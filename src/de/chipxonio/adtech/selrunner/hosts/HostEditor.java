@@ -32,7 +32,7 @@ public class HostEditor extends JDialog {
 
 	private JPanel buttonPanel = null;
 
-	private JButton OKButton = null;
+	private JButton okButton = null;
 
 	private JButton cancelButon = null;
 
@@ -53,6 +53,7 @@ public class HostEditor extends JDialog {
 	private void initialize() {
 		this.setSize(new Dimension(445, 145));
 		this.setContentPane(getJContentPane());
+		this.getRootPane().setDefaultButton(this.getOkButton());
 	}
 
 	/**
@@ -175,23 +176,31 @@ public class HostEditor extends JDialog {
 		if (buttonPanel == null) {
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new FlowLayout());
-			buttonPanel.add(getOKButton(), null);
+			buttonPanel.add(getOkButton(), null);
 			buttonPanel.add(getCancelButon(), null);
 		}
 		return buttonPanel;
 	}
 
 	/**
-	 * This method initializes OKButton	
+	 * This method initializes okButton	
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
-	private JButton getOKButton() {
-		if (OKButton == null) {
-			OKButton = new JButton();
-			OKButton.setText("OK");
+	private JButton getOkButton() {
+		if (okButton == null) {
+			okButton = new JButton();
+			okButton.setText("OK");
+			okButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					host.setName(nameTextField.getText());
+					host.setHostName(hostNameTextField.getText());
+					host.setPort(Integer.parseInt(portTextField.getText()));
+					dispose();
+				}
+			});
 		}
-		return OKButton;
+		return okButton;
 	}
 
 	/**
