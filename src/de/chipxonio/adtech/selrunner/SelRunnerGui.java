@@ -9,6 +9,7 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 
 import de.chipxonio.adtech.selrunner.hosts.Host;
+import de.chipxonio.adtech.selrunner.hosts.HostEditor;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
 
 public class SelRunnerGui extends JFrame {
@@ -76,7 +77,13 @@ public class SelRunnerGui extends JFrame {
 	 */
 	private JList getJList() {
 		HostList hostList = new HostList();
-		hostList.add(new Host());
+		Host host = new Host();
+		host.setName("Windows XP");
+		hostList.add(host);
+		host = new Host();
+		host.setName("Ubuntu");
+		hostList.add(host);
+		new HostEditor(this, host).setVisible(true);
 		if (jList == null) {
 			jList = new JList((ListModel) hostList);
 		}
