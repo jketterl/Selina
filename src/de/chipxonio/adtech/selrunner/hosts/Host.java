@@ -3,7 +3,7 @@ package de.chipxonio.adtech.selrunner.hosts;
 public class Host {
 	private String name;
 	private String hostName;
-	private int port;
+	private int port = 4444;
 	private Object[] browsers;
 	
 	public String getHostName() {
