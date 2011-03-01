@@ -52,6 +52,7 @@ public class HostEditor extends JDialog {
 	 */
 	private void initialize() {
 		this.setSize(new Dimension(445, 145));
+		this.setTitle("Selenium Host bearbeiten");
 		this.setContentPane(getJContentPane());
 		this.getRootPane().setDefaultButton(this.getOkButton());
 	}
