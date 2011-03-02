@@ -24,6 +24,7 @@ import javax.swing.JTextPane;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JSplitPane;
 
 public class SelRunnerGui extends JFrame {
 
@@ -41,6 +42,8 @@ public class SelRunnerGui extends JFrame {
 	private JMenuBar jJMenuBar = null;
 	private JMenu fileMenu = null;
 	private JMenuItem fileOpenMenuItem = null;
+	private JSplitPane jSplitPane = null;
+	private JScrollPane jScrollPane1 = null;
 	/**
 	 * This method initializes 
 	 * 
@@ -72,8 +75,7 @@ public class SelRunnerGui extends JFrame {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new BorderLayout());
 			jContentPane.add(getStartButton(), BorderLayout.SOUTH);
-			jContentPane.add(getJPanel(), BorderLayout.WEST);
-			jContentPane.add(getResultTextPane(), BorderLayout.CENTER);
+			jContentPane.add(getJSplitPane(), BorderLayout.CENTER);
 		}
 		return jContentPane;
 	}
@@ -189,6 +191,7 @@ public class SelRunnerGui extends JFrame {
 		if (jButton == null) {
 			jButton = new JButton();
 			jButton.setText("+");
+			jButton.setPreferredSize(new Dimension(50, 22));
 			jButton.setToolTipText("add another host");
 			jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -209,6 +212,7 @@ public class SelRunnerGui extends JFrame {
 		if (jButton1 == null) {
 			jButton1 = new JButton();
 			jButton1.setText("-");
+			jButton1.setPreferredSize(new Dimension(50, 22));
 			jButton1.setToolTipText("remove host(s)");
 			jButton1.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -277,5 +281,32 @@ public class SelRunnerGui extends JFrame {
 			fileOpenMenuItem.setText("Open...");
 		}
 		return fileOpenMenuItem;
+	}
+
+	/**
+	 * This method initializes jSplitPane	
+	 * 	
+	 * @return javax.swing.JSplitPane	
+	 */
+	private JSplitPane getJSplitPane() {
+		if (jSplitPane == null) {
+			jSplitPane = new JSplitPane();
+			jSplitPane.setLeftComponent(getJPanel());
+			jSplitPane.setRightComponent(getJScrollPane1());
+		}
+		return jSplitPane;
+	}
+
+	/**
+	 * This method initializes jScrollPane1	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane1() {
+		if (jScrollPane1 == null) {
+			jScrollPane1 = new JScrollPane();
+			jScrollPane1.setViewportView(getResultTextPane());
+		}
+		return jScrollPane1;
 	}
 }  //  @jve:decl-index=0:visual-constraint="78,21"
