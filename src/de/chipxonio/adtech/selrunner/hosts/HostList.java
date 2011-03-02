@@ -30,7 +30,10 @@ public class HostList extends Vector<Host> implements ListModel {
 	@Override
 	public synchronized boolean add(Host e) {
 		boolean ret = super.add(e);
-		this.fireIntervalAdded(new ListDataEvent(this, ListDataEvent.INTERVAL_ADDED, this.indexOf(e), this.indexOf(e)));
+		if (ret) {
+			int index = this.indexOf(e);
+			this.fireIntervalAdded(new ListDataEvent(this, ListDataEvent.INTERVAL_ADDED, index, index));
+		}
 		return ret;
 	}
 
