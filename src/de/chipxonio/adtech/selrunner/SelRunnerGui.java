@@ -21,6 +21,9 @@ import de.chipxonio.adtech.selrunner.testingthread.TestingThreadListener;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 import javax.swing.JTextPane;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 public class SelRunnerGui extends JFrame {
 
@@ -35,6 +38,9 @@ public class SelRunnerGui extends JFrame {
 	private JButton jButton = null;
 	private JButton jButton1 = null;
 	private JTextPane resultTextPane = null;
+	private JMenuBar jJMenuBar = null;
+	private JMenu fileMenu = null;
+	private JMenuItem fileOpenMenuItem = null;
 	/**
 	 * This method initializes 
 	 * 
@@ -50,6 +56,7 @@ public class SelRunnerGui extends JFrame {
 	 */
 	private void initialize() {
         this.setSize(new Dimension(667, 341));
+        this.setJMenuBar(getJJMenuBar());
         this.setTitle("Selenium Runner");
         this.setContentPane(getJContentPane());
 			
@@ -230,5 +237,45 @@ public class SelRunnerGui extends JFrame {
 			resultTextPane = new JTextPane();
 		}
 		return resultTextPane;
+	}
+
+	/**
+	 * This method initializes jJMenuBar	
+	 * 	
+	 * @return javax.swing.JMenuBar	
+	 */
+	private JMenuBar getJJMenuBar() {
+		if (jJMenuBar == null) {
+			jJMenuBar = new JMenuBar();
+			jJMenuBar.add(getFileMenu());
+		}
+		return jJMenuBar;
+	}
+
+	/**
+	 * This method initializes fileMenu	
+	 * 	
+	 * @return javax.swing.JMenu	
+	 */
+	private JMenu getFileMenu() {
+		if (fileMenu == null) {
+			fileMenu = new JMenu();
+			fileMenu.setText("File");
+			fileMenu.add(getFileOpenMenuItem());
+		}
+		return fileMenu;
+	}
+
+	/**
+	 * This method initializes fileOpenMenuItem	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getFileOpenMenuItem() {
+		if (fileOpenMenuItem == null) {
+			fileOpenMenuItem = new JMenuItem();
+			fileOpenMenuItem.setText("Open...");
+		}
+		return fileOpenMenuItem;
 	}
 }  //  @jve:decl-index=0:visual-constraint="78,21"
