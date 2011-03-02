@@ -83,6 +83,22 @@ public class SelRunnerGui extends JFrame {
 	private JList getJList() {
 		if (jList == null) {
 			jList = new JList((ListModel) getHostList());
+			jList.addMouseListener(new java.awt.event.MouseListener() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					if (e.getClickCount() == 2) {
+						Host host = (Host) jList.getSelectedValue();
+						new HostEditor(null, host).run();
+					}
+				}
+				public void mousePressed(java.awt.event.MouseEvent e) {
+				}
+				public void mouseReleased(java.awt.event.MouseEvent e) {
+				}
+				public void mouseEntered(java.awt.event.MouseEvent e) {
+				}
+				public void mouseExited(java.awt.event.MouseEvent e) {
+				}
+			});
 		}
 		return jList;
 	}
