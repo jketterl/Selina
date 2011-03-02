@@ -3,6 +3,7 @@ package de.chipxonio.adtech.selrunner;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.Iterator;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 
+import de.chipxonio.adtech.TestingThread;
 import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.hosts.HostEditor;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
@@ -21,7 +23,7 @@ public class SelRunnerGui extends JFrame {
 	private HostList hostList = null;
 	private JPanel jContentPane = null;
 	private JButton startButton = null;
-	private JList jList = null;
+	private JList hostListGui = null;
 	private JScrollPane jScrollPane = null;
 	private JPanel jPanel = null;
 	private JPanel jPanel1 = null;
@@ -71,22 +73,30 @@ public class SelRunnerGui extends JFrame {
 		if (startButton == null) {
 			startButton = new JButton();
 			startButton.setText("Start Testing");
+			startButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Iterator<Host> i = getHostList().iterator();
+					while (i.hasNext()) {
+						new TestingThread(i.next()).start();
+					}
+				}
+			});
 		}
 		return startButton;
 	}
 
 	/**
-	 * This method initializes jList	
+	 * This method initializes hostListGui	
 	 * 	
 	 * @return javax.swing.JList	
 	 */
-	private JList getJList() {
-		if (jList == null) {
-			jList = new JList((ListModel) getHostList());
-			jList.addMouseListener(new java.awt.event.MouseListener() {
+	private JList getHostListGui() {
+		if (hostListGui == null) {
+			hostListGui = new JList((ListModel) getHostList());
+			hostListGui.addMouseListener(new java.awt.event.MouseListener() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					if (e.getClickCount() == 2) {
-						Host host = (Host) jList.getSelectedValue();
+						Host host = (Host) hostListGui.getSelectedValue();
 						new HostEditor(null, host).run();
 					}
 				}
@@ -100,7 +110,7 @@ public class SelRunnerGui extends JFrame {
 				}
 			});
 		}
-		return jList;
+		return hostListGui;
 	}
 
 	/**
@@ -111,7 +121,7 @@ public class SelRunnerGui extends JFrame {
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			jScrollPane.setViewportView(getJList());
+			jScrollPane.setViewportView(getHostListGui());
 		}
 		return jScrollPane;
 	}
@@ -181,7 +191,7 @@ public class SelRunnerGui extends JFrame {
 			jButton1.setToolTipText("remove host(s)");
 			jButton1.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Host host = (Host)getJList().getSelectedValue();
+					Host host = (Host)getHostListGui().getSelectedValue();
 					if (host != null) getHostList().remove(host);
 				}
 			});
