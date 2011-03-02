@@ -58,6 +58,7 @@ public class TestingThread extends Thread {
 		try {
 			this.test.run();
 		} catch (WebDriverException e) {
+			result.pushException(e);
 			e.printStackTrace();
 			this.extractScreenshot(e);
 		}
