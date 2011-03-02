@@ -3,6 +3,8 @@ package de.chipxonio.adtech.selrunner.testingthread;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Vector;
 
 import org.apache.commons.codec.binary.Base64;
 import org.openqa.selenium.WebDriver;
@@ -12,17 +14,32 @@ import org.openqa.selenium.remote.ScreenshotException;
 import de.chipxonio.adtech.selrunner.browsers.FirefoxBrowser;
 import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.tests.AbstractTest;
+import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class TestingThread extends Thread {
 	private Host host;
 	private AbstractTest test;
 	private WebDriver driver = null;
+	private Vector<TestingThreadListener> listeners = new Vector<TestingThreadListener>();
 	
 	public TestingThread(Host host, AbstractTest test)
 	{
 		super();
 		this.host = host;
 		this.test = test;
+	}
+	
+	public void addListener(TestingThreadListener l) {
+		this.listeners.add(l);
+	}
+	
+	public void removeListener(TestingThreadListener l) {
+		this.listeners.remove(l);
+	}
+	
+	private void fireTestingComplete(TestResult result) {
+		Iterator<TestingThreadListener> i = this.listeners.iterator();
+		while (i.hasNext()) i.next().testingComplete(result);
 	}
 	
 	public WebDriver getDriver() {
@@ -36,12 +53,14 @@ public class TestingThread extends Thread {
 	{
 		System.out.println("Starting thread execution");
 		this.test.setDriver(this.getDriver());
+		TestResult result = new TestResult();
 		try {
-			System.out.println(this.test.run());
+			result = this.test.run();
 		} catch (WebDriverException e) {
 			e.printStackTrace();
 			this.extractScreenshot(e);
 		}
+		this.fireTestingComplete(result);
 		System.out.println("Thread finished");
 		getDriver().quit();
 	}

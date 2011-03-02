@@ -17,6 +17,10 @@ import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.hosts.HostEditor;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
 import de.chipxonio.adtech.selrunner.testingthread.TestingThread;
+import de.chipxonio.adtech.selrunner.testingthread.TestingThreadListener;
+import de.chipxonio.adtech.selrunner.tests.TestResult;
+
+import javax.swing.JTextPane;
 
 public class SelRunnerGui extends JFrame {
 
@@ -30,6 +34,7 @@ public class SelRunnerGui extends JFrame {
 	private JPanel jPanel1 = null;
 	private JButton jButton = null;
 	private JButton jButton1 = null;
+	private JTextPane resultTextPane = null;
 	/**
 	 * This method initializes 
 	 * 
@@ -44,7 +49,7 @@ public class SelRunnerGui extends JFrame {
 	 * 
 	 */
 	private void initialize() {
-        this.setSize(new Dimension(619, 281));
+        this.setSize(new Dimension(667, 341));
         this.setTitle("Selenium Runner");
         this.setContentPane(getJContentPane());
 			
@@ -61,6 +66,7 @@ public class SelRunnerGui extends JFrame {
 			jContentPane.setLayout(new BorderLayout());
 			jContentPane.add(getStartButton(), BorderLayout.SOUTH);
 			jContentPane.add(getJPanel(), BorderLayout.WEST);
+			jContentPane.add(getResultTextPane(), BorderLayout.CENTER);
 		}
 		return jContentPane;
 	}
@@ -78,7 +84,14 @@ public class SelRunnerGui extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Iterator<Host> i = getHostList().iterator();
 					while (i.hasNext()) {
-						new TestingThread(i.next(), new DemoTest()).start();
+						TestingThread t = new TestingThread(i.next(), new DemoTest());
+						t.addListener(new TestingThreadListener() {
+							@Override
+							public void testingComplete(TestResult result) {
+								getResultTextPane().setText(result.toString());
+							}
+						});
+						t.start();
 					}
 				}
 			});
@@ -206,4 +219,16 @@ public class SelRunnerGui extends JFrame {
 		}
 		return hostList;
 	}
-}  //  @jve:decl-index=0:visual-constraint="95,65"
+
+	/**
+	 * This method initializes resultTextPane	
+	 * 	
+	 * @return javax.swing.JTextPane	
+	 */
+	private JTextPane getResultTextPane() {
+		if (resultTextPane == null) {
+			resultTextPane = new JTextPane();
+		}
+		return resultTextPane;
+	}
+}  //  @jve:decl-index=0:visual-constraint="78,21"
