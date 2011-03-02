@@ -7,6 +7,11 @@ public class TestSuite implements TestInterface{
 	private static final long serialVersionUID = -69790777830967570L;
 	
 	private Vector<TestInterface> tests;
+	
+	public void addTest(TestInterface test)
+	{
+		this.tests.add(test);
+	}
 
 	@Override
 	public TestResult run() {
