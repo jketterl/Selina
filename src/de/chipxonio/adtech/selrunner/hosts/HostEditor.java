@@ -127,6 +127,7 @@ public class HostEditor extends JDialog {
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.anchor = GridBagConstraints.WEST;
 			gridBagConstraints4.gridy = 2;
+			gridBagConstraints4.ipadx = 10;
 			gridBagConstraints4.gridx = 0;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.fill = GridBagConstraints.BOTH;
@@ -137,6 +138,8 @@ public class HostEditor extends JDialog {
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.anchor = GridBagConstraints.WEST;
 			gridBagConstraints2.gridy = 1;
+			gridBagConstraints2.ipady = 0;
+			gridBagConstraints2.ipadx = 10;
 			gridBagConstraints2.gridx = 0;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.fill = GridBagConstraints.BOTH;
@@ -149,6 +152,7 @@ public class HostEditor extends JDialog {
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.anchor = GridBagConstraints.WEST;
 			gridBagConstraints.gridy = 0;
+			gridBagConstraints.ipadx = 10;
 			gridBagConstraints.gridx = 0;
 			portLabel = new JLabel();
 			portLabel.setText("Port:");
