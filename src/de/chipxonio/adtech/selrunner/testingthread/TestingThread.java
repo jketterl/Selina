@@ -54,8 +54,9 @@ public class TestingThread extends Thread {
 		System.out.println("Starting thread execution");
 		this.test.setDriver(this.getDriver());
 		TestResult result = new TestResult();
+		this.test.setResult(result);
 		try {
-			result = this.test.run();
+			this.test.run();
 		} catch (WebDriverException e) {
 			e.printStackTrace();
 			this.extractScreenshot(e);

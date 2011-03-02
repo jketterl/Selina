@@ -3,12 +3,11 @@ package de.chipxonio.adtech.seleniumtests;
 import org.openqa.selenium.By;
 
 import de.chipxonio.adtech.selrunner.tests.TestCase;
-import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class DemoTest extends TestCase {
 	@Override
-	public TestResult run() {
-		TestResult result = new TestResult();
+	public void run() {
+		//TestResult result = new TestResult();
 		getDriver().get("http://www.chip.de");
 		getDriver().findElement(By.xpath("//body/div[@id='header-global']/div[@id='header-wrapper']/div[@id='header-v3']/ul[@id='he-v1-nav']/li[@id='dropDown3']/a[2]")).click();
 		for (int i = 1; i <= 5; i++) {
@@ -19,6 +18,5 @@ public class DemoTest extends TestCase {
 			//getDriver().executeScript("history.go(-3);");
 			getDriver().findElement(By.xpath("//body/div[@id='header-global']/div[@id='header-wrapper']/div[@id='header-v3']/ul[@id='he-v1-nav']/li[@id='dropDown3']/a[2]")).click();
 		}
-		return result;
 	}
 }

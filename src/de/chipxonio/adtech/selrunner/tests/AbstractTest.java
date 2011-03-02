@@ -3,6 +3,17 @@ package de.chipxonio.adtech.selrunner.tests;
 import org.openqa.selenium.WebDriver;
 
 abstract public class AbstractTest {
+	private WebDriver driver;
+	private TestResult result;
+	
+	public TestResult getResult() {
+		return result;
+	}
+
+	public void setResult(TestResult result) {
+		this.result = result;
+	}
+
 	public WebDriver getDriver() {
 		return driver;
 	}
@@ -11,7 +22,5 @@ abstract public class AbstractTest {
 		this.driver = driver;
 	}
 
-	private WebDriver driver;
-	
-	abstract public TestResult run();
+	abstract public void run();
 }

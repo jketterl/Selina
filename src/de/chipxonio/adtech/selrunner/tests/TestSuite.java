@@ -14,9 +14,12 @@ public class TestSuite extends AbstractTest{
 	}
 
 	@Override
-	public TestResult run() {
+	public void run() {
 		Iterator<AbstractTest> i = this.tests.iterator();
-		while (i.hasNext()) i.next().run();
-		return new TestResult();
+		while (i.hasNext()) {
+			AbstractTest test = i.next();
+			test.setResult(this.getResult());
+			test.run();
+		}
 	}
 }
