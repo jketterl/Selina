@@ -1,18 +1,23 @@
 package de.chipxonio.adtech.selrunner.hosts;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import javax.swing.JButton;
-import java.awt.Insets;
-import java.awt.Dimension;
+import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
 
 public class HostEditor extends JDialog {
 
@@ -41,8 +46,17 @@ public class HostEditor extends JDialog {
 	 */
 	public HostEditor(Frame owner, Host host) {
 		super(owner);
+		if (host == null) {
+			host = new Host();
+		}
 		this.host = host;
 		initialize();
+	}
+	
+	public Host run()
+	{
+		this.setVisible(true);
+		return host;
 	}
 
 	/**
@@ -52,9 +66,17 @@ public class HostEditor extends JDialog {
 	 */
 	private void initialize() {
 		this.setSize(new Dimension(445, 145));
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		this.setModal(true);
 		this.setTitle("Selenium Host bearbeiten");
 		this.setContentPane(getJContentPane());
 		this.getRootPane().setDefaultButton(this.getOkButton());
+		this.getRootPane().registerKeyboardAction(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
 	/**
@@ -123,7 +145,6 @@ public class HostEditor extends JDialog {
 			gridBagConstraints5.gridx = 1;
 			gridBagConstraints5.gridy = 2;
 			gridBagConstraints5.weightx = 1.0;
-			gridBagConstraints5.gridwidth = 1;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.anchor = GridBagConstraints.WEST;
 			gridBagConstraints4.gridy = 2;
@@ -134,7 +155,6 @@ public class HostEditor extends JDialog {
 			gridBagConstraints3.gridx = 1;
 			gridBagConstraints3.gridy = 1;
 			gridBagConstraints3.weightx = 1.0;
-			gridBagConstraints3.gridwidth = 1;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.anchor = GridBagConstraints.WEST;
 			gridBagConstraints2.gridy = 1;
@@ -146,9 +166,6 @@ public class HostEditor extends JDialog {
 			gridBagConstraints1.gridx = 1;
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.weightx = 1.0;
-			gridBagConstraints1.insets = new Insets(0, 0, 0, 0);
-			gridBagConstraints1.ipadx = 0;
-			gridBagConstraints1.gridwidth = 2;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.anchor = GridBagConstraints.WEST;
 			gridBagConstraints.gridy = 0;
@@ -217,6 +234,11 @@ public class HostEditor extends JDialog {
 		if (cancelButon == null) {
 			cancelButon = new JButton();
 			cancelButon.setText("Abbrechen");
+			cancelButon.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dispose();
+				}
+			});
 		}
 		return cancelButon;
 	}
