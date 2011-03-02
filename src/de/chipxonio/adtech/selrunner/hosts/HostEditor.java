@@ -46,8 +46,17 @@ public class HostEditor extends JDialog {
 	 */
 	public HostEditor(Frame owner, Host host) {
 		super(owner);
+		if (host == null) {
+			host = new Host();
+		}
 		this.host = host;
 		initialize();
+	}
+	
+	public Host run()
+	{
+		this.setVisible(true);
+		return host;
 	}
 
 	/**
