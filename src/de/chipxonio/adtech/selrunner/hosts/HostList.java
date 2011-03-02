@@ -1,16 +1,20 @@
 package de.chipxonio.adtech.selrunner.hosts;
 
+import java.util.Iterator;
 import java.util.Vector;
 
 import javax.swing.ListModel;
+import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 public class HostList extends Vector<Host> implements ListModel {
 	private static final long serialVersionUID = 5240371749382136337L;
+	
+	private Vector<ListDataListener> listeners = new Vector<ListDataListener>();
 
 	@Override
 	public void addListDataListener(ListDataListener arg0) {
-		// TODO Auto-generated method stub
+		listeners.add(arg0);
 	}
 
 	@Override
@@ -24,7 +28,29 @@ public class HostList extends Vector<Host> implements ListModel {
 	}
 
 	@Override
+	public synchronized boolean add(Host e) {
+		boolean ret = super.add(e);
+		this.fireIntervalAdded(new ListDataEvent(this, ListDataEvent.INTERVAL_ADDED, this.indexOf(e), this.indexOf(e)));
+		return ret;
+	}
+
+	@Override
 	public void removeListDataListener(ListDataListener arg0) {
-		// TODO Auto-generated method stub
+		listeners.remove(arg0);
+	}
+	
+	private void fireContentsChanged(ListDataEvent e) {
+		Iterator<ListDataListener> i = listeners.iterator();
+		while (i.hasNext()) i.next().contentsChanged(e);
+	}
+	
+	private void fireIntervalAdded(ListDataEvent e) {
+		Iterator<ListDataListener> i = listeners.iterator();
+		while (i.hasNext()) i.next().intervalAdded(e);
+	}
+	
+	private void fireIntervalRemoved(ListDataEvent e) {
+		Iterator<ListDataListener> i = listeners.iterator();
+		while (i.hasNext()) i.next().intervalRemoved(e);
 	}
 }
