@@ -38,6 +38,13 @@ public class HostList extends Vector<Host> implements ListModel {
 	}
 
 	@Override
+	public boolean remove(Object o) {
+		int index = this.indexOf(o);
+		this.fireIntervalRemoved(new ListDataEvent(this, ListDataEvent.INTERVAL_REMOVED, index, index));
+		return super.remove(o);
+	}
+
+	@Override
 	public void removeListDataListener(ListDataListener arg0) {
 		listeners.remove(arg0);
 	}

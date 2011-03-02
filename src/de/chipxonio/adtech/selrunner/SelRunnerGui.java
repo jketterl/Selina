@@ -163,6 +163,12 @@ public class SelRunnerGui extends JFrame {
 			jButton1 = new JButton();
 			jButton1.setText("-");
 			jButton1.setToolTipText("remove host(s)");
+			jButton1.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Host host = (Host)getJList().getSelectedValue();
+					if (host != null) getHostList().remove(host);
+				}
+			});
 		}
 		return jButton1;
 	}
