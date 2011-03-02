@@ -5,8 +5,7 @@ import org.openqa.selenium.By;
 import de.chipxonio.adtech.selrunner.tests.TestCase;
 
 public class DemoTest extends TestCase {
-	@Override
-	public void run() {
+	public void testNews() {
 		//TestResult result = new TestResult();
 		getDriver().get("http://www.chip.de");
 		getDriver().findElement(By.xpath("//body/div[@id='header-global']/div[@id='header-wrapper']/div[@id='header-v3']/ul[@id='he-v1-nav']/li[@id='dropDown3']/a[2]")).click();

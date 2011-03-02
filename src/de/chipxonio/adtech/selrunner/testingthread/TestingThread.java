@@ -57,10 +57,10 @@ public class TestingThread extends Thread {
 		this.test.setResult(result);
 		try {
 			this.test.run();
-		} catch (WebDriverException e) {
+		} catch (Exception e) {
 			result.pushException(e);
 			e.printStackTrace();
-			this.extractScreenshot(e);
+			if (e instanceof WebDriverException) this.extractScreenshot((WebDriverException) e);
 		}
 		this.fireTestingComplete(result);
 		System.out.println("Thread finished");

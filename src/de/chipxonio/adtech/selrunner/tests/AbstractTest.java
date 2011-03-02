@@ -22,5 +22,5 @@ abstract public class AbstractTest {
 		this.driver = driver;
 	}
 
-	abstract public void run();
+	abstract public void run() throws Exception;
 }

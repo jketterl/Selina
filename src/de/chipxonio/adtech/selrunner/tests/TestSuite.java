@@ -19,7 +19,12 @@ public class TestSuite extends AbstractTest{
 		while (i.hasNext()) {
 			AbstractTest test = i.next();
 			test.setResult(this.getResult());
-			test.run();
+			try {
+				test.run();
+			} catch (Exception e) {
+				this.getResult().pushException(e);
+				e.printStackTrace();
+			}
 		}
 	}
 }
