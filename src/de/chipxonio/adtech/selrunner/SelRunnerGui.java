@@ -12,10 +12,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 
-import de.chipxonio.adtech.TestingThread;
+import de.chipxonio.adtech.seleniumtests.DemoTest;
 import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.hosts.HostEditor;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
+import de.chipxonio.adtech.selrunner.testingthread.TestingThread;
 
 public class SelRunnerGui extends JFrame {
 
@@ -77,7 +78,7 @@ public class SelRunnerGui extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Iterator<Host> i = getHostList().iterator();
 					while (i.hasNext()) {
-						new TestingThread(i.next()).start();
+						new TestingThread(i.next(), new DemoTest()).start();
 					}
 				}
 			});
