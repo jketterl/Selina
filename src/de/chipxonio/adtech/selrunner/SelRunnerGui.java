@@ -1,11 +1,14 @@
 package de.chipxonio.adtech.selrunner;
 
-import javax.swing.JFrame;
-import java.awt.Dimension;
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 
 import de.chipxonio.adtech.selrunner.hosts.Host;
@@ -14,14 +17,16 @@ import de.chipxonio.adtech.selrunner.hosts.HostList;
 
 public class SelRunnerGui extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4222699284599413079L;
+	private HostList hostList = null;
 	private JPanel jContentPane = null;
 	private JButton startButton = null;
 	private JList jList = null;
-
+	private JScrollPane jScrollPane = null;
+	private JPanel jPanel = null;
+	private JPanel jPanel1 = null;
+	private JButton jButton = null;
+	private JButton jButton1 = null;
 	/**
 	 * This method initializes 
 	 * 
@@ -36,7 +41,7 @@ public class SelRunnerGui extends JFrame {
 	 * 
 	 */
 	private void initialize() {
-        this.setSize(new Dimension(469, 244));
+        this.setSize(new Dimension(619, 281));
         this.setTitle("Selenium Runner");
         this.setContentPane(getJContentPane());
 			
@@ -52,7 +57,7 @@ public class SelRunnerGui extends JFrame {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new BorderLayout());
 			jContentPane.add(getStartButton(), BorderLayout.SOUTH);
-			jContentPane.add(getJList(), BorderLayout.WEST);
+			jContentPane.add(getJPanel(), BorderLayout.WEST);
 		}
 		return jContentPane;
 	}
@@ -76,17 +81,96 @@ public class SelRunnerGui extends JFrame {
 	 * @return javax.swing.JList	
 	 */
 	private JList getJList() {
-		HostList hostList = new HostList();
-		Host host = new Host();
-		host.setName("Windows XP");
-		hostList.add(host);
-		host = new Host();
-		host.setName("Ubuntu");
-		hostList.add(host);
-		new HostEditor(this, host).setVisible(true);
 		if (jList == null) {
-			jList = new JList((ListModel) hostList);
+			jList = new JList((ListModel) getHostList());
 		}
 		return jList;
+	}
+
+	/**
+	 * This method initializes jScrollPane	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane() {
+		if (jScrollPane == null) {
+			jScrollPane = new JScrollPane();
+			jScrollPane.setViewportView(getJList());
+		}
+		return jScrollPane;
+	}
+
+	/**
+	 * This method initializes jPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanel() {
+		if (jPanel == null) {
+			jPanel = new JPanel();
+			jPanel.setLayout(new BorderLayout());
+			jPanel.add(getJScrollPane(), BorderLayout.CENTER);
+			jPanel.add(getJPanel1(), BorderLayout.SOUTH);
+		}
+		return jPanel;
+	}
+
+	/**
+	 * This method initializes jPanel1	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanel1() {
+		if (jPanel1 == null) {
+			FlowLayout flowLayout = new FlowLayout();
+			flowLayout.setVgap(1);
+			flowLayout.setHgap(8);
+			jPanel1 = new JPanel();
+			jPanel1.setLayout(flowLayout);
+			jPanel1.add(getJButton(), null);
+			jPanel1.add(getJButton1(), null);
+		}
+		return jPanel1;
+	}
+
+	/**
+	 * This method initializes jButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButton() {
+		if (jButton == null) {
+			jButton = new JButton();
+			jButton.setText("+");
+			jButton.setToolTipText("add another host");
+			jButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Host host = (new HostEditor(null, null)).run();
+					if (host != null) getHostList().add(host);
+				}
+			});
+		}
+		return jButton;
+	}
+
+	/**
+	 * This method initializes jButton1	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButton1() {
+		if (jButton1 == null) {
+			jButton1 = new JButton();
+			jButton1.setText("-");
+			jButton1.setToolTipText("remove host(s)");
+		}
+		return jButton1;
+	}
+	
+	private HostList getHostList() {
+		if (hostList == null) {
+			hostList = new HostList();
+		}
+		return hostList;
 	}
 }  //  @jve:decl-index=0:visual-constraint="95,65"
