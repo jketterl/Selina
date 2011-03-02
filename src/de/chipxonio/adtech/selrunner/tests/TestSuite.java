@@ -3,19 +3,19 @@ package de.chipxonio.adtech.selrunner.tests;
 import java.util.Iterator;
 import java.util.Vector;
 
-public class TestSuite implements TestInterface{
+public class TestSuite extends AbstractTest{
 	private static final long serialVersionUID = -69790777830967570L;
 	
-	private Vector<TestInterface> tests;
+	private Vector<AbstractTest> tests;
 	
-	public void addTest(TestInterface test)
+	public void addTest(AbstractTest test)
 	{
 		this.tests.add(test);
 	}
 
 	@Override
 	public TestResult run() {
-		Iterator<TestInterface> i = this.tests.iterator();
+		Iterator<AbstractTest> i = this.tests.iterator();
 		while (i.hasNext()) i.next().run();
 		return new TestResult();
 	}
