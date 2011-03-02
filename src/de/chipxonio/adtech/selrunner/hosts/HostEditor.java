@@ -51,6 +51,7 @@ public class HostEditor extends JDialog {
 	 */
 	private void initialize() {
 		this.setSize(new Dimension(445, 145));
+		this.setModal(true);
 		this.setTitle("Selenium Host bearbeiten");
 		this.setContentPane(getJContentPane());
 		this.getRootPane().setDefaultButton(this.getOkButton());
@@ -121,6 +122,7 @@ public class HostEditor extends JDialog {
 			gridBagConstraints5.fill = GridBagConstraints.BOTH;
 			gridBagConstraints5.gridx = 1;
 			gridBagConstraints5.gridy = 2;
+			gridBagConstraints5.weightx = 1.0;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.anchor = GridBagConstraints.WEST;
 			gridBagConstraints4.gridy = 2;
@@ -129,6 +131,7 @@ public class HostEditor extends JDialog {
 			gridBagConstraints3.fill = GridBagConstraints.BOTH;
 			gridBagConstraints3.gridx = 1;
 			gridBagConstraints3.gridy = 1;
+			gridBagConstraints3.weightx = 1.0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.anchor = GridBagConstraints.WEST;
 			gridBagConstraints2.gridy = 1;
@@ -137,6 +140,7 @@ public class HostEditor extends JDialog {
 			gridBagConstraints1.fill = GridBagConstraints.BOTH;
 			gridBagConstraints1.gridx = 1;
 			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.weightx = 1.0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.anchor = GridBagConstraints.WEST;
 			gridBagConstraints.gridy = 0;
