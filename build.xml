@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SeleniumRunner" default="all">
+	<property name="src" value="src" />
+	<property name="build" value="build" />
+	<property name="dist" value="dist" />
+	<target name="all" depends="api"/>
+	<target name="api" depends="compile,api-jar" />
+	<target name="init">
+		<mkdir dir="${build}" />
+		<mkdir dir="${dist}" />
+	</target>
+	<target name="compile" depends="init">
+		<javac srcdir="${src}" destdir="${build}">
+			<classpath location="${eclipse.workspace}/selenium-2.0b2/selenium-java-2.0b2.jar" />
+			<classpath location="${eclipse.workspace}/selenium-2.0b2/libs/commons-codec-1.4.jar" />
+		</javac>
+	</target>
+	<target name="api-jar">
+		<jar destfile="${dist}/seleniumrunner-api.jar">
+			<fileset dir="${build}">
+				<include name="de/chipxonio/adtech/selrunner/tests/**" />
+			</fileset>
+		</jar>
+	</target>
+	<target name="clean">
+		<rmdir dir="${build}" />
+	</target>
+</project>
