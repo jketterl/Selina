@@ -6,7 +6,7 @@ import java.util.Vector;
 public class TestSuite extends AbstractTest{
 	private static final long serialVersionUID = -69790777830967570L;
 	
-	private Vector<AbstractTest> tests;
+	private Vector<AbstractTest> tests = new Vector<AbstractTest>();
 	
 	public void addTest(AbstractTest test)
 	{
