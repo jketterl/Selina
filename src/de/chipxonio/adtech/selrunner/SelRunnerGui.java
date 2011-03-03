@@ -8,28 +8,29 @@ import java.util.Iterator;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextPane;
 import javax.swing.ListModel;
 
 import de.chipxonio.adtech.seleniumtests.DemoTest;
+import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
+import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
+import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.hosts.HostEditor;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
-import de.chipxonio.adtech.selrunner.testingthread.TestingThread;
-import de.chipxonio.adtech.selrunner.testingthread.TestingThreadListener;
-import de.chipxonio.adtech.selrunner.tests.TestResult;
-
-import javax.swing.JTextPane;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JSplitPane;
+import javax.swing.WindowConstants;
 
 public class SelRunnerGui extends JFrame {
 
 	private static final long serialVersionUID = -4222699284599413079L;
 	private HostList hostList = null;
+	private SelRunnerEngine engine;
 	private JPanel jContentPane = null;
 	private JButton startButton = null;
 	private JList hostListGui = null;
@@ -59,6 +60,7 @@ public class SelRunnerGui extends JFrame {
 	 */
 	private void initialize() {
         this.setSize(new Dimension(667, 341));
+        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.setJMenuBar(getJJMenuBar());
         this.setTitle("Selenium Runner");
         this.setContentPane(getJContentPane());
@@ -92,16 +94,15 @@ public class SelRunnerGui extends JFrame {
 			startButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Iterator<Host> i = getHostList().iterator();
+					SelRunnerJob job = new SelRunnerJob();
 					while (i.hasNext()) {
-						TestingThread t = new TestingThread(i.next(), new DemoTest());
-						t.addListener(new TestingThreadListener() {
-							@Override
-							public void testingComplete(TestResult result) {
-								getResultTextPane().setText(result.toString());
-							}
-						});
-						t.start();
+						SelRunnerTask task = new SelRunnerTask();
+						task.setHost(i.next());
+						task.setTest(new DemoTest());
+						job.addTask(task);
 					}
+					getEngine().setJob(job);
+					getEngine().run();
 				}
 			});
 		}
@@ -308,5 +309,13 @@ public class SelRunnerGui extends JFrame {
 			jScrollPane1.setViewportView(getResultTextPane());
 		}
 		return jScrollPane1;
+	}
+	
+	public SelRunnerEngine getEngine() {
+		return engine;
+	}
+
+	public void setEngine(SelRunnerEngine engine) {
+		this.engine = engine;
 	}
 }  //  @jve:decl-index=0:visual-constraint="78,21"
