@@ -25,4 +25,16 @@ public abstract class TestCase extends AbstractTest {
 			}
 		}
 	}
+	
+	public void pass() {
+		this.getResult().pass();
+	}
+	
+	public void fail() {
+		this.getResult().fail();
+	}
+	
+	public void assertTrue(boolean b) {
+		if (b) this.pass(); else this.fail();
+	}
 }
