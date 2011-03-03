@@ -19,8 +19,10 @@ public abstract class TestCase extends AbstractTest {
 				// TODO some kind of notification that gets passed to the user
 			} catch (InvocationTargetException e) {
 				if (e.getCause() instanceof Exception)
+					// i know what to do with an exception
 					throw (Exception) e.getCause();
 				else
+					// but i don't know what to do with the rest
 					e.printStackTrace();
 			}
 		}
