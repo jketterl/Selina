@@ -3,6 +3,7 @@ package de.chipxonio.adtech.selrunner;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.io.IOException;
 import java.util.Iterator;
 
 import javax.swing.JButton;
@@ -16,21 +17,23 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextPane;
 import javax.swing.ListModel;
+import javax.swing.WindowConstants;
 
-import de.chipxonio.adtech.seleniumtests.DemoTest;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.hosts.HostEditor;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
-import javax.swing.WindowConstants;
+import de.chipxonio.adtech.selrunner.packageloader.PackageLoader;
+import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 
 public class SelRunnerGui extends JFrame {
 
 	private static final long serialVersionUID = -4222699284599413079L;
 	private HostList hostList = null;
 	private SelRunnerEngine engine;
+	private AbstractTest test;
 	private JPanel jContentPane = null;
 	private JButton startButton = null;
 	private JList hostListGui = null;
@@ -98,7 +101,7 @@ public class SelRunnerGui extends JFrame {
 					while (i.hasNext()) {
 						SelRunnerTask task = new SelRunnerTask();
 						task.setHost(i.next());
-						task.setTest(new DemoTest());
+						task.setTest(test);
 						job.addTask(task);
 					}
 					getEngine().setJob(job);
@@ -280,6 +283,23 @@ public class SelRunnerGui extends JFrame {
 		if (fileOpenMenuItem == null) {
 			fileOpenMenuItem = new JMenuItem();
 			fileOpenMenuItem.setText("Open...");
+			fileOpenMenuItem.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						PackageLoader loader = new PackageLoader("/home/jketterl/workspace/demotests.jar");
+						Class<AbstractTest> c = (Class<AbstractTest>) loader.loadClass("de.chipxonio.adtech.selniumtests.DemoTests");
+						test = c.newInstance();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					} catch (ClassNotFoundException e2) {
+						e2.printStackTrace();
+					} catch (InstantiationException e3) {
+						e3.printStackTrace();
+					} catch (IllegalAccessException e4) {
+						e4.printStackTrace();
+					}
+				}
+			});
 		}
 		return fileOpenMenuItem;
 	}
