@@ -6,6 +6,16 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.xpath.XPathAPI;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
+import de.chipxonio.adtech.selrunner.tests.AbstractTest;
+import de.chipxonio.adtech.selrunner.tests.TestSuite;
+
 public class PackageLoader extends ClassLoader {
 	private final ZipFile file;
 
@@ -32,5 +42,24 @@ public class PackageLoader extends ClassLoader {
 		} catch (IOException exception) {
 			throw new ClassNotFoundException(name, exception);
 		}
+	}
+
+	public TestSuite getTestSuite() throws Exception {
+		ZipEntry entry = this.file.getEntry("tests.xml");
+		// TODO customize exception
+		if (entry == null)
+			throw new Exception("jar file could not be read");
+		InputStream is = this.file.getInputStream(entry);
+		TestSuite testSuite = new TestSuite();
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = dbf.newDocumentBuilder();
+		Document dom = builder.parse(is);
+		NodeList nodes = XPathAPI.selectNodeList(dom, "/tests/test");
+		for (int i = 0; i < nodes.getLength(); i++) {
+			String testClassName = nodes.item(i).getAttributes().getNamedItem("class").getNodeValue();
+			Class<?> c = this.loadClass(testClassName);
+			testSuite.addTest((AbstractTest)c.newInstance());
+		}
+		return testSuite;
 	}
 }
