@@ -286,9 +286,8 @@ public class SelRunnerGui extends JFrame {
 			fileOpenMenuItem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-						PackageLoader loader = new PackageLoader("/home/jketterl/workspace/demotests.jar");
-						Class<AbstractTest> c = (Class<AbstractTest>) loader.loadClass("de.chipxonio.adtech.selniumtests.DemoTests");
-						test = c.newInstance();
+						PackageLoader loader = new PackageLoader("/Users/jakob/Documents/workspace/DemoTests/demotests.jar");
+						test = loader.getTestSuite();
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					} catch (ClassNotFoundException e2) {
@@ -297,6 +296,9 @@ public class SelRunnerGui extends JFrame {
 						e3.printStackTrace();
 					} catch (IllegalAccessException e4) {
 						e4.printStackTrace();
+					} catch (Exception e5) {
+						System.out.println("this is my custom exception");
+						e5.printStackTrace();
 					}
 				}
 			});
