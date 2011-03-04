@@ -18,7 +18,7 @@
 	</target>
 	<target name="api-jar">
 		<jar destfile="${dist}/seleniumrunner-api.jar">
-			<fileset dir="${build	}">
+			<fileset dir="${build}">
 				<include name="de/chipxonio/adtech/selrunner/tests/**" />
 			</fileset>
 		</jar>
