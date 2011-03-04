@@ -12,6 +12,7 @@ public class SelRunnerJob {
 	
 	public void run() {
 		Iterator<SelRunnerTask> i = tasks.iterator();
-		while (i.hasNext()) i.next().run();
+		// start background threads
+		while (i.hasNext()) i.next().start();
 	}
 }

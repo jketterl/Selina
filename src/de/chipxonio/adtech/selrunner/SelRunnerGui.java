@@ -102,14 +102,12 @@ public class SelRunnerGui extends JFrame {
 					Iterator<Host> i = getHostList().iterator();
 					SelRunnerJob job = new SelRunnerJob();
 					while (i.hasNext()) {
-						SelRunnerTask task = new SelRunnerTask();
-						task.setHost(i.next());
 						try {
-							task.setTest(loader.getTestSuite());
+							SelRunnerTask task = new SelRunnerTask(i.next(), loader.getTestSuite());
+							job.addTask(task);
 						} catch (PackageLoaderException e1) {
 							e1.printStackTrace();
 						}
-						job.addTask(task);
 					}
 					getEngine().setJob(job);
 					getEngine().run();
