@@ -52,6 +52,8 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private JScrollPane jScrollPane1 = null;
 	private JMenuItem fileExitMenuItem = null;
 	private JList resultList = null;
+	private JMenu editMenu = null;
+	private JMenuItem preferencesMenuItem = null;
 	/**
 	 * This method initializes 
 	 * 
@@ -252,6 +254,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 		if (jJMenuBar == null) {
 			jJMenuBar = new JMenuBar();
 			jJMenuBar.add(getFileMenu());
+			jJMenuBar.add(getEditMenu());
 		}
 		return jJMenuBar;
 	}
@@ -367,5 +370,37 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			resultList = new JList(new DefaultListModel());
 		}
 		return resultList;
+	}
+
+	/**
+	 * This method initializes editMenu	
+	 * 	
+	 * @return javax.swing.JMenu	
+	 */
+	private JMenu getEditMenu() {
+		if (editMenu == null) {
+			editMenu = new JMenu();
+			editMenu.setText("Edit");
+			editMenu.add(getPreferencesMenuItem());
+		}
+		return editMenu;
+	}
+
+	/**
+	 * This method initializes preferencesMenuItem	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getPreferencesMenuItem() {
+		if (preferencesMenuItem == null) {
+			preferencesMenuItem = new JMenuItem();
+			preferencesMenuItem.setText("Preferences...");
+			preferencesMenuItem.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					(new SelRunnerPreferences(null)).setVisible(true);
+				}
+			});
+		}
+		return preferencesMenuItem;
 	}
 }  //  @jve:decl-index=0:visual-constraint="78,21"
