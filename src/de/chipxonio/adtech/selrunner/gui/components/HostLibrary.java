@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 
+import de.chipxonio.adtech.selrunner.gui.HostEditorGui;
+import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
 
 public class HostLibrary extends JPanel {
@@ -82,6 +84,13 @@ public class HostLibrary extends JPanel {
 	private JList getHostList() {
 		if (hostList == null) {
 			hostList = new JList((ListModel) this.list);
+			hostList.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					if (e.getClickCount() == 2) {
+						(new HostEditorGui(null, (Host) getHostList().getSelectedValue())).run();
+					}
+				}
+			});
 		}
 		return hostList;
 	}
@@ -95,6 +104,12 @@ public class HostLibrary extends JPanel {
 		if (addHostButton == null) {
 			addHostButton = new JButton();
 			addHostButton.setText("Add Host...");
+			addHostButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Host host = (new HostEditorGui(null, new Host())).run();
+					if (host != null) list.add(host);
+				}
+			});
 		}
 		return addHostButton;
 	}
@@ -107,7 +122,15 @@ public class HostLibrary extends JPanel {
 	private JButton getRemoveHostButton() {
 		if (removeHostButton == null) {
 			removeHostButton = new JButton();
-			removeHostButton.setText("Remove Host");
+			removeHostButton.setText("Remove Host(s)");
+			removeHostButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Object[] hosts = getHostList().getSelectedValues();
+					for (int i = 0; i < hosts.length; i++) {
+						list.remove((Host) hosts[i]);
+					}
+				}
+			});
 		}
 		return removeHostButton;
 	}
