@@ -25,8 +25,8 @@ import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.gui.components.HostLibrary;
 import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
-import de.chipxonio.adtech.selrunner.packageloader.PackageLoader;
-import de.chipxonio.adtech.selrunner.packageloader.PackageLoaderException;
+import de.chipxonio.adtech.selrunner.packages.Package;
+import de.chipxonio.adtech.selrunner.packages.PackageLoaderException;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
@@ -34,7 +34,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private static final long serialVersionUID = -4222699284599413079L;
 	private HostList hostList = null;
 	private SelRunnerEngine engine;  //  @jve:decl-index=0:
-	private PackageLoader loader;
+	private Package loader;
 	private JPanel jContentPane = null;
 	private JButton startButton = null;
 	private JMenuBar jJMenuBar = null;
@@ -165,7 +165,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 					JFileChooser dialog = new JFileChooser();
 					if (dialog.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) return;
 					try {
-						loader = new PackageLoader(dialog.getSelectedFile());
+						loader = new Package(dialog.getSelectedFile());
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}

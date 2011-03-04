@@ -1,4 +1,4 @@
-package de.chipxonio.adtech.selrunner.packageloader;
+package de.chipxonio.adtech.selrunner.packages;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -20,14 +20,14 @@ import org.xml.sax.SAXException;
 import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 import de.chipxonio.adtech.selrunner.tests.TestSuite;
 
-public class PackageLoader extends ClassLoader {
+public class Package extends ClassLoader {
 	private final ZipFile file;
 
-	public PackageLoader(String filename) throws IOException {
+	public Package(String filename) throws IOException {
 		this.file = new ZipFile(filename);
 	}
 	
-	public PackageLoader(File file) throws IOException {
+	public Package(File file) throws IOException {
 		this.file = new ZipFile(file);
 	}
 

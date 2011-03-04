@@ -1,4 +1,4 @@
-package de.chipxonio.adtech.selrunner.packageloader;
+package de.chipxonio.adtech.selrunner.packages;
 
 public class PackageLoaderException extends Exception {
 	// why do i have to do this? those constructors are defined by the parent :(
