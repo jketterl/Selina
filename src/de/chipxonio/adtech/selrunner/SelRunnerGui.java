@@ -2,7 +2,9 @@ package de.chipxonio.adtech.selrunner;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FileDialog;
 import java.awt.FlowLayout;
+import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -283,11 +285,14 @@ public class SelRunnerGui extends JFrame {
 	private JMenuItem getFileOpenMenuItem() {
 		if (fileOpenMenuItem == null) {
 			fileOpenMenuItem = new JMenuItem();
-			fileOpenMenuItem.setText("Open...");
+			fileOpenMenuItem.setText("Open test package...");
 			fileOpenMenuItem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					FileDialog dialog = new FileDialog((JFrame) null, "Open test package...", FileDialog.LOAD);
+					dialog.setVisible(true);
+					dialog.dispose();
 					try {
-						PackageLoader loader = new PackageLoader("/Users/jakob/Documents/workspace/DemoTests/demotests.jar");
+						PackageLoader loader = new PackageLoader(dialog.getDirectory() + File.separator + dialog.getFile());
 						test = loader.getTestSuite();
 					} catch (IOException e1) {
 						e1.printStackTrace();
