@@ -13,7 +13,7 @@ import de.chipxonio.adtech.selrunner.gui.components.HostLibrary;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
 import javax.swing.WindowConstants;
 
-public class SelRunnerPreferences extends JDialog {
+public class SelRunnerPreferencesGui extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
@@ -27,7 +27,7 @@ public class SelRunnerPreferences extends JDialog {
 	/**
 	 * @param owner
 	 */
-	public SelRunnerPreferences(Frame owner) {
+	public SelRunnerPreferencesGui(Frame owner) {
 		super(owner);
 		initialize();
 	}
