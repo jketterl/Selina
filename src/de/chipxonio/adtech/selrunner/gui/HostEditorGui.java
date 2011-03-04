@@ -1,4 +1,4 @@
-package de.chipxonio.adtech.selrunner.hosts;
+package de.chipxonio.adtech.selrunner.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -19,7 +19,9 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 
-public class HostEditor extends JDialog {
+import de.chipxonio.adtech.selrunner.hosts.Host;
+
+public class HostEditorGui extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -44,7 +46,7 @@ public class HostEditor extends JDialog {
 	/**
 	 * @param owner
 	 */
-	public HostEditor(Frame owner, Host host) {
+	public HostEditorGui(Frame owner, Host host) {
 		super(owner);
 		if (host == null) {
 			host = new Host();

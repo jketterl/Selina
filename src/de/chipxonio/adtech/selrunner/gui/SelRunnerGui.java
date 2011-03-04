@@ -25,7 +25,6 @@ import de.chipxonio.adtech.selrunner.engine.SelRunnerEngineListener;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.hosts.Host;
-import de.chipxonio.adtech.selrunner.hosts.HostEditor;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
 import de.chipxonio.adtech.selrunner.packageloader.PackageLoader;
 import de.chipxonio.adtech.selrunner.packageloader.PackageLoaderException;
@@ -134,7 +133,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					if (e.getClickCount() == 2) {
 						Host host = (Host) hostListGui.getSelectedValue();
-						new HostEditor(null, host).run();
+						new HostEditorGui(null, host).run();
 					}
 				}
 				public void mousePressed(java.awt.event.MouseEvent e) {
@@ -209,7 +208,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			jButton.setToolTipText("add another host");
 			jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Host host = (new HostEditor(null, null)).run();
+					Host host = (new HostEditorGui(null, null)).run();
 					if (host != null) getHostList().add(host);
 				}
 			});
