@@ -3,6 +3,8 @@ package de.chipxonio.adtech.selrunner.tests;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.openqa.selenium.WebDriver;
+
 public class TestSuite extends AbstractTest{
 	private static final long serialVersionUID = -69790777830967570L;
 	
@@ -10,6 +12,7 @@ public class TestSuite extends AbstractTest{
 	
 	public void addTest(AbstractTest test)
 	{
+		test.setDriver(this.getDriver());
 		this.tests.add(test);
 	}
 
@@ -26,5 +29,13 @@ public class TestSuite extends AbstractTest{
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void setDriver(WebDriver driver)
+	{
+		// pass on the driver to the sub-tests
+		Iterator<AbstractTest> i = this.tests.iterator();
+		while (i.hasNext()) i.next().setDriver(driver);
+		super.setDriver(driver);
 	}
 }
