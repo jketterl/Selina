@@ -21,6 +21,7 @@ import javax.swing.ListModel;
 import javax.swing.WindowConstants;
 
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
+import de.chipxonio.adtech.selrunner.engine.SelRunnerEngineListener;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.hosts.Host;
@@ -28,8 +29,9 @@ import de.chipxonio.adtech.selrunner.hosts.HostEditor;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
 import de.chipxonio.adtech.selrunner.packageloader.PackageLoader;
 import de.chipxonio.adtech.selrunner.packageloader.PackageLoaderException;
+import de.chipxonio.adtech.selrunner.tests.TestResult;
 
-public class SelRunnerGui extends JFrame {
+public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 
 	private static final long serialVersionUID = -4222699284599413079L;
 	private HostList hostList = null;
@@ -336,7 +338,9 @@ public class SelRunnerGui extends JFrame {
 	}
 
 	public void setEngine(SelRunnerEngine engine) {
+		if (this.engine != null) this.engine.removeListener(this);
 		this.engine = engine;
+		this.engine.addListener(this);
 	}
 
 	/**
@@ -356,5 +360,10 @@ public class SelRunnerGui extends JFrame {
 			});
 		}
 		return fileExitMenuItem;
+	}
+
+	@Override
+	public void testingComplete(TestResult result) {
+		this.getResultTextPane().setText(result.toString());
 	}
 }  //  @jve:decl-index=0:visual-constraint="78,21"
