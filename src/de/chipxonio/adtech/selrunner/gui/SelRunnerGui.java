@@ -2,7 +2,6 @@ package de.chipxonio.adtech.selrunner.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -17,13 +16,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.ListModel;
 import javax.swing.WindowConstants;
 
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngineListener;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
+import de.chipxonio.adtech.selrunner.gui.components.HostLibrary;
 import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
 import de.chipxonio.adtech.selrunner.packageloader.PackageLoader;
@@ -38,12 +37,6 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private PackageLoader loader;
 	private JPanel jContentPane = null;
 	private JButton startButton = null;
-	private JList hostListGui = null;
-	private JScrollPane jScrollPane = null;
-	private JPanel jPanel = null;
-	private JPanel jPanel1 = null;
-	private JButton jButton = null;
-	private JButton jButton1 = null;
 	private JMenuBar jJMenuBar = null;
 	private JMenu fileMenu = null;
 	private JMenuItem fileOpenMenuItem = null;
@@ -53,6 +46,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private JList resultList = null;
 	private JMenu editMenu = null;
 	private JMenuItem preferencesMenuItem = null;
+	private HostLibrary hostLibrary = null;
 	/**
 	 * This method initializes 
 	 * 
@@ -121,122 +115,6 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 		return startButton;
 	}
 
-	/**
-	 * This method initializes hostListGui	
-	 * 	
-	 * @return javax.swing.JList	
-	 */
-	private JList getHostListGui() {
-		if (hostListGui == null) {
-			hostListGui = new JList((ListModel) getHostList());
-			hostListGui.addMouseListener(new java.awt.event.MouseListener() {
-				public void mouseClicked(java.awt.event.MouseEvent e) {
-					if (e.getClickCount() == 2) {
-						Host host = (Host) hostListGui.getSelectedValue();
-						new HostEditorGui(null, host).run();
-					}
-				}
-				public void mousePressed(java.awt.event.MouseEvent e) {
-				}
-				public void mouseReleased(java.awt.event.MouseEvent e) {
-				}
-				public void mouseEntered(java.awt.event.MouseEvent e) {
-				}
-				public void mouseExited(java.awt.event.MouseEvent e) {
-				}
-			});
-		}
-		return hostListGui;
-	}
-
-	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
-	 */
-	private JScrollPane getJScrollPane() {
-		if (jScrollPane == null) {
-			jScrollPane = new JScrollPane();
-			jScrollPane.setViewportView(getHostListGui());
-		}
-		return jScrollPane;
-	}
-
-	/**
-	 * This method initializes jPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getJPanel() {
-		if (jPanel == null) {
-			jPanel = new JPanel();
-			jPanel.setLayout(new BorderLayout());
-			jPanel.add(getJScrollPane(), BorderLayout.CENTER);
-			jPanel.add(getJPanel1(), BorderLayout.SOUTH);
-		}
-		return jPanel;
-	}
-
-	/**
-	 * This method initializes jPanel1	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getJPanel1() {
-		if (jPanel1 == null) {
-			FlowLayout flowLayout = new FlowLayout();
-			flowLayout.setVgap(1);
-			flowLayout.setHgap(8);
-			jPanel1 = new JPanel();
-			jPanel1.setLayout(flowLayout);
-			jPanel1.add(getJButton(), null);
-			jPanel1.add(getJButton1(), null);
-		}
-		return jPanel1;
-	}
-
-	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */
-	private JButton getJButton() {
-		if (jButton == null) {
-			jButton = new JButton();
-			jButton.setText("+");
-			jButton.setPreferredSize(new Dimension(50, 22));
-			jButton.setToolTipText("add another host");
-			jButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Host host = (new HostEditorGui(null, null)).run();
-					if (host != null) getHostList().add(host);
-				}
-			});
-		}
-		return jButton;
-	}
-
-	/**
-	 * This method initializes jButton1	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */
-	private JButton getJButton1() {
-		if (jButton1 == null) {
-			jButton1 = new JButton();
-			jButton1.setText("-");
-			jButton1.setPreferredSize(new Dimension(50, 22));
-			jButton1.setToolTipText("remove host(s)");
-			jButton1.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					Host host = (Host)getHostListGui().getSelectedValue();
-					if (host != null) getHostList().remove(host);
-				}
-			});
-		}
-		return jButton1;
-	}
-	
 	private HostList getHostList() {
 		if (hostList == null) {
 			hostList = new HostList();
@@ -305,8 +183,8 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private JSplitPane getJSplitPane() {
 		if (jSplitPane == null) {
 			jSplitPane = new JSplitPane();
-			jSplitPane.setLeftComponent(getJPanel());
 			jSplitPane.setRightComponent(getJScrollPane1());
+			jSplitPane.setLeftComponent(getHostLibrary());
 		}
 		return jSplitPane;
 	}
@@ -401,5 +279,17 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			});
 		}
 		return preferencesMenuItem;
+	}
+
+	/**
+	 * This method initializes hostLibrary	
+	 * 	
+	 * @return de.chipxonio.adtech.selrunner.gui.components.HostLibrary	
+	 */
+	private HostLibrary getHostLibrary() {
+		if (hostLibrary == null) {
+			hostLibrary = new HostLibrary(this.getHostList());
+		}
+		return hostLibrary;
 	}
 }  //  @jve:decl-index=0:visual-constraint="78,21"
