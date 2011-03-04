@@ -12,7 +12,9 @@ public abstract class TestCase extends AbstractTest {
 			// execute the methods of this class that begin with "test"
 			Pattern p = Pattern.compile("^test[A-Z].*");
 			if (p.matcher(methods[i].getName()).matches()) try {
+				this.setUp();
 				methods[i].invoke(this, new Object[0]);
+				this.tearDown();
 			} catch (IllegalAccessException e) {
 				// NOOP
 				// ignored: test methods must be public
@@ -28,6 +30,12 @@ public abstract class TestCase extends AbstractTest {
 		}
 	}
 	
+	public void setUp() {
+	}
+
+	public void tearDown() {
+	}
+
 	public void pass() {
 		this.getResult().pass();
 	}
