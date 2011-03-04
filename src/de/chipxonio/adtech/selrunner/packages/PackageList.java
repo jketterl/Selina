@@ -18,7 +18,7 @@ public class PackageList extends Vector<Package> implements ListModel {
 
 	@Override
 	public Object getElementAt(int arg0) {
-		return this.getElementAt(arg0);
+		return this.get(arg0);
 	}
 
 	@Override
