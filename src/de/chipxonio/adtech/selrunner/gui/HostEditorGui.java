@@ -27,6 +27,8 @@ public class HostEditorGui extends JDialog {
 	
 	private Host host;
 	
+	private boolean confirmed = false;
+	
 	private JPanel jContentPane = null;
 	private JLabel nameLabel = null;
 	private JTextField nameTextField = null;
@@ -58,6 +60,7 @@ public class HostEditorGui extends JDialog {
 	public Host run()
 	{
 		this.setVisible(true);
+		if (!this.confirmed) return null;
 		return host;
 	}
 
@@ -217,6 +220,7 @@ public class HostEditorGui extends JDialog {
 			okButton.setText("OK");
 			okButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					confirmed = true;
 					host.setName(nameTextField.getText());
 					host.setHostName(hostNameTextField.getText());
 					host.setPort(Integer.parseInt(portTextField.getText()));
