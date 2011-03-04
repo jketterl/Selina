@@ -3,14 +3,18 @@ package de.chipxonio.adtech.selrunner.gui.components;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 
+import de.chipxonio.adtech.selrunner.packages.Package;
 import de.chipxonio.adtech.selrunner.packages.PackageList;
+import de.chipxonio.adtech.selrunner.packages.PackageLoaderException;
 
 public class PackageLibrary extends JPanel {
 
@@ -70,6 +74,20 @@ public class PackageLibrary extends JPanel {
 		if (addButton == null) {
 			addButton = new JButton();
 			addButton.setText("Add Package...");
+			addButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					JFileChooser dialog = new JFileChooser();
+					if (dialog.showOpenDialog(getParent()) != JFileChooser.APPROVE_OPTION) return;
+					try {
+						list.add(new Package(dialog.getSelectedFile()));
+					} catch (IOException e1) {
+						// TODO display an error message
+					} catch (PackageLoaderException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
 		}
 		return addButton;
 	}
