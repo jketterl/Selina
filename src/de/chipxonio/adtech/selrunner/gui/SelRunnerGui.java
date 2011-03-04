@@ -168,6 +168,8 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 						loader = new Package(dialog.getSelectedFile());
 					} catch (IOException e1) {
 						e1.printStackTrace();
+					} catch (PackageLoaderException e1) {
+						e1.printStackTrace();
 					}
 				}
 			});
