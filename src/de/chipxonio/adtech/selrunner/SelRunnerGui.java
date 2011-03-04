@@ -29,14 +29,13 @@ import de.chipxonio.adtech.selrunner.hosts.HostEditor;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
 import de.chipxonio.adtech.selrunner.packageloader.PackageLoader;
 import de.chipxonio.adtech.selrunner.packageloader.PackageLoaderException;
-import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 
 public class SelRunnerGui extends JFrame {
 
 	private static final long serialVersionUID = -4222699284599413079L;
 	private HostList hostList = null;
-	private SelRunnerEngine engine;
-	private AbstractTest test;
+	private SelRunnerEngine engine;  //  @jve:decl-index=0:
+	private PackageLoader loader;
 	private JPanel jContentPane = null;
 	private JButton startButton = null;
 	private JList hostListGui = null;
@@ -99,12 +98,17 @@ public class SelRunnerGui extends JFrame {
 			startButton.setText("Start Testing");
 			startButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (loader == null) return;
 					Iterator<Host> i = getHostList().iterator();
 					SelRunnerJob job = new SelRunnerJob();
 					while (i.hasNext()) {
 						SelRunnerTask task = new SelRunnerTask();
 						task.setHost(i.next());
-						task.setTest(test);
+						try {
+							task.setTest(loader.getTestSuite());
+						} catch (PackageLoaderException e1) {
+							e1.printStackTrace();
+						}
 						job.addTask(task);
 					}
 					getEngine().setJob(job);
@@ -292,11 +296,8 @@ public class SelRunnerGui extends JFrame {
 					dialog.setVisible(true);
 					dialog.dispose();
 					try {
-						PackageLoader loader = new PackageLoader(dialog.getDirectory() + File.separator + dialog.getFile());
-						test = loader.getTestSuite();
+						loader = new PackageLoader(dialog.getDirectory() + File.separator + dialog.getFile());
 					} catch (IOException e1) {
-						e1.printStackTrace();
-					} catch (PackageLoaderException e1) {
 						e1.printStackTrace();
 					}
 				}
