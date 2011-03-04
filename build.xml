@@ -18,12 +18,13 @@
 	</target>
 	<target name="api-jar">
 		<jar destfile="${dist}/seleniumrunner-api.jar">
-			<fileset dir="${build}">
+			<fileset dir="${build	}">
 				<include name="de/chipxonio/adtech/selrunner/tests/**" />
 			</fileset>
 		</jar>
 	</target>
 	<target name="clean">
-		<rmdir dir="${build}" />
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
 	</target>
 </project>
