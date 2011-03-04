@@ -1,7 +1,7 @@
-package de.chipxonio.adtech.selrunner.testingthread;
+package de.chipxonio.adtech.selrunner.engine;
 
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
-public interface TestingThreadListener {
+public interface SelRunnerTaskListener {
 	public void testingComplete(TestResult result);
 }

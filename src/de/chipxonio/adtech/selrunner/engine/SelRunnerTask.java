@@ -13,14 +13,13 @@ import org.openqa.selenium.remote.ScreenshotException;
 
 import de.chipxonio.adtech.selrunner.browsers.FirefoxBrowser;
 import de.chipxonio.adtech.selrunner.hosts.Host;
-import de.chipxonio.adtech.selrunner.testingthread.TestingThreadListener;
 import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class SelRunnerTask extends Thread {
 	private Host host;
 	private AbstractTest test;
-	private Vector<TestingThreadListener> listeners = new Vector<TestingThreadListener>();
+	private Vector<SelRunnerTaskListener> listeners = new Vector<SelRunnerTaskListener>();
 	private WebDriver driver = null;
 	
 	public SelRunnerTask(Host host, AbstractTest test) {
@@ -29,16 +28,16 @@ public class SelRunnerTask extends Thread {
 		this.test = test;
 	}
 	
-	public void addListener(TestingThreadListener l) {
+	public void addListener(SelRunnerTaskListener l) {
 		this.listeners.add(l);
 	}
 	
 	private void fireTestingComplete(TestResult result) {
-		Iterator<TestingThreadListener> i = this.listeners.iterator();
+		Iterator<SelRunnerTaskListener> i = this.listeners.iterator();
 		while (i.hasNext()) i.next().testingComplete(result);
 	}
 	
-	public void removeListener(TestingThreadListener l) {
+	public void removeListener(SelRunnerTaskListener l) {
 		this.listeners.remove(l);
 	}
 	
