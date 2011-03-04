@@ -1,17 +1,20 @@
 package de.chipxonio.adtech.selrunner.gui;
 
-import javax.swing.JPanel;
-import java.awt.Frame;
 import java.awt.BorderLayout;
-import javax.swing.JDialog;
-import javax.swing.JTabbedPane;
-import java.awt.GridBagLayout;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.WindowConstants;
 
 import de.chipxonio.adtech.selrunner.gui.components.HostLibrary;
+import de.chipxonio.adtech.selrunner.gui.components.PackageLibrary;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
-import javax.swing.WindowConstants;
+import de.chipxonio.adtech.selrunner.packages.PackageList;
 
 public class SelRunnerPreferencesGui extends JDialog {
 
@@ -21,8 +24,8 @@ public class SelRunnerPreferencesGui extends JDialog {
 	private JPanel buttonPanel = null;
 	private JButton okButton = null;
 	private JButton canelButton = null;
-	private JPanel testLibraryPanel = null;
 	private JPanel hostPanel = null;
+	private PackageLibrary packageLibrary = null;
 
 	/**
 	 * @param owner
@@ -38,7 +41,7 @@ public class SelRunnerPreferencesGui extends JDialog {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(300, 200);
+		this.setSize(331, 267);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setModal(true);
 		this.setContentPane(getJContentPane());
@@ -67,7 +70,7 @@ public class SelRunnerPreferencesGui extends JDialog {
 	private JTabbedPane getJTabbedPane() {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
-			jTabbedPane.addTab("Package Library", null, getTestLibraryPanel(), null);
+			jTabbedPane.addTab("Package Library", null, getPackageLibrary(), null);
 			jTabbedPane.addTab("Host Library", null, getHostPanel(), null);
 		}
 		return jTabbedPane;
@@ -118,19 +121,6 @@ public class SelRunnerPreferencesGui extends JDialog {
 	}
 
 	/**
-	 * This method initializes testLibraryPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getTestLibraryPanel() {
-		if (testLibraryPanel == null) {
-			testLibraryPanel = new JPanel();
-			testLibraryPanel.setLayout(new GridBagLayout());
-		}
-		return testLibraryPanel;
-	}
-
-	/**
 	 * This method initializes hostPanel	
 	 * 	
 	 * @return javax.swing.JPanel	
@@ -142,4 +132,16 @@ public class SelRunnerPreferencesGui extends JDialog {
 		return hostPanel;
 	}
 
-}
+	/**
+	 * This method initializes packageLibrary	
+	 * 	
+	 * @return de.chipxonio.adtech.selrunner.gui.components.PackageLibrary	
+	 */
+	private PackageLibrary getPackageLibrary() {
+		if (packageLibrary == null) {
+			packageLibrary = new PackageLibrary(new PackageList());
+		}
+		return packageLibrary;
+	}
+
+}  //  @jve:decl-index=0:visual-constraint="10,10"
