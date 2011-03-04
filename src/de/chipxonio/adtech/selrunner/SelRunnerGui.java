@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.io.IOException;
 import java.util.Iterator;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -16,7 +17,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTextPane;
 import javax.swing.ListModel;
 import javax.swing.WindowConstants;
 
@@ -45,13 +45,13 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private JPanel jPanel1 = null;
 	private JButton jButton = null;
 	private JButton jButton1 = null;
-	private JTextPane resultTextPane = null;
 	private JMenuBar jJMenuBar = null;
 	private JMenu fileMenu = null;
 	private JMenuItem fileOpenMenuItem = null;
 	private JSplitPane jSplitPane = null;
 	private JScrollPane jScrollPane1 = null;
 	private JMenuItem fileExitMenuItem = null;
+	private JList resultList = null;
 	/**
 	 * This method initializes 
 	 * 
@@ -243,18 +243,6 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	}
 
 	/**
-	 * This method initializes resultTextPane	
-	 * 	
-	 * @return javax.swing.JTextPane	
-	 */
-	private JTextPane getResultTextPane() {
-		if (resultTextPane == null) {
-			resultTextPane = new JTextPane();
-		}
-		return resultTextPane;
-	}
-
-	/**
 	 * This method initializes jJMenuBar	
 	 * 	
 	 * @return javax.swing.JMenuBar	
@@ -328,7 +316,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private JScrollPane getJScrollPane1() {
 		if (jScrollPane1 == null) {
 			jScrollPane1 = new JScrollPane();
-			jScrollPane1.setViewportView(getResultTextPane());
+			jScrollPane1.setViewportView(getResultList());
 		}
 		return jScrollPane1;
 	}
@@ -364,6 +352,19 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 
 	@Override
 	public void testingComplete(TestResult result) {
-		this.getResultTextPane().setText(result.toString());
+		((DefaultListModel) this.getResultList().getModel()).addElement(result);
+		//this.getResultTextPane().setText(result.toString());
+	}
+
+	/**
+	 * This method initializes resultList	
+	 * 	
+	 * @return javax.swing.JList	
+	 */
+	private JList getResultList() {
+		if (resultList == null) {
+			resultList = new JList(new DefaultListModel());
+		}
+		return resultList;
 	}
 }  //  @jve:decl-index=0:visual-constraint="78,21"
