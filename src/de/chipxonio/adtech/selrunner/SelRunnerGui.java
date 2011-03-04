@@ -26,6 +26,7 @@ import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.hosts.HostEditor;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
 import de.chipxonio.adtech.selrunner.packageloader.PackageLoader;
+import de.chipxonio.adtech.selrunner.packageloader.PackageLoaderException;
 import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 
 public class SelRunnerGui extends JFrame {
@@ -290,15 +291,8 @@ public class SelRunnerGui extends JFrame {
 						test = loader.getTestSuite();
 					} catch (IOException e1) {
 						e1.printStackTrace();
-					} catch (ClassNotFoundException e2) {
-						e2.printStackTrace();
-					} catch (InstantiationException e3) {
-						e3.printStackTrace();
-					} catch (IllegalAccessException e4) {
-						e4.printStackTrace();
-					} catch (Exception e5) {
-						System.out.println("this is my custom exception");
-						e5.printStackTrace();
+					} catch (PackageLoaderException e1) {
+						e1.printStackTrace();
 					}
 				}
 			});
