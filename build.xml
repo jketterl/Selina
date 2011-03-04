@@ -13,6 +13,7 @@
 		<javac srcdir="${src}" destdir="${build}">
 			<classpath location="${eclipse.workspace}/selenium-2.0b2/selenium-java-2.0b2.jar" />
 			<classpath location="${eclipse.workspace}/selenium-2.0b2/libs/commons-codec-1.4.jar" />
+			<classpath location="${eclipse.workspace}/selenium-2.0b2/libs/xalan-2.7.1.jar" />
 		</javac>
 	</target>
 	<target name="api-jar">
