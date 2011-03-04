@@ -1,4 +1,4 @@
-package de.chipxonio.adtech.selrunner;
+package de.chipxonio.adtech.selrunner.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
