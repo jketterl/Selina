@@ -49,6 +49,7 @@ public class SelRunnerGui extends JFrame {
 	private JMenuItem fileOpenMenuItem = null;
 	private JSplitPane jSplitPane = null;
 	private JScrollPane jScrollPane1 = null;
+	private JMenuItem fileExitMenuItem = null;
 	/**
 	 * This method initializes 
 	 * 
@@ -274,6 +275,7 @@ public class SelRunnerGui extends JFrame {
 			fileMenu = new JMenu();
 			fileMenu.setText("File");
 			fileMenu.add(getFileOpenMenuItem());
+			fileMenu.add(getFileExitMenuItem());
 		}
 		return fileMenu;
 	}
@@ -335,5 +337,24 @@ public class SelRunnerGui extends JFrame {
 
 	public void setEngine(SelRunnerEngine engine) {
 		this.engine = engine;
+	}
+
+	/**
+	 * This method initializes fileExitMenuItem	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getFileExitMenuItem() {
+		if (fileExitMenuItem == null) {
+			fileExitMenuItem = new JMenuItem();
+			fileExitMenuItem.setText("Exit");
+			fileExitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					// TODO: this is not so pretty. we should return to the SelRunner at this point
+					System.exit(0);
+				}
+			});
+		}
+		return fileExitMenuItem;
 	}
 }  //  @jve:decl-index=0:visual-constraint="78,21"
