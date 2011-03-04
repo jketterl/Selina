@@ -22,13 +22,22 @@ import de.chipxonio.adtech.selrunner.tests.TestSuite;
 
 public class Package extends ClassLoader {
 	private final ZipFile file;
+	private String name;
 
-	public Package(String filename) throws IOException {
-		this.file = new ZipFile(filename);
+	public Package(String filename) throws IOException, PackageLoaderException {
+		this(new File(filename));
 	}
 	
-	public Package(File file) throws IOException {
+	public Package(File file) throws IOException, PackageLoaderException {
 		this.file = new ZipFile(file);
+		try {
+			NodeList nodes = XPathAPI.selectNodeList(this.getTestIndex(), "/package");
+			if (nodes.getLength() != 1)
+				throw new PackageLoaderException("Multiple or no package definitions found");
+			this.name = nodes.item(0).getAttributes().getNamedItem("name").getNodeValue();
+		} catch (TransformerException e) {
+			throw new PackageLoaderException("XPath Engine could not find package definition", e);
+		}
 	}
 
 	@Override
@@ -51,19 +60,30 @@ public class Package extends ClassLoader {
 			throw new ClassNotFoundException(name, exception);
 		}
 	}
-
-	public TestSuite getTestSuite() throws PackageLoaderException {
-		// pretty much to go wrong in this method... phew
-		ZipEntry entry = this.file.getEntry("tests.xml");
+	
+	private Document getTestIndex() throws PackageLoaderException {
+		ZipEntry entry = this.file.getEntry("package.xml");
 		if (entry == null)
-			throw new PackageLoaderException("package file does not contain a test index XML (tests.xml missing)");
+			throw new PackageLoaderException("package file does not contain a test index XML (package.xml missing)");
 		try {
 			InputStream is = this.file.getInputStream(entry);
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = dbf.newDocumentBuilder();
-			Document dom = builder.parse(is);
+			return builder.parse(is);
+		} catch (IOException e) {
+			throw new PackageLoaderException("test index XML could not be extracted", e);
+		} catch (ParserConfigurationException e) {
+			throw new PackageLoaderException("could not parse test index XML", e);
+		} catch (SAXException e) {
+			throw new PackageLoaderException("could not parse test index XML", e);
+		}
+	}
+
+	public TestSuite getTestSuite() throws PackageLoaderException {
+		// pretty much to go wrong in this method... phew
+		try {
 			TestSuite testSuite = new TestSuite();
-			NodeList nodes = XPathAPI.selectNodeList(dom, "/tests/test");
+			NodeList nodes = XPathAPI.selectNodeList(this.getTestIndex(), "/package/test");
 			for (int i = 0; i < nodes.getLength(); i++) {
 				String testClassName = nodes.item(i).getAttributes().getNamedItem("class").getNodeValue();
 				try {
@@ -78,14 +98,12 @@ public class Package extends ClassLoader {
 				}
 			}
 			return testSuite;
-		} catch (IOException e1) {
-			throw new PackageLoaderException("test index XML could not be extracted", e1);
-		} catch (ParserConfigurationException e2) {
-			throw new PackageLoaderException("could not parse test index XML", e2);
-		} catch (SAXException e3) {
-			throw new PackageLoaderException("could not parse test index XML", e3);
 		} catch (TransformerException e4) {
 			throw new PackageLoaderException("XPATH engine could not determine classes to be loaded", e4);
 		}
+	}
+	
+	public String toString() {
+		return this.name + " (" + this.file.getName() + ")";
 	}
 }
