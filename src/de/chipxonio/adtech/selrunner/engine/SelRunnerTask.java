@@ -73,8 +73,12 @@ public class SelRunnerTask extends Thread {
 			//e.printStackTrace();
 			if (e instanceof WebDriverException) this.extractScreenshot((WebDriverException) e);
 		}
+		try {
+			getDriver().quit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.fireTestingComplete(result);
-		getDriver().quit();
 	}
 	
 	protected void extractScreenshot(WebDriverException e) {
