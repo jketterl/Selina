@@ -1,6 +1,7 @@
 package de.chipxonio.adtech.selrunner.packageloader;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
@@ -24,6 +25,10 @@ public class PackageLoader extends ClassLoader {
 
 	public PackageLoader(String filename) throws IOException {
 		this.file = new ZipFile(filename);
+	}
+	
+	public PackageLoader(File file) throws IOException {
+		this.file = new ZipFile(file);
 	}
 
 	@Override
