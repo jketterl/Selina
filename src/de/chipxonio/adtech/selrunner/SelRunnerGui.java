@@ -101,6 +101,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			startButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (loader == null) return;
+					((DefaultListModel) getResultList().getModel()).clear();
 					Iterator<Host> i = getHostList().iterator();
 					SelRunnerJob job = new SelRunnerJob();
 					while (i.hasNext()) {
