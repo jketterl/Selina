@@ -32,7 +32,7 @@ public class SelRunnerEngine implements SelRunnerJobListener {
 		while (i.hasNext()) i.next().testingComplete(result);
 	}
 	
-	public void removeListener(SelRunnerJobListener l) {
+	public void removeListener(SelRunnerEngineListener l) {
 		this.listeners.remove(l);
 	}
 
