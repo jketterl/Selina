@@ -81,28 +81,33 @@ public class Package extends ClassLoader {
 
 	public TestSuite getTestSuite() throws PackageLoaderException {
 		TestSuite testSuite = new TestSuite();
-		AbstractTest[] tests = this.getTests();
-		for (int i = 0; i < tests.length; i++)
-			testSuite.addTest(tests[i]);
+		Class<AbstractTest>[] tests = this.getTests();
+		for (int i = 0; i < tests.length; i++) try {
+			testSuite.addTest(tests[i].newInstance());
+		} catch (InstantiationException e) {
+			throw new PackageLoaderException("class '" + tests[i].getName() + "' could not be instantiated", e);
+		} catch (IllegalAccessException e) {
+			throw new PackageLoaderException("class '" + tests[i].getName() + "' could not be accessed", e);
+		}
 		return testSuite;
 	}
 	
-	public AbstractTest[] getTests() throws PackageLoaderException {
+	// TODO i don't like to suppress warnings, but i don't know a way to work this out properly atm
+	@SuppressWarnings("unchecked")
+	public Class<AbstractTest>[] getTests() throws PackageLoaderException {
 		// pretty much to go wrong in this method... phew
 		try {
 			NodeList nodes = XPathAPI.selectNodeList(this.getTestIndex(), "/package/test");
-			AbstractTest[] tests = new AbstractTest[nodes.getLength()];
+			Class<AbstractTest>[] tests = new Class[nodes.getLength()];
 			for (int i = 0; i < nodes.getLength(); i++) {
 				String testClassName = nodes.item(i).getAttributes().getNamedItem("class").getNodeValue();
 				try {
 					Class<?> c = this.loadClass(testClassName);
-					tests[i] = (AbstractTest)c.newInstance();
+					if (!AbstractTest.class.isAssignableFrom(c))
+						throw new PackageLoaderException("'" + testClassName + "' does not inherit from AbstractTest");
+					tests[i] = (Class<AbstractTest>) c;
 				} catch (ClassNotFoundException e) {
 					throw new PackageLoaderException("class '" + testClassName + "' defined in test index XML could not be found in JAR", e);
-				} catch (InstantiationException e) {
-					throw new PackageLoaderException("class '" + testClassName + "' could not be instantiated", e);
-				} catch (IllegalAccessException e) {
-					throw new PackageLoaderException("class '" + testClassName + "' could not be accessed", e);
 				}
 			}
 			return tests;
