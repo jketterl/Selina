@@ -80,15 +80,23 @@ public class Package extends ClassLoader {
 	}
 
 	public TestSuite getTestSuite() throws PackageLoaderException {
+		TestSuite testSuite = new TestSuite();
+		AbstractTest[] tests = this.getTests();
+		for (int i = 0; i < tests.length; i++)
+			testSuite.addTest(tests[i]);
+		return testSuite;
+	}
+	
+	public AbstractTest[] getTests() throws PackageLoaderException {
 		// pretty much to go wrong in this method... phew
 		try {
-			TestSuite testSuite = new TestSuite();
 			NodeList nodes = XPathAPI.selectNodeList(this.getTestIndex(), "/package/test");
+			AbstractTest[] tests = new AbstractTest[nodes.getLength()];
 			for (int i = 0; i < nodes.getLength(); i++) {
 				String testClassName = nodes.item(i).getAttributes().getNamedItem("class").getNodeValue();
 				try {
 					Class<?> c = this.loadClass(testClassName);
-					testSuite.addTest((AbstractTest)c.newInstance());
+					tests[i] = (AbstractTest)c.newInstance();
 				} catch (ClassNotFoundException e) {
 					throw new PackageLoaderException("class '" + testClassName + "' defined in test index XML could not be found in JAR", e);
 				} catch (InstantiationException e) {
@@ -97,9 +105,9 @@ public class Package extends ClassLoader {
 					throw new PackageLoaderException("class '" + testClassName + "' could not be accessed", e);
 				}
 			}
-			return testSuite;
-		} catch (TransformerException e4) {
-			throw new PackageLoaderException("XPATH engine could not determine classes to be loaded", e4);
+			return tests;
+		} catch (TransformerException e) {
+			throw new PackageLoaderException("XPATH engine could not determine classes to be loaded", e);
 		}
 	}
 	
