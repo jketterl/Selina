@@ -20,6 +20,11 @@ import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 
 import de.chipxonio.adtech.selrunner.hosts.Host;
+import java.awt.Insets;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.BorderFactory;
+import java.awt.Color;
+import javax.swing.border.TitledBorder;
 
 public class HostEditorGui extends JDialog {
 
@@ -70,7 +75,6 @@ public class HostEditorGui extends JDialog {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(new Dimension(445, 145));
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setModal(true);
 		this.setTitle("Selenium Host bearbeiten");
@@ -82,6 +86,7 @@ public class HostEditorGui extends JDialog {
 				dispose();
 			}
 		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+		this.pack();
 	}
 
 	/**
@@ -108,6 +113,7 @@ public class HostEditorGui extends JDialog {
 		if (nameTextField == null) {
 			nameTextField = new JTextField();
 			nameTextField.setText(this.host.getName());
+			nameTextField.setPreferredSize(new Dimension(200, 22));
 		}
 		return nameTextField;
 	}
@@ -121,6 +127,7 @@ public class HostEditorGui extends JDialog {
 		if (hostNameTextField == null) {
 			hostNameTextField = new JTextField();
 			hostNameTextField.setText(this.host.getHostName());
+			hostNameTextField.setPreferredSize(new Dimension(200, 22));
 		}
 		return hostNameTextField;
 	}
@@ -134,6 +141,7 @@ public class HostEditorGui extends JDialog {
 		if (portTextField == null) {
 			portTextField = new JTextField();
 			portTextField.setText(Integer.toString(this.host.getPort()));
+			portTextField.setPreferredSize(new Dimension(200, 22));
 		}
 		return portTextField;
 	}
@@ -149,32 +157,38 @@ public class HostEditorGui extends JDialog {
 			gridBagConstraints5.fill = GridBagConstraints.BOTH;
 			gridBagConstraints5.gridx = 1;
 			gridBagConstraints5.gridy = 2;
+			gridBagConstraints5.insets = new Insets(2, 5, 2, 5);
 			gridBagConstraints5.weightx = 1.0;
 			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
 			gridBagConstraints4.anchor = GridBagConstraints.WEST;
 			gridBagConstraints4.gridy = 2;
 			gridBagConstraints4.ipadx = 10;
+			gridBagConstraints4.insets = new Insets(2, 5, 2, 5);
 			gridBagConstraints4.gridx = 0;
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.fill = GridBagConstraints.BOTH;
 			gridBagConstraints3.gridx = 1;
 			gridBagConstraints3.gridy = 1;
+			gridBagConstraints3.insets = new Insets(2, 5, 2, 5);
 			gridBagConstraints3.weightx = 1.0;
 			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
 			gridBagConstraints2.anchor = GridBagConstraints.WEST;
 			gridBagConstraints2.gridy = 1;
 			gridBagConstraints2.ipady = 0;
 			gridBagConstraints2.ipadx = 10;
+			gridBagConstraints2.insets = new Insets(2, 5, 2, 5);
 			gridBagConstraints2.gridx = 0;
 			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
 			gridBagConstraints1.fill = GridBagConstraints.BOTH;
 			gridBagConstraints1.gridx = 1;
 			gridBagConstraints1.gridy = 0;
+			gridBagConstraints1.insets = new Insets(2, 5, 2, 5);
 			gridBagConstraints1.weightx = 1.0;
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.anchor = GridBagConstraints.WEST;
 			gridBagConstraints.gridy = 0;
 			gridBagConstraints.ipadx = 10;
+			gridBagConstraints.insets = new Insets(2, 5, 2, 5);
 			gridBagConstraints.gridx = 0;
 			portLabel = new JLabel();
 			portLabel.setText("Port:");
@@ -184,6 +198,7 @@ public class HostEditorGui extends JDialog {
 			nameLabel.setText("Name:");
 			fieldPanel = new JPanel();
 			fieldPanel.setLayout(new GridBagLayout());
+			fieldPanel.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 			fieldPanel.add(nameLabel, gridBagConstraints);
 			fieldPanel.add(getNameTextField(), gridBagConstraints1);
 			fieldPanel.add(hostNameLabel, gridBagConstraints2);
@@ -201,10 +216,18 @@ public class HostEditorGui extends JDialog {
 	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
+			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+			gridBagConstraints7.insets = new Insets(2, 5, 2, 5);
+			gridBagConstraints7.gridy = 0;
+			gridBagConstraints7.gridx = 1;
+			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+			gridBagConstraints6.insets = new Insets(2, 5, 2, 5);
+			gridBagConstraints6.gridy = 0;
+			gridBagConstraints6.gridx = 0;
 			buttonPanel = new JPanel();
-			buttonPanel.setLayout(new FlowLayout());
-			buttonPanel.add(getOkButton(), null);
-			buttonPanel.add(getCancelButon(), null);
+			buttonPanel.setLayout(new GridBagLayout());
+			buttonPanel.add(getOkButton(), gridBagConstraints6);
+			buttonPanel.add(getCancelButon(), gridBagConstraints7);
 		}
 		return buttonPanel;
 	}
