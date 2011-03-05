@@ -13,6 +13,7 @@ import javax.swing.ListModel;
 import de.chipxonio.adtech.selrunner.gui.HostEditorGui;
 import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
+import java.awt.Insets;
 
 public class HostLibrary extends JPanel {
 
@@ -65,12 +66,15 @@ public class HostLibrary extends JPanel {
 	 */
 	private JPanel getButtonBanel() {
 		if (buttonBanel == null) {
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.insets = new Insets(2, 5, 2, 5);
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 1;
+			gridBagConstraints.insets = new Insets(2, 5, 2, 5);
 			gridBagConstraints.gridy = 0;
 			buttonBanel = new JPanel();
 			buttonBanel.setLayout(new GridBagLayout());
-			buttonBanel.add(getAddHostButton(), new GridBagConstraints());
+			buttonBanel.add(getAddHostButton(), gridBagConstraints2);
 			buttonBanel.add(getRemoveHostButton(), gridBagConstraints);
 		}
 		return buttonBanel;

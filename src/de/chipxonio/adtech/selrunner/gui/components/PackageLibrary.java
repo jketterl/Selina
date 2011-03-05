@@ -15,6 +15,7 @@ import javax.swing.ListModel;
 import de.chipxonio.adtech.selrunner.packages.Package;
 import de.chipxonio.adtech.selrunner.packages.PackageList;
 import de.chipxonio.adtech.selrunner.packages.PackageLoaderException;
+import java.awt.Insets;
 
 public class PackageLibrary extends JPanel {
 
@@ -54,12 +55,15 @@ public class PackageLibrary extends JPanel {
 	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.insets = new Insets(2, 5, 2, 5);
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 1;
+			gridBagConstraints.insets = new Insets(2, 5, 2, 5);
 			gridBagConstraints.gridy = 0;
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new GridBagLayout());
-			buttonPanel.add(getAddButton(), new GridBagConstraints());
+			buttonPanel.add(getAddButton(), gridBagConstraints3);
 			buttonPanel.add(getRemoveButton(), gridBagConstraints);
 		}
 		return buttonPanel;
