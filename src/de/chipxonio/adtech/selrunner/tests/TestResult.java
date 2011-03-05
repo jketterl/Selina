@@ -16,7 +16,7 @@ public class TestResult {
 	private Vector<Exception> exceptions = new Vector<Exception>();
 	
 	public String toString() {
-		String result = "successful: " + this.passes + ", failed: " + this.failures;
+		String result = "passes: " + this.passes + ", failed: " + this.failures;
 		if (this.exceptions.size() > 0) {
 			result += ", exceptions: " + exceptions.size();
 			Iterator<Exception> i = this.exceptions.iterator();
