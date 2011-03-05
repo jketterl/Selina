@@ -18,7 +18,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import de.chipxonio.adtech.selrunner.tests.AbstractTest;
-import de.chipxonio.adtech.selrunner.tests.TestSuite;
 
 public class Package extends ClassLoader {
 	private final ZipFile file;
