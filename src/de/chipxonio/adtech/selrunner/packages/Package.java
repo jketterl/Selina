@@ -79,19 +79,6 @@ public class Package extends ClassLoader {
 		}
 	}
 
-	public TestSuite getTestSuite() throws PackageLoaderException {
-		TestSuite testSuite = new TestSuite();
-		Class<AbstractTest>[] tests = this.getTests();
-		for (int i = 0; i < tests.length; i++) try {
-			testSuite.addTest(tests[i].newInstance());
-		} catch (InstantiationException e) {
-			throw new PackageLoaderException("class '" + tests[i].getName() + "' could not be instantiated", e);
-		} catch (IllegalAccessException e) {
-			throw new PackageLoaderException("class '" + tests[i].getName() + "' could not be accessed", e);
-		}
-		return testSuite;
-	}
-	
 	// TODO i don't like to suppress warnings, but i don't know a way to work this out properly atm
 	@SuppressWarnings("unchecked")
 	public Class<AbstractTest>[] getTests() throws PackageLoaderException {
