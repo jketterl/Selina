@@ -5,11 +5,11 @@ import java.awt.Image;
 
 import javax.swing.JPanel;
 
-public class ImageViewer extends JPanel {
+public class ImagePanel extends JPanel {
 	private static final long serialVersionUID = 8584005392814040230L;
 	private Image image;
 	
-	public ImageViewer(Image i) {
+	public ImagePanel(Image i) {
 		this.image = i;
 	}
 

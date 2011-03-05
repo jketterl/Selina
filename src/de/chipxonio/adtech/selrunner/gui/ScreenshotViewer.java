@@ -7,13 +7,13 @@ import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
-import de.chipxonio.adtech.selrunner.gui.components.ImageViewer;
+import de.chipxonio.adtech.selrunner.gui.components.ImagePanel;
 
 public class ScreenshotViewer extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private Image image;
-	private ImageViewer imageViewer = null;
+	private ImagePanel imageViewer = null;
 	private JScrollPane jScrollPane = null;
 	/**
 	 * @param owner
@@ -41,9 +41,9 @@ public class ScreenshotViewer extends JDialog {
 	 * 	
 	 * @return de.chipxonio.adtech.selrunner.gui.components.ImageViewer	
 	 */
-	private ImageViewer getImageViewer() {
+	private ImagePanel getImageViewer() {
 		if (imageViewer == null) {
-			imageViewer = new ImageViewer(this.image);
+			imageViewer = new ImagePanel(this.image);
 		}
 		return imageViewer;
 	}
