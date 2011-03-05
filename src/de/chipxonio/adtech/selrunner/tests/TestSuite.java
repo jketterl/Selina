@@ -26,7 +26,6 @@ public class TestSuite extends AbstractTest{
 				test.run();
 			} catch (Exception e) {
 				this.getResult().pushException(e);
-				e.printStackTrace();
 			}
 		}
 	}
