@@ -18,11 +18,11 @@ import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class SelRunnerTask extends Thread {
 	private Host host;
-	private AbstractTest test;
+	private Class<AbstractTest> test;
 	private Vector<SelRunnerTaskListener> listeners = new Vector<SelRunnerTaskListener>();
 	private WebDriver driver = null;
 	
-	public SelRunnerTask(Host host, AbstractTest test) {
+	public SelRunnerTask(Host host, Class<AbstractTest> test) {
 		super();
 		this.host = host;
 		this.test = test;
@@ -47,10 +47,10 @@ public class SelRunnerTask extends Thread {
 	public void setHost(Host host) {
 		this.host = host;
 	}
-	public AbstractTest getTest() {
+	public Class<AbstractTest> getTest() {
 		return test;
 	}
-	public void setTest(AbstractTest test) {
+	public void setTest(Class<AbstractTest> test) {
 		this.test = test;
 	}
 	
@@ -65,9 +65,10 @@ public class SelRunnerTask extends Thread {
 	{
 		TestResult result = new TestResult();
 		try {
-			this.test.setResult(result);
-			this.test.setDriver(this.getDriver());
-			this.test.run();
+			AbstractTest test = this.getTest().newInstance();
+			test.setResult(result);
+			test.setDriver(this.getDriver());
+			test.run();
 			try {
 				getDriver().quit();
 			} catch (Exception e) {

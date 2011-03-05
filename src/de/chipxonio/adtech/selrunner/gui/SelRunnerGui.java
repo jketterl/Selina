@@ -27,6 +27,7 @@ import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
 import de.chipxonio.adtech.selrunner.packages.Package;
 import de.chipxonio.adtech.selrunner.packages.PackageLoaderException;
+import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
@@ -101,8 +102,12 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 					SelRunnerJob job = new SelRunnerJob();
 					while (i.hasNext()) {
 						try {
-							SelRunnerTask task = new SelRunnerTask(i.next(), loader.getTestSuite());
-							job.addTask(task);
+							Host host = i.next();
+							Class<AbstractTest>[] tests = loader.getTests();
+							for (int k = 0; k < tests.length; k++) {
+								SelRunnerTask task = new SelRunnerTask(host, tests[k]);
+								job.addTask(task);
+							}
 						} catch (PackageLoaderException e1) {
 							e1.printStackTrace();
 						}
