@@ -2,14 +2,15 @@ package de.chipxonio.adtech.selrunner.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -18,13 +19,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
+import javax.swing.border.TitledBorder;
 
 import de.chipxonio.adtech.selrunner.hosts.Host;
-import java.awt.Insets;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.BorderFactory;
-import java.awt.Color;
-import javax.swing.border.TitledBorder;
 
 public class HostEditorGui extends JDialog {
 
