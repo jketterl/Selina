@@ -15,6 +15,7 @@ import de.chipxonio.adtech.selrunner.gui.components.HostLibrary;
 import de.chipxonio.adtech.selrunner.gui.components.PackageLibrary;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
 import de.chipxonio.adtech.selrunner.packages.PackageList;
+import java.awt.Insets;
 
 public class SelRunnerPreferencesGui extends JDialog {
 
@@ -83,12 +84,15 @@ public class SelRunnerPreferencesGui extends JDialog {
 	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.insets = new Insets(2, 5, 2, 5);
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 1;
+			gridBagConstraints.insets = new Insets(2, 5, 2, 5);
 			gridBagConstraints.gridy = 0;
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new GridBagLayout());
-			buttonPanel.add(getOkButton(), new GridBagConstraints());
+			buttonPanel.add(getOkButton(), gridBagConstraints4);
 			buttonPanel.add(getCanelButton(), gridBagConstraints);
 		}
 		return buttonPanel;
