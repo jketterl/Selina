@@ -1,8 +1,11 @@
 package de.chipxonio.adtech.selrunner.engine;
 
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
+import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class SelRunnerJob implements SelRunnerTaskListener {
@@ -15,9 +18,27 @@ public class SelRunnerJob implements SelRunnerTaskListener {
 	}
 	
 	public void run() {
-		Iterator<SelRunnerTask> i = tasks.iterator();
-		// start background threads
-		while (i.hasNext()) i.next().start();
+		// assort all queued tasks into per-host queues
+		Hashtable<Host,HostQueue> queues = new Hashtable<Host,HostQueue>();
+		Iterator<SelRunnerTask> i = this.tasks.iterator();
+		while (i.hasNext()) {
+			SelRunnerTask task = i.next();
+			HostQueue hostQueue = queues.get(task.getHost());
+			if (hostQueue == null) {
+				hostQueue = new HostQueue();
+				queues.put(task.getHost(), hostQueue);
+			}
+			hostQueue.add(task);
+		}
+
+		// start one host queue thread per host
+		Enumeration<Host> hosts = queues.keys();
+		while (hosts.hasMoreElements()) {
+			Host host = hosts.nextElement();
+			HostQueue hostQueue = queues.get(host);
+			// start background thread
+			hostQueue.start();
+		}
 	}
 
 	public void addListener(SelRunnerJobListener l) {
