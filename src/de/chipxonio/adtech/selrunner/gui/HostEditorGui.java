@@ -77,7 +77,7 @@ public class HostEditorGui extends JDialog {
 	private void initialize() {
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setModal(true);
-		this.setTitle("Selenium Host bearbeiten");
+		this.setTitle("Edit Selenium host");
 		this.setContentPane(getJContentPane());
 		this.getRootPane().setDefaultButton(this.getOkButton());
 		this.getRootPane().registerKeyboardAction(new ActionListener() {
@@ -193,7 +193,7 @@ public class HostEditorGui extends JDialog {
 			portLabel = new JLabel();
 			portLabel.setText("Port:");
 			hostNameLabel = new JLabel();
-			hostNameLabel.setText("Rechnername / IP:");
+			hostNameLabel.setText("Hostname / IP:");
 			nameLabel = new JLabel();
 			nameLabel.setText("Name:");
 			fieldPanel = new JPanel();
@@ -262,7 +262,7 @@ public class HostEditorGui extends JDialog {
 	private JButton getCancelButon() {
 		if (cancelButon == null) {
 			cancelButon = new JButton();
-			cancelButon.setText("Abbrechen");
+			cancelButon.setText("Cancel");
 			cancelButon.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					dispose();
