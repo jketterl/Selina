@@ -2,6 +2,7 @@ package de.chipxonio.adtech.selrunner.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -251,7 +252,16 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	 */
 	private JList getResultList() {
 		if (resultList == null) {
+			final JFrame parent = this;
 			resultList = new JList(new DefaultListModel());
+			resultList.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					if (e.getClickCount() != 2) return;
+					TestResult result = (TestResult) getResultList().getSelectedValue();
+					Iterator<Image> i = result.getScreenshots().iterator();
+					while (i.hasNext()) (new ScreenshotViewer(parent, i.next())).setVisible(true);
+				}
+			});
 		}
 		return resultList;
 	}

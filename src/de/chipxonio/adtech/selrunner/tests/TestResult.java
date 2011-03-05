@@ -1,10 +1,10 @@
 package de.chipxonio.adtech.selrunner.tests;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.awt.Image;
 import java.util.Iterator;
 import java.util.Vector;
+
+import javax.swing.ImageIcon;
 
 import org.apache.commons.codec.binary.Base64;
 import org.openqa.selenium.WebDriverException;
@@ -22,8 +22,7 @@ public class TestResult {
 			Iterator<Exception> i = this.exceptions.iterator();
 			int screenshots = 0;
 			while (i.hasNext()) {
-				Exception e = i.next();
-				if (e instanceof WebDriverException && hasScreenshot((WebDriverException)e)) screenshots++;
+				if (hasScreenshot(i.next())) screenshots++;
 			}
 			if (screenshots > 0) result += ", screenshots: " + screenshots;
 		}
@@ -46,24 +45,25 @@ public class TestResult {
 		this.failures++;
 	}
 	
-	protected boolean hasScreenshot(WebDriverException e) {
+	protected boolean hasScreenshot(Exception e) {
+		if (!(e instanceof WebDriverException)) return false;
 		Throwable cause = e.getCause();
 		return cause instanceof ScreenshotException;
 	}
-
-	protected void extractScreenshot(WebDriverException e) {
-		if (!this.hasScreenshot(e)) return;
-		ScreenshotException cause = (ScreenshotException) e.getCause();
-		try {
-			File f = new File("/home/jketterl/screenshot.png");
-			if (f.exists()) f.delete();
-			FileOutputStream file = new FileOutputStream(f);
-			file.write(Base64.decodeBase64((cause).getBase64EncodedScreenshot()));
-			file.close();
-			System.out.println("screenshot has been written");
-		} catch (IOException e1) {
-			e1.printStackTrace();
-			System.out.println("failed writing screenshot");
+	
+	public Vector<Image> getScreenshots() {
+		Vector<Image> screenshots = new Vector<Image>();
+		Iterator<Exception> i = this.exceptions.iterator();
+		while (i.hasNext()) {
+			Exception e = i.next();
+			if (hasScreenshot(e)) screenshots.add(extractScreenshot((WebDriverException) e));
 		}
+		return screenshots;
+	}
+
+	protected Image extractScreenshot(WebDriverException e) {
+		if (!this.hasScreenshot(e)) return null;
+		ScreenshotException cause = (ScreenshotException) e.getCause();
+		return (new ImageIcon(Base64.decodeBase64(cause.getBase64EncodedScreenshot()))).getImage();
 	}
 }
