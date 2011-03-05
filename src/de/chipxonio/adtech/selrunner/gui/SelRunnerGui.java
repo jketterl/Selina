@@ -114,7 +114,6 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 						}
 					}
 					getEngine().setJob(job);
-					getEngine().run();
 				}
 			});
 		}

@@ -6,8 +6,11 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 
+import de.chipxonio.adtech.selrunner.hosts.Host;
+
 public class HostQueue extends Thread {
 	private boolean toBeStopped = false;
+	//private Host host;
 	private Queue<SelRunnerTask> tasks = new AbstractQueue<SelRunnerTask>() {
 		private LinkedList<SelRunnerTask> list = new LinkedList<SelRunnerTask>();
 		
@@ -46,8 +49,14 @@ public class HostQueue extends Thread {
 		}
 	};
 	
+	public HostQueue(Host host) {
+		//this.host = host;
+		this.start();
+	}
+	
 	public void add(SelRunnerTask task) {
 		this.tasks.add(task);
+		if (this.isAlive()) this.interrupt();
 	}
 	
 	public void run() {

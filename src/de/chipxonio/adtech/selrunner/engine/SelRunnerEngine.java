@@ -19,10 +19,6 @@ public class SelRunnerEngine implements SelRunnerJobListener {
 		return this.job;
 	}
 	
-	public void run() {
-		this.job.run();
-	}
-
 	public void addListener(SelRunnerEngineListener l) {
 		this.listeners.add(l);
 	}
