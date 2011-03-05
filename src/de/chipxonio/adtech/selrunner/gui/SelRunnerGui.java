@@ -35,7 +35,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private static final long serialVersionUID = -4222699284599413079L;
 	private HostList hostList = null;
 	private SelRunnerEngine engine;  //  @jve:decl-index=0:
-	private Package loader;
+	private Package pack;
 	private JPanel jContentPane = null;
 	private JButton startButton = null;
 	private JMenuBar jJMenuBar = null;
@@ -96,14 +96,14 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			startButton.setText("Start Testing");
 			startButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (loader == null) return;
+					if (pack == null) return;
 					((DefaultListModel) getResultList().getModel()).clear();
 					Iterator<Host> i = getHostList().iterator();
 					SelRunnerJob job = new SelRunnerJob();
 					while (i.hasNext()) {
 						try {
 							Host host = i.next();
-							Class<AbstractTest>[] tests = loader.getTests();
+							Class<AbstractTest>[] tests = pack.getTests();
 							for (int k = 0; k < tests.length; k++) {
 								SelRunnerTask task = new SelRunnerTask(host, tests[k]);
 								job.addTask(task);
@@ -170,7 +170,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 					JFileChooser dialog = new JFileChooser();
 					if (dialog.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) return;
 					try {
-						loader = new Package(dialog.getSelectedFile());
+						pack = new Package(dialog.getSelectedFile());
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					} catch (PackageLoaderException e1) {
