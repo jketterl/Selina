@@ -58,19 +58,26 @@ public class SelRunnerTask extends Thread {
 	public void run()
 	{
 		TestResult result = new TestResult();
+		WebDriver driver = null;
+		try {
+			driver = this.getDriver();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (driver == null) return;
 		try {
 			AbstractTest test = this.getTest().newInstance();
 			test.setResult(result);
-			test.setDriver(this.getDriver());
+			test.setDriver(driver);
 			test.run();
-			try {
-				getDriver().quit();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		} catch (Exception e) {
 			result.pushException(e);
 		}
 		this.fireTestingComplete(result);
+		try {
+			driver.quit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
