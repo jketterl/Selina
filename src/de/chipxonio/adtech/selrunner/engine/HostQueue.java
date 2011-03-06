@@ -5,11 +5,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Queue;
+import java.util.Vector;
 
 import de.chipxonio.adtech.selrunner.hosts.Host;
 
 public class HostQueue extends Thread {
 	private boolean toBeStopped = false;
+	private Vector<HostQueueListener> listeners = new Vector<HostQueueListener>();
 	//private Host host;
 	private Queue<SelRunnerTask> tasks = new AbstractQueue<SelRunnerTask>() {
 		private LinkedList<SelRunnerTask> list = new LinkedList<SelRunnerTask>();
@@ -60,6 +62,7 @@ public class HostQueue extends Thread {
 	}
 	
 	public void run() {
+		this.fireStatusChanged(new HostQueueEvent(this, HostQueueEvent.RUNNING | HostQueueEvent.INACTIVE));
 		while(!this.toBeStopped) {
 			SelRunnerTask task = this.tasks.poll();
 			if (task == null) {
@@ -68,15 +71,35 @@ public class HostQueue extends Thread {
 					this.terminate();
 				} catch (InterruptedException e) {
 				}
-			} else {
+			} else try {
+				this.fireStatusChanged(new HostQueueEvent(this, HostQueueEvent.RUNNING | HostQueueEvent.ACTIVE));
 				task.run();
+				this.fireStatusChanged(new HostQueueEvent(this, HostQueueEvent.RUNNING | HostQueueEvent.INACTIVE));
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
+		this.fireStatusChanged(new HostQueueEvent(this, HostQueueEvent.STOPPED | HostQueueEvent.INACTIVE));
 	}
 	
 	public void terminate(){
 		if (!this.isAlive()) return;
 		this.toBeStopped = true;
 		this.interrupt();
+	}
+	
+	public void addListener(HostQueueListener listener) {
+		this.listeners.add(listener);
+	}
+	
+	public void removeListener(HostQueueListener listener) {
+		this.listeners.remove(listener);
+	}
+	
+	private void fireStatusChanged(HostQueueEvent e) {
+		Iterator<HostQueueListener> i = this.listeners.iterator();
+		while (i.hasNext()) {
+			i.next().statusChanged(e);
+		}
 	}
 }
