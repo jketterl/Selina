@@ -8,12 +8,10 @@ import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class SelRunnerJob implements SelRunnerTaskListener {
-	private Vector<SelRunnerTask> tasks = new Vector<SelRunnerTask>();
 	private Vector<SelRunnerJobListener> listeners = new Vector<SelRunnerJobListener>();
 	private Hashtable<Host,HostQueue> queues = new Hashtable<Host,HostQueue>();
 	
 	public void addTask(SelRunnerTask task) {
-		this.tasks.add(task);
 		task.addListener(this);
 		HostQueue hostQueue = queues.get(task.getHost());
 		if (hostQueue == null || !hostQueue.isAlive()) {
