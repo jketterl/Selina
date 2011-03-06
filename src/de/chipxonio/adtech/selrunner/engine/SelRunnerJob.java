@@ -1,27 +1,41 @@
 package de.chipxonio.adtech.selrunner.engine;
 
-import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Vector;
 
-import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
-public class SelRunnerJob implements SelRunnerTaskListener, HostQueueListener {
+public class SelRunnerJob implements SelRunnerTaskListener {
 	private Vector<SelRunnerJobListener> listeners = new Vector<SelRunnerJobListener>();
-	private Hashtable<Host,HostQueue> queues = new Hashtable<Host,HostQueue>();
+	private LinkedList<SelRunnerTask> unstartedTasks = new LinkedList<SelRunnerTask>();
+	private SelRunnerEngine engine;
 	
 	public void addTask(SelRunnerTask task) {
 		task.addListener(this);
-		HostQueue hostQueue = queues.get(task.getHost());
-		if (hostQueue == null) {
-			hostQueue = new HostQueue(task.getHost());
-			hostQueue.addListener(this);
-			queues.put(task.getHost(), hostQueue);
+		if (this.hasEngine()) {
+			this.engine.getQueue(task.getHost()).add(task);
+		} else {
+			this.unstartedTasks.add(task);
 		}
-		hostQueue.add(task);
 	}
 	
+	public boolean hasEngine() {
+		return this.engine != null;
+	}
+	
+	public SelRunnerEngine getEngine() {
+		return engine;
+	}
+
+	public void setEngine(SelRunnerEngine engine) {
+		this.engine = engine;
+		SelRunnerTask task;
+		while ((task = this.unstartedTasks.poll()) != null) {
+			this.engine.getQueue(task.getHost()).add(task);
+		}
+	}
+
 	public void addListener(SelRunnerJobListener l) {
 		this.listeners.add(l);
 	}
@@ -38,12 +52,5 @@ public class SelRunnerJob implements SelRunnerTaskListener, HostQueueListener {
 	@Override
 	public void testingComplete(TestResult result) {
 		this.fireTestingComplete(result);
-	}
-
-	@Override
-	public void statusChanged(HostQueueEvent e) {
-		if ((e.getStatus() & HostQueueEvent.RUNNING) == HostQueueEvent.STOPPED) {
-			this.queues.remove(e.getSource());
-		}
 	}
 }

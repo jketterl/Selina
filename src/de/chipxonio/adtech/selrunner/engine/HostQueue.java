@@ -12,7 +12,7 @@ import de.chipxonio.adtech.selrunner.hosts.Host;
 public class HostQueue extends Thread {
 	private boolean toBeStopped = false;
 	private Vector<HostQueueListener> listeners = new Vector<HostQueueListener>();
-	//private Host host;
+	private Host host;
 	private Queue<SelRunnerTask> tasks = new AbstractQueue<SelRunnerTask>() {
 		private LinkedList<SelRunnerTask> list = new LinkedList<SelRunnerTask>();
 		
@@ -52,7 +52,7 @@ public class HostQueue extends Thread {
 	};
 	
 	public HostQueue(Host host) {
-		//this.host = host;
+		this.host = host;
 		this.start();
 	}
 	
@@ -101,5 +101,9 @@ public class HostQueue extends Thread {
 		while (i.hasNext()) {
 			i.next().statusChanged(e);
 		}
+	}
+	
+	public Host getHost() {
+		return this.host;
 	}
 }
