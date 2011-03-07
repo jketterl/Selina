@@ -43,7 +43,8 @@ public class SelRunnerPreferencesGui extends JDialog {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(331, 267);
+		this.setSize(600, 400);
+		this.setTitle("Selenium Runner Preferences");
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setModal(true);
 		this.setContentPane(getJContentPane());
