@@ -90,6 +90,12 @@ public class PackageList extends Vector<Package> implements ListModel {
 	public boolean remove(Object o) {
 		int index = this.indexOf(o);
 		this.fireIntervalRemoved(new ListDataEvent(this, ListDataEvent.INTERVAL_REMOVED, index, index));
+		Package p = (Package) o;
+		if (p.hasPreferences()) try {
+			p.getPreferences().removeNode();
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
+		}
 		return super.remove(o);
 	}
 
