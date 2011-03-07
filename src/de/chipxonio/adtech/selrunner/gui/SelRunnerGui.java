@@ -19,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
 
+import de.chipxonio.adtech.library.Library;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngineListener;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
@@ -37,6 +38,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private HostList hostList = null;
 	private SelRunnerEngine engine;  //  @jve:decl-index=0:
 	private Package pack;
+	private Library library;
 	private JPanel jContentPane = null;
 	private JButton startButton = null;
 	private JMenuBar jJMenuBar = null;
@@ -355,5 +357,13 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			});
 		}
 		return fileOpenMenuItem;
+	}
+
+	public void setLibrary(Library l) {
+		this.library = l;
+	}
+	
+	public Library getLibrary() {
+		return this.library;
 	}
 }  //  @jve:decl-index=0:visual-constraint="78,21"

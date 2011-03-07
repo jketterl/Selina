@@ -4,14 +4,15 @@ import java.util.Iterator;
 
 public class PackageLoader extends ClassLoader {
 	private static PackageLoader sharedInstance;
-	private PackageList packages = new PackageList();
+	private PackageList packagelist;
 	
 	public void registerPackage(Package p) {
-		packages.add(p);
+		packagelist.add(p);
 	}
 	
 	protected Class<?> findClass(String name) throws ClassNotFoundException {
-		Iterator<Package> i = packages.iterator();
+		if (packagelist == null) throw new ClassNotFoundException(name);
+		Iterator<Package> i = packagelist.iterator();
 		while (i.hasNext()) try {
 			return i.next().loadClass(name);
 		} catch (ClassNotFoundException e1) {
@@ -25,5 +26,13 @@ public class PackageLoader extends ClassLoader {
 			sharedInstance = new PackageLoader();
 		}
 		return sharedInstance;
+	}
+
+	public PackageList getPackageList() {
+		return packagelist;
+	}
+
+	public void setPackageList(PackageList packages) {
+		this.packagelist = packages;
 	}
 }
