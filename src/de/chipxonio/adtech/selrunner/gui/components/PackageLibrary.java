@@ -3,6 +3,7 @@ package de.chipxonio.adtech.selrunner.gui.components;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.IOException;
 
 import javax.swing.JButton;
@@ -12,11 +13,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 
-import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.packages.Package;
 import de.chipxonio.adtech.selrunner.packages.PackageList;
 import de.chipxonio.adtech.selrunner.packages.PackageLoaderException;
-import java.awt.Insets;
 
 public class PackageLibrary extends JPanel {
 
