@@ -3,17 +3,16 @@ package de.chipxonio.adtech.selrunner.gui.components;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListModel;
 
 import de.chipxonio.adtech.selrunner.gui.HostEditorGui;
 import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
-import java.awt.Insets;
 
 public class HostLibrary extends JPanel {
 
