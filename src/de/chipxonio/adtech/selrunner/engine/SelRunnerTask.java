@@ -1,5 +1,6 @@
 package de.chipxonio.adtech.selrunner.engine;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -10,7 +11,8 @@ import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
-public class SelRunnerTask extends Thread {
+public class SelRunnerTask extends Thread implements Serializable {
+	private static final long serialVersionUID = 7731026883005748237L;
 	private Host host;
 	private Class<AbstractTest> test;
 	private Vector<SelRunnerTaskListener> listeners = new Vector<SelRunnerTaskListener>();

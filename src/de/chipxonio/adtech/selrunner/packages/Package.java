@@ -34,6 +34,7 @@ public class Package extends ClassLoader {
 			if (nodes.getLength() != 1)
 				throw new PackageLoaderException("Multiple or no package definitions found");
 			this.name = nodes.item(0).getAttributes().getNamedItem("name").getNodeValue();
+			PackageLoader.getSharedInstance().registerPackage(this);
 		} catch (TransformerException e) {
 			throw new PackageLoaderException("XPath Engine could not find package definition", e);
 		}

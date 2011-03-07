@@ -41,7 +41,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private JButton startButton = null;
 	private JMenuBar jJMenuBar = null;
 	private JMenu fileMenu = null;
-	private JMenuItem fileOpenMenuItem = null;
+	private JMenuItem fileOpenPackageMenuItem = null;
 	private JSplitPane jSplitPane = null;
 	private JScrollPane jScrollPane1 = null;
 	private JMenuItem fileExitMenuItem = null;
@@ -49,6 +49,8 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private JMenu editMenu = null;
 	private JMenuItem preferencesMenuItem = null;
 	private HostLibrary hostLibrary = null;
+	private JMenuItem fileSaveMenuItem = null;
+	private JMenuItem fileOpenMenuItem = null;
 	/**
 	 * This method initializes 
 	 * 
@@ -99,25 +101,29 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (pack == null) return;
 					((DefaultListModel) getResultList().getModel()).clear();
-					Iterator<Host> i = getHostList().iterator();
-					SelRunnerJob job = new SelRunnerJob();
-					while (i.hasNext()) {
-						try {
-							Host host = i.next();
-							Class<AbstractTest>[] tests = pack.getTests();
-							for (int k = 0; k < tests.length; k++) {
-								SelRunnerTask task = new SelRunnerTask(host, tests[k]);
-								job.add(task);
-							}
-						} catch (PackageLoaderException e1) {
-							e1.printStackTrace();
-						}
-					}
-					getEngine().runJob(job);
+					getEngine().runJob(getJob());
 				}
 			});
 		}
 		return startButton;
+	}
+	
+	public SelRunnerJob getJob() {
+		Iterator<Host> i = getHostList().iterator();
+		SelRunnerJob job = new SelRunnerJob();
+		while (i.hasNext()) {
+			try {
+				Host host = i.next();
+				Class<AbstractTest>[] tests = pack.getTests();
+				for (int k = 0; k < tests.length; k++) {
+					SelRunnerTask task = new SelRunnerTask(host, tests[k]);
+					job.add(task);
+				}
+			} catch (PackageLoaderException e1) {
+				e1.printStackTrace();
+			}
+		}
+		return job;
 	}
 
 	private HostList getHostList() {
@@ -150,22 +156,24 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 		if (fileMenu == null) {
 			fileMenu = new JMenu();
 			fileMenu.setText("File");
-			fileMenu.add(getFileOpenMenuItem());
+			fileMenu.add(getFileOpenPackageMenuItem());
 			fileMenu.add(getFileExitMenuItem());
+			fileMenu.add(getFileOpenMenuItem());
+			fileMenu.add(getFileSaveMenuItem());
 		}
 		return fileMenu;
 	}
 
 	/**
-	 * This method initializes fileOpenMenuItem	
+	 * This method initializes fileOpenPackageMenuItem	
 	 * 	
 	 * @return javax.swing.JMenuItem	
 	 */
-	private JMenuItem getFileOpenMenuItem() {
-		if (fileOpenMenuItem == null) {
-			fileOpenMenuItem = new JMenuItem();
-			fileOpenMenuItem.setText("Open test package...");
-			fileOpenMenuItem.addActionListener(new java.awt.event.ActionListener() {
+	private JMenuItem getFileOpenPackageMenuItem() {
+		if (fileOpenPackageMenuItem == null) {
+			fileOpenPackageMenuItem = new JMenuItem();
+			fileOpenPackageMenuItem.setText("Open test package...");
+			fileOpenPackageMenuItem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					JFileChooser dialog = new JFileChooser();
 					if (dialog.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) return;
@@ -179,7 +187,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 				}
 			});
 		}
-		return fileOpenMenuItem;
+		return fileOpenPackageMenuItem;
 	}
 
 	/**
@@ -307,5 +315,45 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			hostLibrary = new HostLibrary(this.getHostList());
 		}
 		return hostLibrary;
+	}
+
+	/**
+	 * This method initializes fileSaveMenuItem	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getFileSaveMenuItem() {
+		if (fileSaveMenuItem == null) {
+			fileSaveMenuItem = new JMenuItem();
+			fileSaveMenuItem.setText("Save Job...");
+			fileSaveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					JFileChooser dialog = new JFileChooser();
+					if (dialog.showSaveDialog(null) != JFileChooser.APPROVE_OPTION) return;
+					getJob().saveToFile(dialog.getSelectedFile());
+				}
+			});
+		}
+		return fileSaveMenuItem;
+	}
+
+	/**
+	 * This method initializes fileOpenMenuItem	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getFileOpenMenuItem() {
+		if (fileOpenMenuItem == null) {
+			fileOpenMenuItem = new JMenuItem();
+			fileOpenMenuItem.setText("Open Job...");
+			fileOpenMenuItem.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					JFileChooser dialog = new JFileChooser();
+					if (dialog.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) return;
+					getEngine().runJob(SelRunnerJob.loadFromFile(dialog.getSelectedFile()));
+				}
+			});
+		}
+		return fileOpenMenuItem;
 	}
 }  //  @jve:decl-index=0:visual-constraint="78,21"

@@ -1,16 +1,17 @@
 package de.chipxonio.adtech.selrunner.engine;
 
-import java.beans.XMLEncoder;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamClass;
 import java.util.Iterator;
 import java.util.Vector;
 
+import de.chipxonio.adtech.selrunner.packages.PackageLoader;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class SelRunnerJob extends Vector<SelRunnerTask> implements SelRunnerTaskListener {
@@ -41,25 +42,40 @@ public class SelRunnerJob extends Vector<SelRunnerTask> implements SelRunnerTask
 	}
 	
 	public void saveToFile(File file) {
+		/*
+		XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(file)));
+		encoder.writeObject(this);
+		encoder.close();
+		*/
 		try {
-			XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(file)));
-			encoder.writeObject(this);
-			encoder.close();
+			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+			oos.writeObject(this);
+			oos.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		/*
-		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
-		oos.writeObject(this);
-		oos.close();
-		*/
 	}
 	
 	public static SelRunnerJob loadFromFile(File file) {
 		ObjectInputStream ois;
 		try {
-			ois = new ObjectInputStream(new FileInputStream(file));
+			ois = new ObjectInputStream(new FileInputStream(file)) {
+				protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException, ClassNotFoundException {
+					try {
+						return Class.forName(desc.getName());
+					} catch (ClassNotFoundException e) {
+						try {
+							return PackageLoader.getSharedInstance().loadClass(desc.getName());
+						} catch (ClassNotFoundException e1) {
+						}
+						throw new ClassNotFoundException(desc.getName());
+					}
+				}
+			};
 			SelRunnerJob job = (SelRunnerJob) ois.readObject();
 			ois.close();
 			return job;

@@ -1,6 +1,9 @@
 package de.chipxonio.adtech.selrunner.hosts;
 
-public class Host {
+import java.io.Serializable;
+
+public class Host implements Serializable {
+	private static final long serialVersionUID = 5974183186503258109L;
 	private String name;
 	private String hostName;
 	private int port = 4444;
