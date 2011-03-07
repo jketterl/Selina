@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 
+import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.packages.Package;
 import de.chipxonio.adtech.selrunner.packages.PackageList;
 import de.chipxonio.adtech.selrunner.packages.PackageLoaderException;
@@ -105,6 +106,14 @@ public class PackageLibrary extends JPanel {
 		if (removeButton == null) {
 			removeButton = new JButton();
 			removeButton.setText("Remove Package(s)");
+			removeButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Object[] packages = getPackageList().getSelectedValues();
+					for (int i = 0; i < packages.length; i++) {
+						list.remove((Package) packages[i]);
+					}
+				}
+			});
 		}
 		return removeButton;
 	}
