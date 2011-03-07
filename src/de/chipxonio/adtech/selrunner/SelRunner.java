@@ -31,7 +31,7 @@ public class SelRunner {
 				e.printStackTrace();
 			}
 			SelRunnerGui gui = new SelRunnerGui();
-			Library l = new LocalLibrary(Preferences.userRoot().node("library"));
+			Library l = new LocalLibrary(Preferences.userRoot().node("SelRunner").node("library"));
 			PackageLoader.getSharedInstance().setPackageList(l.getPackages());
 			gui.setEngine(engine);
 			gui.setLibrary(l);

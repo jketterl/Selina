@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -11,11 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
 
+import de.chipxonio.adtech.library.Library;
 import de.chipxonio.adtech.selrunner.gui.components.HostLibrary;
 import de.chipxonio.adtech.selrunner.gui.components.PackageLibrary;
-import de.chipxonio.adtech.selrunner.hosts.HostList;
 import de.chipxonio.adtech.selrunner.packages.PackageList;
-import java.awt.Insets;
 
 public class SelRunnerPreferencesGui extends JDialog {
 
@@ -27,12 +27,14 @@ public class SelRunnerPreferencesGui extends JDialog {
 	private JButton canelButton = null;
 	private JPanel hostPanel = null;
 	private PackageLibrary packageLibrary = null;
+	private Library library;
 
 	/**
 	 * @param owner
 	 */
-	public SelRunnerPreferencesGui(Frame owner) {
+	public SelRunnerPreferencesGui(Frame owner, Library library) {
 		super(owner);
+		this.library = library;
 		initialize();
 	}
 
@@ -131,7 +133,7 @@ public class SelRunnerPreferencesGui extends JDialog {
 	 */
 	private JPanel getHostPanel() {
 		if (hostPanel == null) {
-			hostPanel = new HostLibrary(new HostList());
+			hostPanel = new HostLibrary(this.library.getHosts());
 		}
 		return hostPanel;
 	}

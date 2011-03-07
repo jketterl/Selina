@@ -17,7 +17,7 @@ public class LocalLibrary extends Library {
 	@Override
 	public HostList getHosts() {
 		if (this.hosts == null) {
-			this.hosts = new HostList();
+			this.hosts = new HostList(this.preferences.node("hostlist"));
 		}
 		return this.hosts;
 	}

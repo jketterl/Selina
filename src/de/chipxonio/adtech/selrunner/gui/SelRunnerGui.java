@@ -300,7 +300,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			preferencesMenuItem.setText("Preferences...");
 			preferencesMenuItem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					(new SelRunnerPreferencesGui(null)).setVisible(true);
+					(new SelRunnerPreferencesGui(null, getLibrary())).setVisible(true);
 				}
 			});
 		}
