@@ -30,12 +30,17 @@ public class Host implements Serializable {
 		return this.preferences != null;
 	}
 	
+	public Preferences getPreferences() {
+		return this.preferences;
+	}
+	
 	public String getHostName() {
 		return hostName;
 	}
 
 	public void setHostName(String hostName) {
 		this.hostName = hostName;
+		if (this.hasPreferences()) this.preferences.put("hostName", hostName);
 	}
 
 	public int getPort() {
@@ -44,6 +49,7 @@ public class Host implements Serializable {
 
 	public void setPort(int port) {
 		this.port = port;
+		if (this.hasPreferences()) this.preferences.putInt("post", port);
 	}
 
 	public String getName() {
@@ -52,6 +58,7 @@ public class Host implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+		if (this.hasPreferences()) this.preferences.put("name", name);
 	}
 
 	public String toString()
