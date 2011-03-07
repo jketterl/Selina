@@ -15,7 +15,7 @@ public class LocalLibrary extends Library {
 	}
 
 	@Override
-	public HostList getHosts() {
+	public HostList getHostList() {
 		if (this.hosts == null) {
 			this.hosts = new HostList(this.preferences.node("hostlist"));
 		}
@@ -23,7 +23,7 @@ public class LocalLibrary extends Library {
 	}
 
 	@Override
-	public PackageList getPackages() {
+	public PackageList getPackageList() {
 		if (this.packages == null) {
 			this.packages = new PackageList();
 		}

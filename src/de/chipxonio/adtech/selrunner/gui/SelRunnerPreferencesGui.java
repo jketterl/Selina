@@ -133,7 +133,7 @@ public class SelRunnerPreferencesGui extends JDialog {
 	 */
 	private JPanel getHostPanel() {
 		if (hostPanel == null) {
-			hostPanel = new HostLibrary(this.library.getHosts());
+			hostPanel = new HostLibrary(this.library.getHostList());
 		}
 		return hostPanel;
 	}

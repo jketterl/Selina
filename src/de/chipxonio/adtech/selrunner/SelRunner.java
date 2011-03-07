@@ -32,7 +32,7 @@ public class SelRunner {
 			}
 			SelRunnerGui gui = new SelRunnerGui();
 			Library l = new LocalLibrary(Preferences.userRoot().node("SelRunner").node("library"));
-			PackageLoader.getSharedInstance().setPackageList(l.getPackages());
+			PackageLoader.getSharedInstance().setPackageList(l.getPackageList());
 			gui.setEngine(engine);
 			gui.setLibrary(l);
 			gui.setVisible(true);
