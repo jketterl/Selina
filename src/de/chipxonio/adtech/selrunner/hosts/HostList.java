@@ -97,6 +97,12 @@ public class HostList extends Vector<Host> implements ListModel {
 	public boolean remove(Object o) {
 		int index = this.indexOf(o);
 		this.fireIntervalRemoved(new ListDataEvent(this, ListDataEvent.INTERVAL_REMOVED, index, index));
+		Host h = (Host) o;
+		if (h.hasPreferences()) try {
+				h.getPreferences().removeNode();
+			} catch (BackingStoreException e) {
+				e.printStackTrace();
+			}
 		return super.remove(o);
 	}
 
