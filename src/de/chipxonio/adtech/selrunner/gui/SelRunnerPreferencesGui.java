@@ -15,7 +15,6 @@ import javax.swing.WindowConstants;
 import de.chipxonio.adtech.selrunner.gui.components.HostLibrary;
 import de.chipxonio.adtech.selrunner.gui.components.PackageLibrary;
 import de.chipxonio.adtech.selrunner.library.Library;
-import de.chipxonio.adtech.selrunner.packages.PackageList;
 
 public class SelRunnerPreferencesGui extends JDialog {
 
@@ -145,7 +144,7 @@ public class SelRunnerPreferencesGui extends JDialog {
 	 */
 	private PackageLibrary getPackageLibrary() {
 		if (packageLibrary == null) {
-			packageLibrary = new PackageLibrary(new PackageList());
+			packageLibrary = new PackageLibrary(this.library.getPackageList());
 		}
 		return packageLibrary;
 	}

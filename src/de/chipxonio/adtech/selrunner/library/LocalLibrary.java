@@ -25,7 +25,7 @@ public class LocalLibrary extends Library {
 	@Override
 	public PackageList getPackageList() {
 		if (this.packages == null) {
-			this.packages = new PackageList();
+			this.packages = new PackageList(this.preferences.node("packagelist"));
 		}
 		return this.packages;
 	}

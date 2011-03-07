@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.prefs.Preferences;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -22,6 +23,7 @@ import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 public class Package extends ClassLoader {
 	private final ZipFile file;
 	private String name;
+	private Preferences preferences;
 
 	public Package(String filename) throws IOException, PackageLoaderException {
 		this(new File(filename));
@@ -34,10 +36,27 @@ public class Package extends ClassLoader {
 			if (nodes.getLength() != 1)
 				throw new PackageLoaderException("Multiple or no package definitions found");
 			this.name = nodes.item(0).getAttributes().getNamedItem("name").getNodeValue();
-			PackageLoader.getSharedInstance().registerPackage(this);
 		} catch (TransformerException e) {
 			throw new PackageLoaderException("XPath Engine could not find package definition", e);
 		}
+	}
+
+	public Package(Preferences node) throws IOException, PackageLoaderException {
+		this(new File(node.get("fileName", "")));
+		this.preferences = node;
+	}
+	
+	public void setPreferences(Preferences prefs) {
+		this.preferences = prefs;
+		this.preferences.put("fileName", this.file.getName());
+	}
+	
+	public Preferences getPreferences() {
+		return this.preferences;
+	}
+	
+	public boolean hasPreferences() {
+		return this.preferences != null;
 	}
 
 	@Override
