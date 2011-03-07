@@ -16,14 +16,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
 
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngineListener;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
-import de.chipxonio.adtech.selrunner.gui.components.HostLibrary;
 import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.library.Library;
 import de.chipxonio.adtech.selrunner.packages.Package;
@@ -42,13 +40,11 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private JMenuBar jJMenuBar = null;
 	private JMenu fileMenu = null;
 	private JMenuItem fileOpenPackageMenuItem = null;
-	private JSplitPane jSplitPane = null;
 	private JScrollPane jScrollPane1 = null;
 	private JMenuItem fileExitMenuItem = null;
 	private JList resultList = null;
 	private JMenu editMenu = null;
 	private JMenuItem preferencesMenuItem = null;
-	private HostLibrary hostLibrary = null;
 	private JMenuItem fileSaveMenuItem = null;
 	private JMenuItem fileOpenMenuItem = null;
 	/**
@@ -83,7 +79,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new BorderLayout());
 			jContentPane.add(getStartButton(), BorderLayout.SOUTH);
-			jContentPane.add(getJSplitPane(), BorderLayout.CENTER);
+			jContentPane.add(getJScrollPane1(), BorderLayout.CENTER);
 		}
 		return jContentPane;
 	}
@@ -181,20 +177,6 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			});
 		}
 		return fileOpenPackageMenuItem;
-	}
-
-	/**
-	 * This method initializes jSplitPane	
-	 * 	
-	 * @return javax.swing.JSplitPane	
-	 */
-	private JSplitPane getJSplitPane() {
-		if (jSplitPane == null) {
-			jSplitPane = new JSplitPane();
-			jSplitPane.setRightComponent(getJScrollPane1());
-			jSplitPane.setLeftComponent(getHostLibrary());
-		}
-		return jSplitPane;
 	}
 
 	/**
@@ -299,18 +281,6 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	}
 
 	/**
-	 * This method initializes hostLibrary	
-	 * 	
-	 * @return de.chipxonio.adtech.selrunner.gui.components.HostLibrary	
-	 */
-	private HostLibrary getHostLibrary() {
-		if (hostLibrary == null) {
-			hostLibrary = new HostLibrary();
-		}
-		return hostLibrary;
-	}
-
-	/**
 	 * This method initializes fileSaveMenuItem	
 	 * 	
 	 * @return javax.swing.JMenuItem	
@@ -352,7 +322,6 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 
 	public void setLibrary(Library l) {
 		this.library = l;
-		this.getHostLibrary().setList(l.getHostList());
 	}
 	
 	public Library getLibrary() {
