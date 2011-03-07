@@ -74,21 +74,21 @@ public class HostList extends Vector<Host> implements ListModel {
 		if (ret) {
 			int index = this.indexOf(e);
 			this.fireIntervalAdded(new ListDataEvent(this, ListDataEvent.INTERVAL_ADDED, index, index));
-		}
-		if (this.hasPreferences() && !e.hasPreferences()) {
-			String nodeName;
-			try {
-				// damn. creating an md5 hash in java is hard work...
-				byte[] md5 = MessageDigest.getInstance("MD5").digest(e.toString().getBytes("UTF-8"));
-				StringBuffer hexString = new StringBuffer();
-				for (int i = 0; i < md5.length; i++) hexString.append(Integer.toHexString(0xFF & md5[i]));
-				nodeName = hexString.toString();
-			} catch (NoSuchAlgorithmException e1) {
-				nodeName = e.toString();
-			} catch (UnsupportedEncodingException e1) {
-				nodeName = e.toString();
+			if (this.hasPreferences() && !e.hasPreferences()) {
+				String nodeName;
+				try {
+					// damn. creating an md5 hash in java is hard work...
+					byte[] md5 = MessageDigest.getInstance("MD5").digest(e.toString().getBytes("UTF-8"));
+					StringBuffer hexString = new StringBuffer();
+					for (int i = 0; i < md5.length; i++) hexString.append(Integer.toHexString(0xFF & md5[i]));
+					nodeName = hexString.toString();
+				} catch (NoSuchAlgorithmException e1) {
+					nodeName = e.toString();
+				} catch (UnsupportedEncodingException e1) {
+					nodeName = e.toString();
+				}
+				e.setPreferences(this.preferences.node(nodeName));
 			}
-			e.setPreferences(this.preferences.node(nodeName));
 		}
 		return ret;
 	}
