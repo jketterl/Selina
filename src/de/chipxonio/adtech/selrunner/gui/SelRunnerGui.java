@@ -25,7 +25,6 @@ import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.gui.components.HostLibrary;
 import de.chipxonio.adtech.selrunner.hosts.Host;
-import de.chipxonio.adtech.selrunner.hosts.HostList;
 import de.chipxonio.adtech.selrunner.library.Library;
 import de.chipxonio.adtech.selrunner.packages.Package;
 import de.chipxonio.adtech.selrunner.packages.PackageLoaderException;
@@ -35,10 +34,9 @@ import de.chipxonio.adtech.selrunner.tests.TestResult;
 public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 
 	private static final long serialVersionUID = -4222699284599413079L;
-	private HostList hostList = null;
 	private SelRunnerEngine engine;  //  @jve:decl-index=0:
 	private Package pack;
-	private Library library;
+	private Library library;  //  @jve:decl-index=0:
 	private JPanel jContentPane = null;
 	private JButton startButton = null;
 	private JMenuBar jJMenuBar = null;
@@ -111,7 +109,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	}
 	
 	public SelRunnerJob getJob() {
-		Iterator<Host> i = getHostList().iterator();
+		Iterator<Host> i = this.getLibrary().getHostList().iterator();
 		SelRunnerJob job = new SelRunnerJob();
 		while (i.hasNext()) {
 			try {
@@ -126,13 +124,6 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			}
 		}
 		return job;
-	}
-
-	private HostList getHostList() {
-		if (hostList == null) {
-			hostList = new HostList();
-		}
-		return hostList;
 	}
 
 	/**
@@ -314,7 +305,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	 */
 	private HostLibrary getHostLibrary() {
 		if (hostLibrary == null) {
-			hostLibrary = new HostLibrary(this.getHostList());
+			hostLibrary = new HostLibrary();
 		}
 		return hostLibrary;
 	}
@@ -361,6 +352,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 
 	public void setLibrary(Library l) {
 		this.library = l;
+		this.getHostLibrary().setList(l.getHostList());
 	}
 	
 	public Library getLibrary() {
