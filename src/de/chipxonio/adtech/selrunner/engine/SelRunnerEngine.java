@@ -8,19 +8,16 @@ import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class SelRunnerEngine implements SelRunnerJobListener, HostQueueListener {
-	private SelRunnerJob job;
 	private Vector<SelRunnerEngineListener> listeners = new Vector<SelRunnerEngineListener>();
 	private Hashtable<Host,HostQueue> queues = new Hashtable<Host,HostQueue>();
 
-	public void setJob(SelRunnerJob job) {
-		if (this.job != null) this.job.removeListener(this);
-		this.job = job;
-		this.job.addListener(this);
-		this.job.setEngine(this);
-	}
-	
-	public SelRunnerJob getJob() {
-		return this.job;
+	public void runJob(SelRunnerJob job) {
+		job.addListener(this);
+		Iterator<SelRunnerTask> i = job.iterator();
+		while (i.hasNext()) {
+			SelRunnerTask t = i.next();
+			this.getQueue(t.getHost()).add(t);
+		}
 	}
 	
 	public void addListener(SelRunnerEngineListener l) {

@@ -1,41 +1,20 @@
 package de.chipxonio.adtech.selrunner.engine;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Vector;
 
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
-public class SelRunnerJob implements SelRunnerTaskListener {
+public class SelRunnerJob extends Vector<SelRunnerTask> implements SelRunnerTaskListener {
+	private static final long serialVersionUID = 6697337614166675395L;
 	private Vector<SelRunnerJobListener> listeners = new Vector<SelRunnerJobListener>();
-	private LinkedList<SelRunnerTask> unstartedTasks = new LinkedList<SelRunnerTask>();
-	private SelRunnerEngine engine;
+	//private LinkedList<SelRunnerTask> tasks = new LinkedList<SelRunnerTask>();
 	
-	public void addTask(SelRunnerTask task) {
+	public boolean add(SelRunnerTask task) {
 		task.addListener(this);
-		if (this.hasEngine()) {
-			this.engine.getQueue(task.getHost()).add(task);
-		} else {
-			this.unstartedTasks.add(task);
-		}
+		return super.add(task);
 	}
 	
-	public boolean hasEngine() {
-		return this.engine != null;
-	}
-	
-	public SelRunnerEngine getEngine() {
-		return engine;
-	}
-
-	public void setEngine(SelRunnerEngine engine) {
-		this.engine = engine;
-		SelRunnerTask task;
-		while ((task = this.unstartedTasks.poll()) != null) {
-			this.engine.getQueue(task.getHost()).add(task);
-		}
-	}
-
 	public void addListener(SelRunnerJobListener l) {
 		this.listeners.add(l);
 	}

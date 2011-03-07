@@ -107,13 +107,13 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 							Class<AbstractTest>[] tests = pack.getTests();
 							for (int k = 0; k < tests.length; k++) {
 								SelRunnerTask task = new SelRunnerTask(host, tests[k]);
-								job.addTask(task);
+								job.add(task);
 							}
 						} catch (PackageLoaderException e1) {
 							e1.printStackTrace();
 						}
 					}
-					getEngine().setJob(job);
+					getEngine().runJob(job);
 				}
 			});
 		}
