@@ -5,10 +5,10 @@ import java.util.prefs.Preferences;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import de.chipxonio.adtech.library.Library;
-import de.chipxonio.adtech.library.LocalLibrary;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
 import de.chipxonio.adtech.selrunner.gui.SelRunnerGui;
+import de.chipxonio.adtech.selrunner.library.Library;
+import de.chipxonio.adtech.selrunner.library.LocalLibrary;
 import de.chipxonio.adtech.selrunner.packages.PackageLoader;
 
 public class SelRunner {

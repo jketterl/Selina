@@ -19,7 +19,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
 
-import de.chipxonio.adtech.library.Library;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngineListener;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
@@ -27,6 +26,7 @@ import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.gui.components.HostLibrary;
 import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.hosts.HostList;
+import de.chipxonio.adtech.selrunner.library.Library;
 import de.chipxonio.adtech.selrunner.packages.Package;
 import de.chipxonio.adtech.selrunner.packages.PackageLoaderException;
 import de.chipxonio.adtech.selrunner.tests.AbstractTest;

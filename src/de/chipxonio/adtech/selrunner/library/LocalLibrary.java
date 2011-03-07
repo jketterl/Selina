@@ -1,4 +1,4 @@
-package de.chipxonio.adtech.library;
+package de.chipxonio.adtech.selrunner.library;
 
 import java.util.prefs.Preferences;
 

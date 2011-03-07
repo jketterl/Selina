@@ -12,9 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
 
-import de.chipxonio.adtech.library.Library;
 import de.chipxonio.adtech.selrunner.gui.components.HostLibrary;
 import de.chipxonio.adtech.selrunner.gui.components.PackageLibrary;
+import de.chipxonio.adtech.selrunner.library.Library;
 import de.chipxonio.adtech.selrunner.packages.PackageList;
 
 public class SelRunnerPreferencesGui extends JDialog {

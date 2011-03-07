@@ -1,4 +1,4 @@
-package de.chipxonio.adtech.library;
+package de.chipxonio.adtech.selrunner.library;
 
 import de.chipxonio.adtech.selrunner.hosts.HostList;
 import de.chipxonio.adtech.selrunner.packages.PackageList;
