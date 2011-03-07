@@ -33,6 +33,16 @@ public class HostLibrary extends JPanel {
 		this.list = list;
 		initialize();
 	}
+	
+	public HostLibrary() {
+		super();
+		initialize();
+	}
+	
+	public void setList(HostList list) {
+		this.list = list;
+		this.getHostList().setModel(list);
+	}
 
 	/**
 	 * This method initializes this
@@ -87,7 +97,8 @@ public class HostLibrary extends JPanel {
 	 */
 	private JList getHostList() {
 		if (hostList == null) {
-			hostList = new JList((ListModel) this.list);
+			hostList = new JList();
+			if (this.list != null) hostList.setModel(this.list);
 			hostList.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					if (e.getClickCount() == 2) {
