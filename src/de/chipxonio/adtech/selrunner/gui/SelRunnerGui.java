@@ -26,9 +26,7 @@ import de.chipxonio.adtech.selrunner.engine.SelRunnerEngineListener;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.library.Library;
-import de.chipxonio.adtech.selrunner.packages.PackageLoader;
-import de.chipxonio.adtech.selrunner.packages.TestDefinition;
-import de.chipxonio.adtech.selrunner.tests.AbstractTest;
+import de.chipxonio.adtech.selrunner.packages.PackageLoaderException;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
@@ -351,6 +349,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private JSplitPane getJSplitPane() {
 		if (jSplitPane == null) {
 			jSplitPane = new JSplitPane();
+			jSplitPane.setDividerLocation(400);
 			jSplitPane.setRightComponent(getJScrollPane1());
 			jSplitPane.setLeftComponent(getJScrollPane());
 		}
@@ -394,11 +393,12 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			jMenuItem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try {
-						@SuppressWarnings("unchecked")
-						Class<AbstractTest> cls = (Class<AbstractTest>) PackageLoader.getSharedInstance().loadClass("de.chipxonio.adtech.seleniumtests.DemoTest");
-						SelRunnerTask task = new SelRunnerTask(getLibrary().getHostList().get(2), new TestDefinition("Probetest", cls));
+						SelRunnerTask task = new SelRunnerTask(
+							getLibrary().getHostList().get(2),
+							getLibrary().getPackageList().get(0).getTests()[0]
+						);
 						getJob().add(task);
-					} catch (ClassNotFoundException e1) {
+					} catch (PackageLoaderException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
