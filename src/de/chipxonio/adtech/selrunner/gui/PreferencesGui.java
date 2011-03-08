@@ -16,7 +16,7 @@ import de.chipxonio.adtech.selrunner.gui.components.HostLibrary;
 import de.chipxonio.adtech.selrunner.gui.components.PackageLibrary;
 import de.chipxonio.adtech.selrunner.library.Library;
 
-public class SelRunnerPreferencesGui extends JDialog {
+public class PreferencesGui extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
@@ -31,7 +31,7 @@ public class SelRunnerPreferencesGui extends JDialog {
 	/**
 	 * @param owner
 	 */
-	public SelRunnerPreferencesGui(Frame owner, Library library) {
+	public PreferencesGui(Frame owner, Library library) {
 		super(owner);
 		this.library = library;
 		initialize();
