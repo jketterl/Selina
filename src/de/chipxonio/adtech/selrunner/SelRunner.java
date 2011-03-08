@@ -1,11 +1,13 @@
 package de.chipxonio.adtech.selrunner;
 
+import java.io.File;
 import java.util.prefs.Preferences;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
+import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.gui.SelRunnerGui;
 import de.chipxonio.adtech.selrunner.library.Library;
 import de.chipxonio.adtech.selrunner.library.LocalLibrary;
@@ -18,7 +20,9 @@ public class SelRunner {
 	 */
 	public static void main(String[] args) {
 		SelRunnerEngine engine = new SelRunnerEngine();
-		if (true) {
+		Library l = new LocalLibrary(Preferences.userRoot().node("SelRunner").node("library"));
+		PackageLoader.getSharedInstance().setPackageList(l.getPackageList());
+		if (args.length == 0) {
 			try {
 				UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
 			} catch (ClassNotFoundException e) {
@@ -31,11 +35,12 @@ public class SelRunner {
 				e.printStackTrace();
 			}
 			SelRunnerGui gui = new SelRunnerGui();
-			Library l = new LocalLibrary(Preferences.userRoot().node("SelRunner").node("library"));
-			PackageLoader.getSharedInstance().setPackageList(l.getPackageList());
 			gui.setEngine(engine);
 			gui.setLibrary(l);
 			gui.setVisible(true);
+		} else {
+			SelRunnerJob job = SelRunnerJob.loadFromFile(new File(args[0]));
+			engine.runJob(job);
 		}
 	}
 
