@@ -11,18 +11,39 @@ import java.io.ObjectStreamClass;
 import java.util.Iterator;
 import java.util.Vector;
 
+import javax.swing.ListModel;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+
 import de.chipxonio.adtech.selrunner.packages.PackageLoader;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
-public class SelRunnerJob extends Vector<SelRunnerTask> implements SelRunnerTaskListener {
+public class SelRunnerJob extends Vector<SelRunnerTask> implements SelRunnerTaskListener, ListModel {
 	private static final long serialVersionUID = 6697337614166675395L;
 	private Vector<SelRunnerJobListener> listeners = new Vector<SelRunnerJobListener>();
+	private Vector<ListDataListener> listListeners = new Vector<ListDataListener>();
 	
 	public boolean add(SelRunnerTask task) {
-		task.addListener(this);
-		return super.add(task);
+		boolean ret = super.add(task);
+		if (ret) {
+			task.addListener(this);
+			int index = this.indexOf(task);
+			this.fireIntervalAdded(new ListDataEvent(this, ListDataEvent.INTERVAL_ADDED, index, index));
+		}
+		return ret;
 	}
 	
+	@Override
+	public boolean remove(Object o) {
+		int index = this.indexOf(o);
+		boolean ret = super.remove(o);
+		if (ret) {
+			((SelRunnerTask) o).removeListener(this);
+			this.fireIntervalRemoved(new ListDataEvent(this, ListDataEvent.INTERVAL_REMOVED, index, index));
+		}
+		return ret;
+	}
+
 	public void addListener(SelRunnerJobListener l) {
 		this.listeners.add(l);
 	}
@@ -38,6 +59,7 @@ public class SelRunnerJob extends Vector<SelRunnerTask> implements SelRunnerTask
 
 	@Override
 	public void testingComplete(TestResult result) {
+		this.fireContentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0, this.size()));
 		this.fireTestingComplete(result);
 	}
 	
@@ -90,5 +112,40 @@ public class SelRunnerJob extends Vector<SelRunnerTask> implements SelRunnerTask
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public void addListDataListener(ListDataListener arg0) {
+		this.listListeners.add(arg0);
+	}
+
+	@Override
+	public Object getElementAt(int arg0) {
+		return this.get(arg0);
+	}
+
+	@Override
+	public int getSize() {
+		return this.size();
+	}
+
+	@Override
+	public void removeListDataListener(ListDataListener arg0) {
+		this.listListeners.remove(arg0);
+	}
+
+	private void fireContentsChanged(ListDataEvent e) {
+		Iterator<ListDataListener> i = listListeners.iterator();
+		while (i.hasNext()) i.next().contentsChanged(e);
+	}
+	
+	private void fireIntervalAdded(ListDataEvent e) {
+		Iterator<ListDataListener> i = listListeners.iterator();
+		while (i.hasNext()) i.next().intervalAdded(e);
+	}
+	
+	private void fireIntervalRemoved(ListDataEvent e) {
+		Iterator<ListDataListener> i = listListeners.iterator();
+		while (i.hasNext()) i.next().intervalRemoved(e);
 	}
 }
