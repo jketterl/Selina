@@ -17,16 +17,19 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileFilter;
 
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngineListener;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
+import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.library.Library;
+import de.chipxonio.adtech.selrunner.packages.PackageLoader;
+import de.chipxonio.adtech.selrunner.packages.TestDefinition;
+import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
-import de.chipxonio.adtech.selrunner.gui.components.PackageTree;
-import javax.swing.JSplitPane;
 
 public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 
@@ -64,9 +67,10 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private JMenuItem preferencesMenuItem = null;
 	private JMenuItem fileSaveMenuItem = null;
 	private JMenuItem fileOpenMenuItem = null;
-	private PackageTree packageTree = null;
 	private JSplitPane jSplitPane = null;
 	private JScrollPane jScrollPane = null;
+	private JList taskList = null;
+	private JMenuItem jMenuItem = null;
 	/**
 	 * This method initializes 
 	 * 
@@ -116,6 +120,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			startButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					((DefaultListModel) getResultList().getModel()).clear();
+					getEngine().runJob(getJob());
 				}
 			});
 		}
@@ -124,11 +129,12 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	
 	public void setJob(SelRunnerJob job) {
 		this.job = job;
+		this.getTaskList().setModel(job);
 	}
 	
 	public SelRunnerJob getJob() {
 		if (this.job == null) {
-			this.job = new SelRunnerJob();
+			this.setJob(new SelRunnerJob());
 		}
 		return this.job;
 		/*
@@ -173,6 +179,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 		if (fileMenu == null) {
 			fileMenu = new JMenu();
 			fileMenu.setText("File");
+			fileMenu.add(getJMenuItem());
 			fileMenu.add(getFileOpenMenuItem());
 			fileMenu.add(getFileSaveMenuItem());
 			fileMenu.add(new JSeparator());
@@ -330,23 +337,10 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 
 	public void setLibrary(Library l) {
 		this.library = l;
-		this.getPackageTree().setList(this.library.getPackageList());
 	}
 	
 	public Library getLibrary() {
 		return this.library;
-	}
-
-	/**
-	 * This method initializes packageTree	
-	 * 	
-	 * @return de.chipxonio.adtech.selrunner.gui.components.PackageTree	
-	 */
-	private PackageTree getPackageTree() {
-		if (packageTree == null) {
-			packageTree = new PackageTree();
-		}
-		return packageTree;
 	}
 
 	/**
@@ -357,8 +351,8 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private JSplitPane getJSplitPane() {
 		if (jSplitPane == null) {
 			jSplitPane = new JSplitPane();
-			jSplitPane.setLeftComponent(getJScrollPane1());
-			jSplitPane.setRightComponent(getJScrollPane());
+			jSplitPane.setRightComponent(getJScrollPane1());
+			jSplitPane.setLeftComponent(getJScrollPane());
 		}
 		return jSplitPane;
 	}
@@ -371,8 +365,46 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			jScrollPane.setViewportView(getPackageTree());
+			jScrollPane.setViewportView(getTaskList());
 		}
 		return jScrollPane;
+	}
+
+	/**
+	 * This method initializes taskList	
+	 * 	
+	 * @return javax.swing.JList	
+	 */
+	private JList getTaskList() {
+		if (taskList == null) {
+			taskList = new JList();
+		}
+		return taskList;
+	}
+
+	/**
+	 * This method initializes jMenuItem	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getJMenuItem() {
+		if (jMenuItem == null) {
+			jMenuItem = new JMenuItem();
+			jMenuItem.setText("generate task");
+			jMenuItem.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						@SuppressWarnings("unchecked")
+						Class<AbstractTest> cls = (Class<AbstractTest>) PackageLoader.getSharedInstance().loadClass("de.chipxonio.adtech.seleniumtests.DemoTest");
+						SelRunnerTask task = new SelRunnerTask(getLibrary().getHostList().get(2), new TestDefinition("Probetest", cls));
+						getJob().add(task);
+					} catch (ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return jMenuItem;
 	}
 }  //  @jve:decl-index=0:visual-constraint="78,21"
