@@ -79,6 +79,7 @@ public class SelRunnerTask extends Thread implements Serializable {
 		this.fireTestingComplete(result);
 		try {
 			driver.quit();
+			this.driver = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
