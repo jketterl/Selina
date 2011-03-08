@@ -12,10 +12,14 @@ import java.util.prefs.Preferences;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
-public class PackageList extends Vector<Package> implements ListModel {
+public class PackageList extends Vector<Package> implements ListModel, TreeModel {
 	private static final long serialVersionUID = -6282910026609075670L;
 	private Vector<ListDataListener> listeners = new Vector<ListDataListener>();
+	private Vector<TreeModelListener> treeListeners = new Vector<TreeModelListener>();
 	private Preferences preferences;
 	
 	public PackageList() {
@@ -112,5 +116,53 @@ public class PackageList extends Vector<Package> implements ListModel {
 	private void fireIntervalRemoved(ListDataEvent e) {
 		Iterator<ListDataListener> i = listeners.iterator();
 		while (i.hasNext()) i.next().intervalRemoved(e);
+	}
+
+	@Override
+	public void addTreeModelListener(TreeModelListener arg0) {
+		this.treeListeners.add(arg0);
+	}
+
+	@Override
+	public Object getChild(Object arg0, int arg1) {
+		if (arg0 == this)
+			return this.get(arg1);
+		else
+			return ((TreeModel) arg0).getChild(arg0, arg1);
+	}
+
+	@Override
+	public int getChildCount(Object arg0) {
+		if (arg0 == this)
+			return this.size();
+		else
+			return ((TreeModel) arg0).getChildCount(arg0);
+	}
+
+	@Override
+	public int getIndexOfChild(Object arg0, Object arg1) {
+		if (arg0 == this)
+			return this.indexOf(arg1);
+		else
+			return ((TreeModel) arg0).getIndexOfChild(arg0, arg1);
+	}
+
+	@Override
+	public Object getRoot() {
+		return this;
+	}
+
+	@Override
+	public boolean isLeaf(Object arg0) {
+		return false;
+	}
+
+	@Override
+	public void removeTreeModelListener(TreeModelListener arg0) {
+		this.treeListeners.remove(arg0);
+	}
+
+	@Override
+	public void valueForPathChanged(TreePath arg0, Object arg1) {
 	}
 }

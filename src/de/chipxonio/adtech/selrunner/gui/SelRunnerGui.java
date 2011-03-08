@@ -25,6 +25,8 @@ import de.chipxonio.adtech.selrunner.engine.SelRunnerEngineListener;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.library.Library;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
+import de.chipxonio.adtech.selrunner.gui.components.PackageTree;
+import javax.swing.JSplitPane;
 
 public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 
@@ -62,6 +64,9 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private JMenuItem preferencesMenuItem = null;
 	private JMenuItem fileSaveMenuItem = null;
 	private JMenuItem fileOpenMenuItem = null;
+	private PackageTree packageTree = null;
+	private JSplitPane jSplitPane = null;
+	private JScrollPane jScrollPane = null;
 	/**
 	 * This method initializes 
 	 * 
@@ -94,7 +99,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new BorderLayout());
 			jContentPane.add(getStartButton(), BorderLayout.SOUTH);
-			jContentPane.add(getJScrollPane1(), BorderLayout.CENTER);
+			jContentPane.add(getJSplitPane(), BorderLayout.CENTER);
 		}
 		return jContentPane;
 	}
@@ -325,9 +330,49 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 
 	public void setLibrary(Library l) {
 		this.library = l;
+		this.getPackageTree().setList(this.library.getPackageList());
 	}
 	
 	public Library getLibrary() {
 		return this.library;
+	}
+
+	/**
+	 * This method initializes packageTree	
+	 * 	
+	 * @return de.chipxonio.adtech.selrunner.gui.components.PackageTree	
+	 */
+	private PackageTree getPackageTree() {
+		if (packageTree == null) {
+			packageTree = new PackageTree();
+		}
+		return packageTree;
+	}
+
+	/**
+	 * This method initializes jSplitPane	
+	 * 	
+	 * @return javax.swing.JSplitPane	
+	 */
+	private JSplitPane getJSplitPane() {
+		if (jSplitPane == null) {
+			jSplitPane = new JSplitPane();
+			jSplitPane.setLeftComponent(getJScrollPane1());
+			jSplitPane.setRightComponent(getJScrollPane());
+		}
+		return jSplitPane;
+	}
+
+	/**
+	 * This method initializes jScrollPane	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane() {
+		if (jScrollPane == null) {
+			jScrollPane = new JScrollPane();
+			jScrollPane.setViewportView(getPackageTree());
+		}
+		return jScrollPane;
 	}
 }  //  @jve:decl-index=0:visual-constraint="78,21"
