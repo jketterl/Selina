@@ -1,10 +1,8 @@
 package de.chipxonio.adtech.selrunner.gui;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -22,11 +20,10 @@ public class PreferencesGui extends JDialog {
 	private JPanel jContentPane = null;
 	private JTabbedPane jTabbedPane = null;
 	private JPanel buttonPanel = null;
-	private JButton okButton = null;
-	private JButton canelButton = null;
 	private JPanel hostPanel = null;
 	private PackageLibrary packageLibrary = null;
 	private Library library;
+	private JButton closeButton = null;
 
 	/**
 	 * @param owner
@@ -86,44 +83,14 @@ public class PreferencesGui extends JDialog {
 	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.insets = new Insets(2, 5, 2, 5);
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 1;
-			gridBagConstraints.insets = new Insets(2, 5, 2, 5);
-			gridBagConstraints.gridy = 0;
+			FlowLayout flowLayout = new FlowLayout();
+			flowLayout.setAlignment(java.awt.FlowLayout.RIGHT);
+			flowLayout.setVgap(2);
 			buttonPanel = new JPanel();
-			buttonPanel.setLayout(new GridBagLayout());
-			buttonPanel.add(getOkButton(), gridBagConstraints4);
-			buttonPanel.add(getCanelButton(), gridBagConstraints);
+			buttonPanel.setLayout(flowLayout);
+			buttonPanel.add(getCloseButton(), null);
 		}
 		return buttonPanel;
-	}
-
-	/**
-	 * This method initializes okButton	
-	 * 	
-	 * @return javax.swing.JToggleButton	
-	 */
-	private JButton getOkButton() {
-		if (okButton == null) {
-			okButton = new JButton();
-			okButton.setText("OK");
-		}
-		return okButton;
-	}
-
-	/**
-	 * This method initializes canelButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */
-	private JButton getCanelButton() {
-		if (canelButton == null) {
-			canelButton = new JButton();
-			canelButton.setText("Cancel");
-		}
-		return canelButton;
 	}
 
 	/**
@@ -148,6 +115,24 @@ public class PreferencesGui extends JDialog {
 			packageLibrary = new PackageLibrary(this.library.getPackageList());
 		}
 		return packageLibrary;
+	}
+
+	/**
+	 * This method initializes closeButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getCloseButton() {
+		if (closeButton == null) {
+			closeButton = new JButton();
+			closeButton.setText("Close");
+			closeButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dispose();
+				}
+			});
+		}
+		return closeButton;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
