@@ -3,7 +3,7 @@ package de.chipxonio.adtech.selrunner.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
-import java.io.IOException;
+import java.io.File;
 import java.util.Iterator;
 
 import javax.swing.DefaultListModel;
@@ -16,30 +16,45 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.WindowConstants;
+import javax.swing.filechooser.FileFilter;
 
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngineListener;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
-import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
-import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.library.Library;
-import de.chipxonio.adtech.selrunner.packages.Package;
-import de.chipxonio.adtech.selrunner.packages.PackageLoaderException;
-import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 
+	private class JobFilter extends FileFilter {
+		@Override
+		public String getDescription() {
+			return "Selnium Runner jobs (*.srjob)";
+		}
+		
+		@Override
+		public boolean accept(File f) {
+			if (f.isDirectory()) return true;
+			return (getExtension(f).equals("srjob"));
+		}
+		
+		private String getExtension(File f) {
+			int i = f.getName().lastIndexOf('.');
+			if (i <= 0) return "";
+			return f.getName().substring(i + 1).toLowerCase();
+		}
+	}
+
 	private static final long serialVersionUID = -4222699284599413079L;
 	private SelRunnerEngine engine;  //  @jve:decl-index=0:
-	private Package pack;
+	private SelRunnerJob job;  //  @jve:decl-index=0:
 	private Library library;  //  @jve:decl-index=0:
 	private JPanel jContentPane = null;
 	private JButton startButton = null;
 	private JMenuBar jJMenuBar = null;
 	private JMenu fileMenu = null;
-	private JMenuItem fileOpenPackageMenuItem = null;
 	private JScrollPane jScrollPane1 = null;
 	private JMenuItem fileExitMenuItem = null;
 	private JList resultList = null;
@@ -95,16 +110,23 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			startButton.setText("Start Testing");
 			startButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (pack == null) return;
 					((DefaultListModel) getResultList().getModel()).clear();
-					getEngine().runJob(getJob());
 				}
 			});
 		}
 		return startButton;
 	}
 	
+	public void setJob(SelRunnerJob job) {
+		this.job = job;
+	}
+	
 	public SelRunnerJob getJob() {
+		if (this.job == null) {
+			this.job = new SelRunnerJob();
+		}
+		return this.job;
+		/*
 		Iterator<Host> i = this.getLibrary().getHostList().iterator();
 		SelRunnerJob job = new SelRunnerJob();
 		while (i.hasNext()) {
@@ -120,6 +142,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			}
 		}
 		return job;
+		*/
 	}
 
 	/**
@@ -145,38 +168,12 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 		if (fileMenu == null) {
 			fileMenu = new JMenu();
 			fileMenu.setText("File");
-			fileMenu.add(getFileOpenPackageMenuItem());
-			fileMenu.add(getFileExitMenuItem());
 			fileMenu.add(getFileOpenMenuItem());
 			fileMenu.add(getFileSaveMenuItem());
+			fileMenu.add(new JSeparator());
+			fileMenu.add(getFileExitMenuItem());
 		}
 		return fileMenu;
-	}
-
-	/**
-	 * This method initializes fileOpenPackageMenuItem	
-	 * 	
-	 * @return javax.swing.JMenuItem	
-	 */
-	private JMenuItem getFileOpenPackageMenuItem() {
-		if (fileOpenPackageMenuItem == null) {
-			fileOpenPackageMenuItem = new JMenuItem();
-			fileOpenPackageMenuItem.setText("Open test package...");
-			fileOpenPackageMenuItem.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					JFileChooser dialog = new JFileChooser();
-					if (dialog.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) return;
-					try {
-						pack = new Package(dialog.getSelectedFile());
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					} catch (PackageLoaderException e1) {
-						e1.printStackTrace();
-					}
-				}
-			});
-		}
-		return fileOpenPackageMenuItem;
 	}
 
 	/**
@@ -292,8 +289,13 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			fileSaveMenuItem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					JFileChooser dialog = new JFileChooser();
+					dialog.setFileFilter(new JobFilter());
 					if (dialog.showSaveDialog(null) != JFileChooser.APPROVE_OPTION) return;
-					getJob().saveToFile(dialog.getSelectedFile());
+					File f = dialog.getSelectedFile();
+					if (f.getName().indexOf('.') <= 0) {
+						f = new File(f.getAbsoluteFile() + ".srjob");
+					}
+					getJob().saveToFile(f);
 				}
 			});
 		}
@@ -312,8 +314,9 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			fileOpenMenuItem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					JFileChooser dialog = new JFileChooser();
+					dialog.setFileFilter(new JobFilter());
 					if (dialog.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) return;
-					getEngine().runJob(SelRunnerJob.loadFromFile(dialog.getSelectedFile()));
+					setJob(SelRunnerJob.loadFromFile(dialog.getSelectedFile()));
 				}
 			});
 		}
