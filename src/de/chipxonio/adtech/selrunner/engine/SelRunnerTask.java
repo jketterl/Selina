@@ -83,4 +83,8 @@ public class SelRunnerTask extends Thread implements Serializable {
 			e.printStackTrace();
 		}
 	}
+	
+	public String toString() {
+		return this.getTest().toString() + " on " + this.getHost().toString() + " using Firefox";
+	}
 }
