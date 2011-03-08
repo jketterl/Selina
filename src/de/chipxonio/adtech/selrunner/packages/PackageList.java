@@ -154,7 +154,10 @@ public class PackageList extends Vector<Package> implements ListModel, TreeModel
 
 	@Override
 	public boolean isLeaf(Object arg0) {
-		return false;
+		if (arg0 == this)
+			return false;
+		else
+			return ((TreeModel) arg0).isLeaf(arg0);
 	}
 
 	@Override

@@ -105,18 +105,19 @@ public class Package extends ClassLoader implements TreeModel {
 
 	// TODO i don't like to suppress warnings, but i don't know a way to work this out properly atm
 	@SuppressWarnings("unchecked")
-	public Class<AbstractTest>[] getTests() throws PackageLoaderException {
+	public TestDefinition[] getTests() throws PackageLoaderException {
 		// pretty much to go wrong in this method... phew
 		try {
 			NodeList nodes = XPathAPI.selectNodeList(this.getTestIndex(), "/package/test");
-			Class<AbstractTest>[] tests = new Class[nodes.getLength()];
+			TestDefinition[] tests = new TestDefinition[nodes.getLength()];
 			for (int i = 0; i < nodes.getLength(); i++) {
 				String testClassName = nodes.item(i).getAttributes().getNamedItem("class").getNodeValue();
+				String testName = nodes.item(i).getAttributes().getNamedItem("name").getNodeValue();
 				try {
 					Class<?> c = this.loadClass(testClassName);
 					if (!AbstractTest.class.isAssignableFrom(c))
 						throw new PackageLoaderException("'" + testClassName + "' does not inherit from AbstractTest");
-					tests[i] = (Class<AbstractTest>) c;
+					tests[i] = new TestDefinition(testName, (Class<AbstractTest>) c);
 				} catch (ClassNotFoundException e) {
 					throw new PackageLoaderException("class '" + testClassName + "' defined in test index XML could not be found in JAR", e);
 				}
@@ -180,7 +181,7 @@ public class Package extends ClassLoader implements TreeModel {
 		if (node == this) {
 			return false;
 		} else {
-			return true;
+			return ((TreeModel) node).isLeaf(node);
 		}
 	}
 
