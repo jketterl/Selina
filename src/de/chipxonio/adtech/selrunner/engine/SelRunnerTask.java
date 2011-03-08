@@ -8,17 +8,18 @@ import org.openqa.selenium.WebDriver;
 
 import de.chipxonio.adtech.selrunner.browsers.FirefoxBrowser;
 import de.chipxonio.adtech.selrunner.hosts.Host;
+import de.chipxonio.adtech.selrunner.packages.TestDefinition;
 import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class SelRunnerTask extends Thread implements Serializable {
 	private static final long serialVersionUID = 7731026883005748237L;
 	private Host host;
-	private Class<AbstractTest> test;
+	private TestDefinition test;
 	private Vector<SelRunnerTaskListener> listeners = new Vector<SelRunnerTaskListener>();
 	private WebDriver driver = null;
 	
-	public SelRunnerTask(Host host, Class<AbstractTest> test) {
+	public SelRunnerTask(Host host, TestDefinition test) {
 		super();
 		this.host = host;
 		this.test = test;
@@ -43,10 +44,10 @@ public class SelRunnerTask extends Thread implements Serializable {
 	public void setHost(Host host) {
 		this.host = host;
 	}
-	public Class<AbstractTest> getTest() {
+	public TestDefinition getTest() {
 		return test;
 	}
-	public void setTest(Class<AbstractTest> test) {
+	public void setTest(TestDefinition test) {
 		this.test = test;
 	}
 	
@@ -68,7 +69,7 @@ public class SelRunnerTask extends Thread implements Serializable {
 		}
 		if (driver == null) return;
 		try {
-			AbstractTest test = this.getTest().newInstance();
+			AbstractTest test = this.getTest().getInstance();
 			test.setResult(result);
 			test.setDriver(driver);
 			test.run();

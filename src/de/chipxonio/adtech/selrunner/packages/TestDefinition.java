@@ -81,4 +81,8 @@ public class TestDefinition implements TreeModel {
 	@Override
 	public void valueForPathChanged(TreePath path, Object newValue) {
 	}
+
+	public AbstractTest getInstance() throws InstantiationException, IllegalAccessException {
+		return this.getTestClass().newInstance();
+	}
 }
