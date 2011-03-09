@@ -24,10 +24,8 @@ import javax.swing.filechooser.FileFilter;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJobListener;
-import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.gui.components.TaskListPanel;
 import de.chipxonio.adtech.selrunner.library.Library;
-import de.chipxonio.adtech.selrunner.packages.PackageLoaderException;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
@@ -68,7 +66,6 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 	private JMenuItem fileOpenMenuItem = null;
 	private JSplitPane jSplitPane = null;
 	private TaskListPanel taskList = null;
-	private JMenuItem jMenuItem = null;
 	/**
 	 * This method initializes 
 	 * 
@@ -178,7 +175,6 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 		if (fileMenu == null) {
 			fileMenu = new JMenu();
 			fileMenu.setText("File");
-			fileMenu.add(getJMenuItem());
 			fileMenu.add(getFileOpenMenuItem());
 			fileMenu.add(getFileSaveMenuItem());
 			fileMenu.add(new JSeparator());
@@ -366,32 +362,5 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 			taskList = new TaskListPanel(this.getLibrary(), this.getJob());
 		}
 		return taskList;
-	}
-
-	/**
-	 * This method initializes jMenuItem	
-	 * 	
-	 * @return javax.swing.JMenuItem	
-	 */
-	private JMenuItem getJMenuItem() {
-		if (jMenuItem == null) {
-			jMenuItem = new JMenuItem();
-			jMenuItem.setText("generate task");
-			jMenuItem.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					try {
-						SelRunnerTask task = new SelRunnerTask(
-							getLibrary().getHostList().get(2),
-							getLibrary().getPackageList().get(0).getTests()[0]
-						);
-						getJob().add(task);
-					} catch (PackageLoaderException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-			});
-		}
-		return jMenuItem;
 	}
 }  //  @jve:decl-index=0:visual-constraint="78,21"
