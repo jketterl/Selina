@@ -30,7 +30,6 @@ public class TaskListPanel extends JPanel {
 	private JButton addTaskButton = null;
 	private JButton removeTaskButton = null;
 	private Library library;
-	private JLabel jLabel = null;
 
 	/**
 	 * This is the default constructor
@@ -87,7 +86,6 @@ public class TaskListPanel extends JPanel {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			GridBagConstraints gridBagConstraints;
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new GridBagLayout());
 			gridBagConstraints = new GridBagConstraints();
@@ -96,7 +94,6 @@ public class TaskListPanel extends JPanel {
 			gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.insets = new Insets(2,5,2,5);
 			buttonPanel.add(getRemoveTaskButton(), gridBagConstraints);
-			buttonPanel.add(jLabel, gridBagConstraints5);
 		}
 		return buttonPanel;
 	}
@@ -119,13 +116,18 @@ public class TaskListPanel extends JPanel {
 					// TODO Auto-generated method stub
 					JLabel l = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
 							cellHasFocus);
+					ImageIcon i = null;
 					switch (((SelRunnerTask) value).getStatus()) {
 					case SelRunnerTaskListener.RUNNING:
-						l.setIcon(new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/loader.gif")));
+						i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/loader.gif"));
 						break;
 					case SelRunnerTaskListener.COMPLETE:
-						l.setIcon(new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/accept.png")));
+						i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/accept.png"));
 						break;
+					}
+					if (i != null) {
+						l.setIcon(i);
+						i.setImageObserver(list);
 					}
 					return l;
 				}
