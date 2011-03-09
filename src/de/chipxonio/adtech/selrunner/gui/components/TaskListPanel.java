@@ -102,6 +102,12 @@ public class TaskListPanel extends JPanel {
 	private JList getTaskList() {
 		if (taskList == null) {
 			taskList = new JList();
+			taskList.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					if (e.getClickCount() != 2) return;
+					(new TaskEditor(null, library, (SelRunnerTask) getTaskList().getSelectedValue())).run();
+				}
+			});
 		}
 		return taskList;
 	}
