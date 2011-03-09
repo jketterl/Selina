@@ -9,6 +9,7 @@ import javax.swing.JScrollPane;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.gui.TaskEditor;
+import de.chipxonio.adtech.selrunner.library.Library;
 
 import java.awt.GridBagLayout;
 import javax.swing.JList;
@@ -24,17 +25,19 @@ public class TaskListPanel extends JPanel {
 	private JList taskList = null;
 	private JButton addTaskButton = null;
 	private JButton removeTaskButton = null;
+	private Library library;
 
 	/**
 	 * This is the default constructor
 	 */
-	public TaskListPanel() {
+	public TaskListPanel(Library l) {
 		super();
+		this.library = l;
 		initialize();
 	}
 	
-	public TaskListPanel(SelRunnerJob job) {
-		this();
+	public TaskListPanel(Library l, SelRunnerJob job) {
+		this(l);
 		this.setJob(job);
 	}
 
@@ -114,7 +117,7 @@ public class TaskListPanel extends JPanel {
 			addTaskButton.setText("New Task...");
 			addTaskButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					SelRunnerTask task = (new TaskEditor(null, new SelRunnerTask())).run();
+					SelRunnerTask task = (new TaskEditor(null, library, new SelRunnerTask())).run();
 					if (task == null) return;
 					getJob().add(task);
 				}
@@ -140,6 +143,10 @@ public class TaskListPanel extends JPanel {
 			});
 		}
 		return removeTaskButton;
+	}
+
+	public void setLibrary(Library l) {
+		this.library = l;
 	}
 
 }
