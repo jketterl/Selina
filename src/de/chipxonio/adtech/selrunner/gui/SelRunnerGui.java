@@ -22,15 +22,15 @@ import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileFilter;
 
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
-import de.chipxonio.adtech.selrunner.engine.SelRunnerEngineListener;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
+import de.chipxonio.adtech.selrunner.engine.SelRunnerJobListener;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.gui.components.TaskListPanel;
 import de.chipxonio.adtech.selrunner.library.Library;
 import de.chipxonio.adtech.selrunner.packages.PackageLoaderException;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
-public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
+public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 
 	private class JobFilter extends FileFilter {
 		@Override
@@ -128,6 +128,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	public void setJob(SelRunnerJob job) {
 		this.job = job;
 		this.getTaskList().setJob(job);
+		job.addListener(this);
 	}
 	
 	public SelRunnerJob getJob() {
@@ -204,9 +205,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	}
 
 	public void setEngine(SelRunnerEngine engine) {
-		if (this.engine != null) this.engine.removeListener(this);
 		this.engine = engine;
-		this.engine.addListener(this);
 	}
 
 	/**
