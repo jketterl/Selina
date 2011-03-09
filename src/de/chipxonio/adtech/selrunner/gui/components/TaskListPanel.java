@@ -113,7 +113,6 @@ public class TaskListPanel extends JPanel {
 				public Component getListCellRendererComponent(JList list,
 						Object value, int index, boolean isSelected,
 						boolean cellHasFocus) {
-					// TODO Auto-generated method stub
 					JLabel l = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
 							cellHasFocus);
 					ImageIcon i = null;
@@ -127,6 +126,9 @@ public class TaskListPanel extends JPanel {
 					}
 					if (i != null) {
 						l.setIcon(i);
+						// TODO this is pretty exhausting, but it's necessary to make animated gifs animated.
+						// unfortunately it also makes the list repaint itself constantly. it doesn't consume very much
+						// cpu, so i'll leave it in. better solutions are however welcome.
 						i.setImageObserver(list);
 					}
 					return l;
