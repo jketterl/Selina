@@ -25,6 +25,7 @@ import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngineListener;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
+import de.chipxonio.adtech.selrunner.gui.components.TaskListPanel;
 import de.chipxonio.adtech.selrunner.library.Library;
 import de.chipxonio.adtech.selrunner.packages.PackageLoaderException;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
@@ -66,8 +67,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	private JMenuItem fileSaveMenuItem = null;
 	private JMenuItem fileOpenMenuItem = null;
 	private JSplitPane jSplitPane = null;
-	private JScrollPane jScrollPane = null;
-	private JList taskList = null;
+	private TaskListPanel taskList = null;
 	private JMenuItem jMenuItem = null;
 	/**
 	 * This method initializes 
@@ -127,7 +127,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	
 	public void setJob(SelRunnerJob job) {
 		this.job = job;
-		this.getTaskList().setModel(job);
+		this.getTaskList().setJob(job);
 	}
 	
 	public SelRunnerJob getJob() {
@@ -351,22 +351,9 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 			jSplitPane = new JSplitPane();
 			jSplitPane.setDividerLocation(400);
 			jSplitPane.setRightComponent(getJScrollPane1());
-			jSplitPane.setLeftComponent(getJScrollPane());
+			jSplitPane.setLeftComponent(getTaskList());
 		}
 		return jSplitPane;
-	}
-
-	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
-	 */
-	private JScrollPane getJScrollPane() {
-		if (jScrollPane == null) {
-			jScrollPane = new JScrollPane();
-			jScrollPane.setViewportView(getTaskList());
-		}
-		return jScrollPane;
 	}
 
 	/**
@@ -374,9 +361,9 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	 * 	
 	 * @return javax.swing.JList	
 	 */
-	private JList getTaskList() {
+	private TaskListPanel getTaskList() {
 		if (taskList == null) {
-			taskList = new JList();
+			taskList = new TaskListPanel();
 		}
 		return taskList;
 	}

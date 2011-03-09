@@ -19,6 +19,10 @@ public class SelRunnerTask extends Thread implements Serializable {
 	private Vector<SelRunnerTaskListener> listeners = new Vector<SelRunnerTaskListener>();
 	private WebDriver driver = null;
 	
+	public SelRunnerTask() {
+		super();
+	};
+	
 	public SelRunnerTask(Host host, TestDefinition test) {
 		super();
 		this.host = host;
