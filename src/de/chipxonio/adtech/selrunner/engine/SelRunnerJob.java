@@ -155,4 +155,11 @@ public class SelRunnerJob extends Vector<SelRunnerTask> implements SelRunnerTask
 		if (index < 0) return;
 		this.fireContentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, index, index));
 	}
+
+	@Override
+	public void resultChanged(SelRunnerTask source, TestResult result) {
+		int index = this.indexOf(source);
+		if (index < 0) return;
+		this.fireContentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, index, index));
+	}
 }

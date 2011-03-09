@@ -8,5 +8,6 @@ public interface SelRunnerTaskListener {
 	public static final int COMPLETE = 2;
 	
 	public void statusUpdated(SelRunnerTask source, int status);
+	public void resultChanged(SelRunnerTask source, TestResult result);
 	public void testingComplete(TestResult result);
 }

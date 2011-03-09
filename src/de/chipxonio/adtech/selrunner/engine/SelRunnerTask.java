@@ -11,8 +11,9 @@ import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.packages.TestDefinition;
 import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
+import de.chipxonio.adtech.selrunner.tests.TestResultListener;
 
-public class SelRunnerTask extends Thread implements Serializable {
+public class SelRunnerTask extends Thread implements Serializable, TestResultListener {
 	private static final long serialVersionUID = 7731026883005748237L;
 	private Host host;
 	private TestDefinition test;
@@ -44,6 +45,11 @@ public class SelRunnerTask extends Thread implements Serializable {
 		while (i.hasNext()) i.next().testingComplete(result);
 	}
 	
+	private void fireResultChanged(TestResult result) {
+		Iterator<SelRunnerTaskListener> i = this.listeners.iterator();
+		while (i.hasNext()) i.next().resultChanged(this, result);
+	}
+	
 	public void removeListener(SelRunnerTaskListener l) {
 		this.listeners.remove(l);
 	}
@@ -67,11 +73,22 @@ public class SelRunnerTask extends Thread implements Serializable {
 		}
 		return this.driver;
 	}
+	
+	public void reset() throws SelRunnerTaskException {
+		if (this.getStatus() == SelRunnerTaskListener.RUNNING)
+			throw new SelRunnerTaskException("Cannot reset a running task");
+		if (this.result != null) {
+			this.result.removeListener(this);
+			this.result = null;
+		}
+		this.setStatus(SelRunnerTaskListener.STOPPED);
+	}
 
 	public void run()
 	{
 		this.setStatus(SelRunnerTaskListener.RUNNING);
 		result = new TestResult();
+		result.addListener(this);
 		WebDriver driver = null;
 		try {
 			driver = this.getDriver();
@@ -88,13 +105,13 @@ public class SelRunnerTask extends Thread implements Serializable {
 			result.pushException(e);
 		}
 		this.fireTestingComplete(result);
-		this.setStatus(SelRunnerTaskListener.COMPLETE);
 		try {
 			driver.quit();
 			this.driver = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		this.setStatus(SelRunnerTaskListener.COMPLETE);
 	}
 	
 	public String toString() {
@@ -109,5 +126,14 @@ public class SelRunnerTask extends Thread implements Serializable {
 		this.status = status;
 		Iterator<SelRunnerTaskListener> i = this.listeners.iterator();
 		while (i.hasNext()) i.next().statusUpdated(this, status);
+	}
+
+	public TestResult getResult() {
+		return result;
+	}
+
+	@Override
+	public void testResultChanged(TestResult result) {
+		this.fireResultChanged(result);
 	}
 }

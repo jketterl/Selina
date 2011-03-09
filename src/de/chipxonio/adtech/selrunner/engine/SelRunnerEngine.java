@@ -10,9 +10,12 @@ public class SelRunnerEngine implements HostQueueListener {
 
 	public void runJob(SelRunnerJob job) {
 		Iterator<SelRunnerTask> i = job.iterator();
-		while (i.hasNext()) {
+		while (i.hasNext()) try {
 			SelRunnerTask t = i.next();
+			t.reset();
 			this.getQueue(t.getHost()).add(t);
+		} catch (SelRunnerTaskException e) {
+			e.printStackTrace();
 		}
 	}
 	

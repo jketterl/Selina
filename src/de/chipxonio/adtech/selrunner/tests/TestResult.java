@@ -14,6 +14,7 @@ public class TestResult {
 	private int passes = 0;
 	private int failures = 0;
 	private Vector<Exception> exceptions = new Vector<Exception>();
+	private Vector<TestResultListener> listeners = new Vector<TestResultListener>();
 	
 	public String toString() {
 		String result = "passes: " + this.passes + ", failed: " + this.failures;
@@ -35,14 +36,17 @@ public class TestResult {
 	
 	public void pushException(Exception e) {
 		this.exceptions.add(e);
+		this.fireTestResultChanged();
 	}
 	
 	public void pass() {
 		this.passes++;
+		this.fireTestResultChanged();
 	}
 	
 	public void fail() {
 		this.failures++;
+		this.fireTestResultChanged();
 	}
 	
 	protected boolean hasScreenshot(Exception e) {
@@ -65,5 +69,18 @@ public class TestResult {
 		if (!this.hasScreenshot(e)) return null;
 		ScreenshotException cause = (ScreenshotException) e.getCause();
 		return (new ImageIcon(Base64.decodeBase64(cause.getBase64EncodedScreenshot()))).getImage();
+	}
+	
+	public void addListener(TestResultListener l) {
+		this.listeners.add(l);
+	}
+	
+	public void removeListener(TestResultListener l) {
+		this.listeners.remove(l);
+	}
+	
+	private void fireTestResultChanged() {
+		Iterator<TestResultListener> i = this.listeners.iterator();
+		while (i.hasNext()) i.next().testResultChanged(this);
 	}
 }
