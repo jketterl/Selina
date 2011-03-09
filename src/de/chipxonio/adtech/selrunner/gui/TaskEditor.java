@@ -12,6 +12,15 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import java.awt.Dimension;
+import de.chipxonio.adtech.selrunner.gui.components.PackageTree;
+import de.chipxonio.adtech.selrunner.hosts.Host;
+import de.chipxonio.adtech.selrunner.library.Library;
+import de.chipxonio.adtech.selrunner.packages.TestDefinition;
+
+import javax.swing.JScrollPane;
 
 public class TaskEditor extends JDialog {
 
@@ -22,12 +31,19 @@ public class TaskEditor extends JDialog {
 	private SelRunnerTask task;  //  @jve:decl-index=0:
 	private boolean confirmed = false;
 	private JPanel jContentPane = null;
+	private JPanel contentPanel = null;
+	private JLabel jLabel = null;
+	private JComboBox hostComboBox = null;
+	private PackageTree packageTree = null;
+	private Library library;
+	private JScrollPane jScrollPane = null;  //  @jve:decl-index=0:visual-constraint="435,217"
 
 	/**
 	 * @param owner
 	 */
-	public TaskEditor(Frame owner, SelRunnerTask task) {
+	public TaskEditor(Frame owner, Library l, SelRunnerTask task) {
 		super(owner);
+		this.library = l;
 		this.task = task;
 		initialize();
 	}
@@ -89,6 +105,8 @@ public class TaskEditor extends JDialog {
 			okButton.setText("OK");
 			okButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					task.setHost((Host) getHostComboBox().getSelectedItem());
+					task.setTest((TestDefinition) getPackageTree().getSelectionPath().getLastPathComponent());
 					confirmed = true;
 					dispose();
 				}
@@ -125,8 +143,86 @@ public class TaskEditor extends JDialog {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new BorderLayout());
 			jContentPane.add(getButtonPanel(), BorderLayout.SOUTH);
+			jContentPane.add(getContentPanel(), BorderLayout.CENTER);
 		}
 		return jContentPane;
+	}
+
+	/**
+	 * This method initializes contentPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getContentPanel() {
+		if (contentPanel == null) {
+			GridBagConstraints gc;
+			jLabel = new JLabel();
+			jLabel.setText("Host:");
+			contentPanel = new JPanel();
+			contentPanel.setLayout(new GridBagLayout());
+			gc = new GridBagConstraints();
+			gc.gridx = 0;
+			gc.gridy = 0;
+			gc.insets = new Insets(2, 5, 2, 5);
+			gc.weightx = 0;
+			gc.anchor = GridBagConstraints.WEST;
+			contentPanel.add(jLabel, gc);
+			gc = new GridBagConstraints();
+			gc.gridx = 1;
+			gc.gridy = 0;
+			gc.weightx = 1;
+			gc.fill = GridBagConstraints.HORIZONTAL;
+			gc.insets = new Insets(2, 5, 2, 5);
+			contentPanel.add(getHostComboBox(), gc);
+			gc = new GridBagConstraints();
+			gc.gridx = 0;
+			gc.gridy = 1;
+			gc.gridwidth = 2;
+			gc.insets = new Insets(2, 5, 2, 5);
+			gc.fill = GridBagConstraints.BOTH;
+			gc.weightx = 1;
+			gc.weighty = 1;
+			contentPanel.add(getJScrollPane(), gc);
+		}
+		return contentPanel;
+	}
+
+	/**
+	 * This method initializes hostComboBox	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */
+	private JComboBox getHostComboBox() {
+		if (hostComboBox == null) {
+			hostComboBox = new JComboBox(this.library.getHostList());
+			hostComboBox.setPreferredSize(new Dimension(200, 22));
+		}
+		return hostComboBox;
+	}
+
+	/**
+	 * This method initializes packageTree	
+	 * 	
+	 * @return de.chipxonio.adtech.selrunner.gui.components.PackageTree	
+	 */
+	private PackageTree getPackageTree() {
+		if (packageTree == null) {
+			packageTree = new PackageTree(this.library.getPackageList());
+		}
+		return packageTree;
+	}
+
+	/**
+	 * This method initializes jScrollPane	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane() {
+		if (jScrollPane == null) {
+			jScrollPane = new JScrollPane();
+			jScrollPane.setViewportView(getPackageTree());
+		}
+		return jScrollPane;
 	}
 
 }
