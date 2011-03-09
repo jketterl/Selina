@@ -148,4 +148,11 @@ public class SelRunnerJob extends Vector<SelRunnerTask> implements SelRunnerTask
 		Iterator<ListDataListener> i = listListeners.iterator();
 		while (i.hasNext()) i.next().intervalRemoved(e);
 	}
+
+	@Override
+	public void statusUpdated(SelRunnerTask source, int status) {
+		int index = this.indexOf(source);
+		if (index < 0) return;
+		this.fireContentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, index, index));
+	}
 }

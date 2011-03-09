@@ -18,7 +18,13 @@ public class SelRunnerTask extends Thread implements Serializable {
 	private TestDefinition test;
 	private Vector<SelRunnerTaskListener> listeners = new Vector<SelRunnerTaskListener>();
 	private WebDriver driver = null;
+	private int status = SelRunnerTaskListener.STOPPED;
+	private TestResult result;
 	
+	public int getStatus() {
+		return status;
+	}
+
 	public SelRunnerTask() {
 		super();
 	};
@@ -64,7 +70,8 @@ public class SelRunnerTask extends Thread implements Serializable {
 
 	public void run()
 	{
-		TestResult result = new TestResult();
+		this.setStatus(SelRunnerTaskListener.RUNNING);
+		result = new TestResult();
 		WebDriver driver = null;
 		try {
 			driver = this.getDriver();
@@ -81,6 +88,7 @@ public class SelRunnerTask extends Thread implements Serializable {
 			result.pushException(e);
 		}
 		this.fireTestingComplete(result);
+		this.setStatus(SelRunnerTaskListener.COMPLETE);
 		try {
 			driver.quit();
 			this.driver = null;
@@ -90,6 +98,16 @@ public class SelRunnerTask extends Thread implements Serializable {
 	}
 	
 	public String toString() {
-		return this.getTest().toString() + " on " + this.getHost().toString() + " using Firefox";
+		if (this.getTest() == null || this.getHost() == null) return "<uninitialized task>";
+		String ret;
+		ret = this.getTest().toString() + " on " + this.getHost().toString() + " using Firefox";
+		if (result != null) ret += " (" + result.toString() + ")";
+		return ret;
+	}
+	
+	private void setStatus(int status) {
+		this.status = status;
+		Iterator<SelRunnerTaskListener> i = this.listeners.iterator();
+		while (i.hasNext()) i.next().statusUpdated(this, status);
 	}
 }
