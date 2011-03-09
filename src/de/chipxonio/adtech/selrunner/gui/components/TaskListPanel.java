@@ -1,20 +1,24 @@
 package de.chipxonio.adtech.selrunner.gui.components;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
+import de.chipxonio.adtech.selrunner.engine.SelRunnerTaskListener;
 import de.chipxonio.adtech.selrunner.gui.TaskEditor;
 import de.chipxonio.adtech.selrunner.library.Library;
-
-import java.awt.GridBagLayout;
-import javax.swing.JList;
-import javax.swing.JButton;
-import java.awt.GridBagConstraints;
 
 public class TaskListPanel extends JPanel {
 
@@ -26,6 +30,7 @@ public class TaskListPanel extends JPanel {
 	private JButton addTaskButton = null;
 	private JButton removeTaskButton = null;
 	private Library library;
+	private JLabel jLabel = null;
 
 	/**
 	 * This is the default constructor
@@ -82,6 +87,7 @@ public class TaskListPanel extends JPanel {
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
 			GridBagConstraints gridBagConstraints;
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new GridBagLayout());
 			gridBagConstraints = new GridBagConstraints();
@@ -90,6 +96,7 @@ public class TaskListPanel extends JPanel {
 			gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.insets = new Insets(2,5,2,5);
 			buttonPanel.add(getRemoveTaskButton(), gridBagConstraints);
+			buttonPanel.add(jLabel, gridBagConstraints5);
 		}
 		return buttonPanel;
 	}
@@ -102,6 +109,27 @@ public class TaskListPanel extends JPanel {
 	private JList getTaskList() {
 		if (taskList == null) {
 			taskList = new JList();
+			taskList.setCellRenderer(new DefaultListCellRenderer(){
+				private static final long serialVersionUID = 1191528509556498236L;
+
+				@Override
+				public Component getListCellRendererComponent(JList list,
+						Object value, int index, boolean isSelected,
+						boolean cellHasFocus) {
+					// TODO Auto-generated method stub
+					JLabel l = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
+							cellHasFocus);
+					switch (((SelRunnerTask) value).getStatus()) {
+					case SelRunnerTaskListener.RUNNING:
+						l.setIcon(new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/loader.gif")));
+						break;
+					case SelRunnerTaskListener.COMPLETE:
+						l.setIcon(new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/accept.png")));
+						break;
+					}
+					return l;
+				}
+			});
 			taskList.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					if (e.getClickCount() != 2) return;
