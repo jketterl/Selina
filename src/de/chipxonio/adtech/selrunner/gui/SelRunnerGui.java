@@ -335,6 +335,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 
 	public void setLibrary(Library l) {
 		this.library = l;
+		this.taskList.setLibrary(l);
 	}
 	
 	public Library getLibrary() {
@@ -363,7 +364,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerEngineListener {
 	 */
 	private TaskListPanel getTaskList() {
 		if (taskList == null) {
-			taskList = new TaskListPanel();
+			taskList = new TaskListPanel(this.getLibrary(), this.getJob());
 		}
 		return taskList;
 	}
