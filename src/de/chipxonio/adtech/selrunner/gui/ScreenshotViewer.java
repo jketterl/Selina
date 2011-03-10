@@ -30,10 +30,10 @@ public class ScreenshotViewer extends JDialog {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(800, 600);
 		this.setTitle("Selenium Screenshot");
 		this.setContentPane(getJScrollPane());
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		this.pack();
 	}
 
 	/**
