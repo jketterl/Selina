@@ -66,6 +66,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 	private JMenuItem fileOpenMenuItem = null;
 	private JSplitPane jSplitPane = null;
 	private TaskListPanel taskList = null;
+	private JMenuItem fileNewMenuItem = null;
 	/**
 	 * This method initializes 
 	 * 
@@ -175,6 +176,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 		if (fileMenu == null) {
 			fileMenu = new JMenu();
 			fileMenu.setText("File");
+			fileMenu.add(getFileNewMenuItem());
 			fileMenu.add(getFileOpenMenuItem());
 			fileMenu.add(getFileSaveMenuItem());
 			fileMenu.add(new JSeparator());
@@ -362,5 +364,23 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 			taskList = new TaskListPanel(this.getLibrary(), this.getJob());
 		}
 		return taskList;
+	}
+
+	/**
+	 * This method initializes fileNewMenuItem	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getFileNewMenuItem() {
+		if (fileNewMenuItem == null) {
+			fileNewMenuItem = new JMenuItem();
+			fileNewMenuItem.setText("New Job");
+			fileNewMenuItem.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					setJob(new SelRunnerJob());
+				}
+			});
+		}
+		return fileNewMenuItem;
 	}
 }  //  @jve:decl-index=0:visual-constraint="78,21"
