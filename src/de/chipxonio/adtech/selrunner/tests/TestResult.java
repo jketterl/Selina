@@ -26,7 +26,7 @@ public class TestResult {
 	}
 	
 	public boolean isSuccessful() {
-		return this.failures == 0;
+		return this.failures == 0 && this.exceptions.size() == 0;
 	}
 	
 	public void pushException(Exception e) {

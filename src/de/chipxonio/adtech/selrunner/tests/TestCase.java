@@ -9,7 +9,6 @@ import org.openqa.selenium.TakesScreenshot;
 
 import de.chipxonio.adtech.selrunner.screenshots.Screenshot;
 
-
 public abstract class TestCase extends AbstractTest {
 	public void run() throws Exception {
 		Method[] methods = this.getClass().getDeclaredMethods();
@@ -53,9 +52,9 @@ public abstract class TestCase extends AbstractTest {
 		if (b) this.pass(); else this.fail();
 	}
 	
-	public void takeScreenshot() throws Exception {
+	public void takeScreenshot() throws InvalidDriverException {
 		if (!(this.getDriver() instanceof TakesScreenshot))
-			throw new Exception("cannot take screenshot");
+			throw new InvalidDriverException();
 		this.getResult().pushScreenshot(new Screenshot(((TakesScreenshot) this.getDriver()).getScreenshotAs(OutputType.BYTES)));
 	}
 }
