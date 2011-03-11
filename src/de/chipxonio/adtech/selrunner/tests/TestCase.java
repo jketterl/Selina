@@ -4,6 +4,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+
+import de.chipxonio.adtech.selrunner.screenshots.Screenshot;
+
 
 public abstract class TestCase extends AbstractTest {
 	public void run() throws Exception {
@@ -46,5 +51,11 @@ public abstract class TestCase extends AbstractTest {
 	
 	public void assertTrue(boolean b) {
 		if (b) this.pass(); else this.fail();
+	}
+	
+	public void takeScreenshot() throws Exception {
+		if (!(this.getDriver() instanceof TakesScreenshot))
+			throw new Exception("cannot take screenshot");
+		this.getResult().pushScreenshot(new Screenshot(((TakesScreenshot) this.getDriver()).getScreenshotAs(OutputType.BYTES)));
 	}
 }

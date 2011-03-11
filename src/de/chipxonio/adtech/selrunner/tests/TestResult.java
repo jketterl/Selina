@@ -1,31 +1,26 @@
 package de.chipxonio.adtech.selrunner.tests;
 
-import java.awt.Image;
 import java.util.Iterator;
 import java.util.Vector;
 
-import javax.swing.ImageIcon;
-
-import org.apache.commons.codec.binary.Base64;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.remote.ScreenshotException;
+
+import de.chipxonio.adtech.selrunner.screenshots.MissingScreenshotException;
+import de.chipxonio.adtech.selrunner.screenshots.Screenshot;
 
 public class TestResult {
 	private int passes = 0;
 	private int failures = 0;
 	private Vector<Exception> exceptions = new Vector<Exception>();
 	private Vector<TestResultListener> listeners = new Vector<TestResultListener>();
+	private Vector<Screenshot> screenshots = new Vector<Screenshot>();
 	
 	public String toString() {
 		String result = "passes: " + this.passes + ", failed: " + this.failures;
 		if (this.exceptions.size() > 0) {
 			result += ", exceptions: " + exceptions.size();
-			Iterator<Exception> i = this.exceptions.iterator();
-			int screenshots = 0;
-			while (i.hasNext()) {
-				if (hasScreenshot(i.next())) screenshots++;
-			}
-			if (screenshots > 0) result += ", screenshots: " + screenshots;
+			int screenshotCount = this.screenshots.size();
+			if (screenshotCount > 0) result += ", screenshots: " + screenshotCount;
 		}
 		return result;
 	}
@@ -36,6 +31,12 @@ public class TestResult {
 	
 	public void pushException(Exception e) {
 		this.exceptions.add(e);
+		if (e instanceof WebDriverException) try {
+			this.screenshots.add(new Screenshot((WebDriverException) e));
+		} catch (MissingScreenshotException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		this.fireTestResultChanged();
 	}
 	
@@ -49,28 +50,10 @@ public class TestResult {
 		this.fireTestResultChanged();
 	}
 	
-	protected boolean hasScreenshot(Exception e) {
-		if (!(e instanceof WebDriverException)) return false;
-		Throwable cause = e.getCause();
-		return cause instanceof ScreenshotException;
-	}
-	
-	public Vector<Image> getScreenshots() {
-		Vector<Image> screenshots = new Vector<Image>();
-		Iterator<Exception> i = this.exceptions.iterator();
-		while (i.hasNext()) {
-			Exception e = i.next();
-			if (hasScreenshot(e)) screenshots.add(extractScreenshot((WebDriverException) e));
-		}
+	public Vector<Screenshot> getScreenshots() {
 		return screenshots;
 	}
 
-	protected Image extractScreenshot(WebDriverException e) {
-		if (!this.hasScreenshot(e)) return null;
-		ScreenshotException cause = (ScreenshotException) e.getCause();
-		return (new ImageIcon(Base64.decodeBase64(cause.getBase64EncodedScreenshot()))).getImage();
-	}
-	
 	public void addListener(TestResultListener l) {
 		this.listeners.add(l);
 	}
@@ -82,5 +65,9 @@ public class TestResult {
 	private void fireTestResultChanged() {
 		Iterator<TestResultListener> i = this.listeners.iterator();
 		while (i.hasNext()) i.next().testResultChanged(this);
+	}
+
+	public void pushScreenshot(Screenshot screenshot) {
+		this.screenshots.add(screenshot);
 	}
 }
