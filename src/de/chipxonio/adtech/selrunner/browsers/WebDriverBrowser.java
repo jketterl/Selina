@@ -3,8 +3,8 @@ package de.chipxonio.adtech.selrunner.browsers;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import de.chipxonio.adtech.selrunner.hosts.Host;
@@ -24,5 +24,5 @@ public abstract class WebDriverBrowser extends Browser {
 		}
 	}
 	
-	abstract protected Capabilities getCapabilities();
+	abstract protected DesiredCapabilities getCapabilities();
 }
