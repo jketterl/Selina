@@ -72,6 +72,8 @@ public class HostQueue extends Thread {
 				} catch (InterruptedException e) {
 				}
 			} else try {
+				// clear interruption state (this helps with the screenshots, they must not be interrupted);
+				interrupted();
 				this.fireStatusChanged(new HostQueueEvent(this, HostQueueEvent.RUNNING | HostQueueEvent.ACTIVE));
 				task.run();
 				this.fireStatusChanged(new HostQueueEvent(this, HostQueueEvent.RUNNING | HostQueueEvent.INACTIVE));

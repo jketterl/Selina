@@ -2,7 +2,12 @@ package de.chipxonio.adtech.selrunner.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -11,6 +16,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
@@ -19,12 +25,41 @@ import javax.swing.filechooser.FileFilter;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJobListener;
+import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.gui.components.TaskGenerator;
 import de.chipxonio.adtech.selrunner.gui.components.TaskListPanel;
 import de.chipxonio.adtech.selrunner.library.Library;
+import de.chipxonio.adtech.selrunner.screenshots.Screenshot;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
+
+	private class TaskContextMenu extends JPopupMenu {
+		private static final long serialVersionUID = -2012460762563752709L;
+		private JMenuItem showScreenshotMenuItem;
+		private SelRunnerTask task;
+
+		public TaskContextMenu(SelRunnerTask task) {
+			super();
+			this.task = task;
+			this.add(getShowScreenshotMenuItem());
+		}
+		
+		private JMenuItem getShowScreenshotMenuItem() {
+			if (showScreenshotMenuItem == null) {
+				showScreenshotMenuItem = new JMenuItem();
+				showScreenshotMenuItem.setText("Show Screenshot");
+				showScreenshotMenuItem.addActionListener(new ActionListener(){
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						Vector<Screenshot> screenshots = task.getResult().getScreenshots();
+						(new ScreenshotViewer(null, screenshots.get(0).getImage())).setVisible(true);
+					}
+				});
+			}
+			return showScreenshotMenuItem;
+		}
+	}
 
 	private class JobFilter extends FileFilter {
 		@Override
@@ -324,6 +359,25 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 	private TaskListPanel getTaskList() {
 		if (taskList == null) {
 			taskList = new TaskListPanel(this.getLibrary(), this.getJob());
+			taskList.getTaskList().addMouseListener(new MouseAdapter(){
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					this.showPopup(e);
+				}
+				@Override
+				public void mousePressed(MouseEvent e) {
+					this.showPopup(e);
+				}
+				private void showPopup(MouseEvent e) {
+					if (!e.isPopupTrigger()) return;
+					int index = taskList.getTaskList().locationToIndex(e.getPoint());
+					if (index < 0) return;
+					taskList.getTaskList().setSelectedIndex(index);
+					SelRunnerTask task = (SelRunnerTask)taskList.getTaskList().getModel().getElementAt(index);
+					if (task == null) return;
+					(new TaskContextMenu(task)).show(taskList, e.getX(), e.getY());
+				}
+			});
 		}
 		return taskList;
 	}
@@ -354,6 +408,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 	private TaskGenerator getTaskGenerator() {
 		if (taskGenerator == null) {
 			taskGenerator = new TaskGenerator(this.getJob(), this.getLibrary());
+			
 		}
 		return taskGenerator;
 	}

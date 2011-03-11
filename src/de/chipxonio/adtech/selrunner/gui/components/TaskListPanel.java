@@ -103,7 +103,7 @@ public class TaskListPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JList	
 	 */
-	private JList getTaskList() {
+	public JList getTaskList() {
 		if (taskList == null) {
 			taskList = new JList();
 			taskList.setCellRenderer(new DefaultListCellRenderer(){
