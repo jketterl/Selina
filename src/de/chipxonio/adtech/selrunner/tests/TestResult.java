@@ -16,7 +16,7 @@ public class TestResult {
 	private Vector<Screenshot> screenshots = new Vector<Screenshot>();
 	
 	public String toString() {
-		String result = "passes: " + this.passes + ", failed: " + this.failures;
+		String result = "passed: " + this.passes + ", failed: " + this.failures;
 		if (this.exceptions.size() > 0) {
 			result += ", exceptions: " + exceptions.size();
 			int screenshotCount = this.screenshots.size();
