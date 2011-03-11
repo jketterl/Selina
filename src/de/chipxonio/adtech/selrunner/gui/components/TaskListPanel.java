@@ -116,12 +116,17 @@ public class TaskListPanel extends JPanel {
 					JLabel l = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
 							cellHasFocus);
 					ImageIcon i = null;
-					switch (((SelRunnerTask) value).getStatus()) {
+					SelRunnerTask task = (SelRunnerTask) value;
+					switch (task.getStatus()) {
 					case SelRunnerTaskListener.RUNNING:
 						i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/loader.gif"));
 						break;
 					case SelRunnerTaskListener.COMPLETE:
-						i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/accept.png"));
+						if (task.getResult().isSuccessful()) {
+							i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/accept.png"));
+						} else {
+							i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/exclamation.png"));
+						}
 						break;
 					}
 					if (i != null) {
