@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.Vector;
+import java.util.Iterator;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -36,28 +36,35 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 
 	private class TaskContextMenu extends JPopupMenu {
 		private static final long serialVersionUID = -2012460762563752709L;
-		private JMenuItem showScreenshotMenuItem;
+		private JMenu showScreenshotMenu;
 		private SelRunnerTask task;
 
 		public TaskContextMenu(SelRunnerTask task) {
 			super();
 			this.task = task;
-			this.add(getShowScreenshotMenuItem());
+			this.add(getShowScreenshotMenu());
 		}
 		
-		private JMenuItem getShowScreenshotMenuItem() {
-			if (showScreenshotMenuItem == null) {
-				showScreenshotMenuItem = new JMenuItem();
-				showScreenshotMenuItem.setText("Show Screenshot");
-				showScreenshotMenuItem.addActionListener(new ActionListener(){
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						Vector<Screenshot> screenshots = task.getResult().getScreenshots();
-						(new ScreenshotViewer(null, screenshots.get(0).getImage())).setVisible(true);
-					}
-				});
+		private JMenu getShowScreenshotMenu() {
+			if (showScreenshotMenu == null) {
+				showScreenshotMenu = new JMenu();
+				showScreenshotMenu.setText("Show Screenshot");
+				Iterator<Screenshot> i = task.getResult().getScreenshots().iterator();
+				int count = 0;
+				while (i.hasNext()) {
+					count++;
+					final Screenshot s = i.next();
+					JMenuItem item = new JMenuItem("Screenshot " + count);
+					item.addActionListener(new ActionListener(){
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							(new ScreenshotViewer(null, s.getImage())).setVisible(true);
+						}
+					});
+					showScreenshotMenu.add(item);
+				}
 			}
-			return showScreenshotMenuItem;
+			return showScreenshotMenu;
 		}
 	}
 
