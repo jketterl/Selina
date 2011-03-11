@@ -14,9 +14,18 @@ public class TestResult {
 	private Vector<Exception> exceptions = new Vector<Exception>();
 	private Vector<TestResultListener> listeners = new Vector<TestResultListener>();
 	private Vector<Screenshot> screenshots = new Vector<Screenshot>();
+	private long startTime = 0, endTime = 0;
+	
+	public TestResult() {
+		this.startTime = System.currentTimeMillis();
+	}
 	
 	public String toString() {
-		String result = "passed: " + this.passes + ", failed: " + this.failures;
+		String result = "";
+		if (this.startTime > 0 && this.endTime > 0) {
+			result += "runtime: " + Math.round((this.endTime - this.startTime) / 1000) + "s; ";
+		}
+		result += "passed: " + this.passes + ", failed: " + this.failures;
 		if (this.exceptions.size() > 0) {
 			result += ", exceptions: " + exceptions.size();
 			int screenshotCount = this.screenshots.size();
@@ -69,5 +78,9 @@ public class TestResult {
 
 	public void pushScreenshot(Screenshot screenshot) {
 		this.screenshots.add(screenshot);
+	}
+
+	public void stopTimer() {
+		this.endTime = System.currentTimeMillis();
 	}
 }

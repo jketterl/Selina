@@ -112,6 +112,7 @@ public class SelRunnerTask extends Thread implements Serializable, TestResultLis
 				e.printStackTrace();
 			}
 		}
+		result.stopTimer();
 		this.setStatus(SelRunnerTaskListener.COMPLETE);
 	}
 	
