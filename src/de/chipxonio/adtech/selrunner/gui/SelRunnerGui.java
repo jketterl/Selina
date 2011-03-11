@@ -2,20 +2,15 @@ package de.chipxonio.adtech.selrunner.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.io.File;
-import java.util.Iterator;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
@@ -24,6 +19,7 @@ import javax.swing.filechooser.FileFilter;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJobListener;
+import de.chipxonio.adtech.selrunner.gui.components.TaskGenerator;
 import de.chipxonio.adtech.selrunner.gui.components.TaskListPanel;
 import de.chipxonio.adtech.selrunner.library.Library;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
@@ -57,9 +53,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 	private JButton startButton = null;
 	private JMenuBar jJMenuBar = null;
 	private JMenu fileMenu = null;
-	private JScrollPane jScrollPane1 = null;
 	private JMenuItem fileExitMenuItem = null;
-	private JList resultList = null;
 	private JMenu editMenu = null;
 	private JMenuItem preferencesMenuItem = null;
 	private JMenuItem fileSaveMenuItem = null;
@@ -67,6 +61,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 	private JSplitPane jSplitPane = null;
 	private TaskListPanel taskList = null;
 	private JMenuItem fileNewMenuItem = null;
+	private TaskGenerator taskGenerator = null;
 	/**
 	 * This method initializes 
 	 * 
@@ -115,7 +110,6 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 			startButton.setText("Start Testing");
 			startButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					((DefaultListModel) getResultList().getModel()).clear();
 					getEngine().runJob(getJob());
 				}
 			});
@@ -185,19 +179,6 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 		return fileMenu;
 	}
 
-	/**
-	 * This method initializes jScrollPane1	
-	 * 	
-	 * @return javax.swing.JScrollPane	
-	 */
-	private JScrollPane getJScrollPane1() {
-		if (jScrollPane1 == null) {
-			jScrollPane1 = new JScrollPane();
-			jScrollPane1.setViewportView(getResultList());
-		}
-		return jScrollPane1;
-	}
-	
 	public SelRunnerEngine getEngine() {
 		return engine;
 	}
@@ -227,29 +208,8 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 
 	@Override
 	public void testingComplete(TestResult result) {
-		((DefaultListModel) this.getResultList().getModel()).addElement(result);
+		//((DefaultListModel) this.getResultList().getModel()).addElement(result);
 		//this.getResultTextPane().setText(result.toString());
-	}
-
-	/**
-	 * This method initializes resultList	
-	 * 	
-	 * @return javax.swing.JList	
-	 */
-	private JList getResultList() {
-		if (resultList == null) {
-			final JFrame parent = this;
-			resultList = new JList(new DefaultListModel());
-			resultList.addMouseListener(new java.awt.event.MouseAdapter() {
-				public void mouseClicked(java.awt.event.MouseEvent e) {
-					if (e.getClickCount() != 2) return;
-					TestResult result = (TestResult) getResultList().getSelectedValue();
-					Iterator<Image> i = result.getScreenshots().iterator();
-					while (i.hasNext()) (new ScreenshotViewer(parent, i.next())).setVisible(true);
-				}
-			});
-		}
-		return resultList;
 	}
 
 	/**
@@ -333,6 +293,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 	public void setLibrary(Library l) {
 		this.library = l;
 		this.taskList.setLibrary(l);
+		this.getTaskGenerator().setLibrary(l);
 	}
 	
 	public Library getLibrary() {
@@ -347,9 +308,10 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 	private JSplitPane getJSplitPane() {
 		if (jSplitPane == null) {
 			jSplitPane = new JSplitPane();
-			jSplitPane.setDividerLocation(400);
-			jSplitPane.setRightComponent(getJScrollPane1());
-			jSplitPane.setLeftComponent(getTaskList());
+			jSplitPane.setDividerLocation(150);
+			jSplitPane.setTopComponent(getTaskGenerator());
+			jSplitPane.setBottomComponent(getTaskList());
+			jSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		}
 		return jSplitPane;
 	}
@@ -382,5 +344,17 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 			});
 		}
 		return fileNewMenuItem;
+	}
+
+	/**
+	 * This method initializes taskGenerator	
+	 * 	
+	 * @return de.chipxonio.adtech.selrunner.gui.components.TaskGenerator	
+	 */
+	private TaskGenerator getTaskGenerator() {
+		if (taskGenerator == null) {
+			taskGenerator = new TaskGenerator(this.getJob(), this.getLibrary());
+		}
+		return taskGenerator;
 	}
 }  //  @jve:decl-index=0:visual-constraint="78,21"
