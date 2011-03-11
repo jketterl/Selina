@@ -95,21 +95,22 @@ public class SelRunnerTask extends Thread implements Serializable, TestResultLis
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (driver == null) return;
-		try {
-			AbstractTest test = this.getTest().getInstance();
-			test.setResult(result);
-			test.setDriver(driver);
-			test.run();
-		} catch (Exception e) {
-			result.pushException(e);
-		}
-		this.fireTestingComplete(result);
-		try {
-			driver.quit();
-			this.driver = null;
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (driver != null) {
+			try {
+				AbstractTest test = this.getTest().getInstance();
+				test.setResult(result);
+				test.setDriver(driver);
+				test.run();
+			} catch (Exception e) {
+				result.pushException(e);
+			}
+			this.fireTestingComplete(result);
+			try {
+				driver.quit();
+				this.driver = null;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		this.setStatus(SelRunnerTaskListener.COMPLETE);
 	}
