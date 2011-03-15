@@ -17,6 +17,8 @@ import javax.swing.JScrollPane;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTaskListener;
+import de.chipxonio.adtech.selrunner.gui.TestResultViewer;
+import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class TaskListPanel extends JPanel {
 
@@ -133,6 +135,9 @@ public class TaskListPanel extends JPanel {
 			taskList.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					if (e.getClickCount() != 2) return;
+					TestResult result = ((SelRunnerTask) taskList.getSelectedValue()).getResult();
+					(new TestResultViewer(null, result)).setVisible(true);
+					
 				}
 			});
 		}

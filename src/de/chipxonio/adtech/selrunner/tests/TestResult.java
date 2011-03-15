@@ -93,4 +93,8 @@ public class TestResult {
 	public void setTestMethod(Method m) {
 		this.currentMethod = m;
 	}
+
+	public Vector<Exception> getExceptions() {
+		return exceptions;
+	}
 }
