@@ -11,12 +11,14 @@ import de.chipxonio.adtech.selrunner.screenshots.Screenshot;
 
 public abstract class TestCase extends AbstractTest {
 	public void run() throws Exception {
+		getResult().setTestClass(this.getClass());
 		Method[] methods = this.getClass().getDeclaredMethods();
 		for (int i = 0; i < methods.length; i++) {
 			// execute the methods of this class that begin with "test"
 			Pattern p = Pattern.compile("^test[A-Z].*");
 			if (p.matcher(methods[i].getName()).matches()) try {
 				this.setUp();
+				getResult().setTestMethod(methods[i]);
 				methods[i].invoke(this, new Object[0]);
 				this.tearDown();
 			} catch (IllegalAccessException e) {
