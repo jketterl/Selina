@@ -17,8 +17,6 @@ import javax.swing.JScrollPane;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTaskListener;
-import de.chipxonio.adtech.selrunner.gui.TaskEditor;
-import de.chipxonio.adtech.selrunner.library.Library;
 
 public class TaskListPanel extends JPanel {
 
@@ -27,21 +25,18 @@ public class TaskListPanel extends JPanel {
 	private JPanel buttonPanel = null;
 	private SelRunnerJob job;
 	private JList taskList = null;
-	private JButton addTaskButton = null;
 	private JButton removeTaskButton = null;
-	private Library library;
 
 	/**
 	 * This is the default constructor
 	 */
-	public TaskListPanel(Library l) {
+	public TaskListPanel() {
 		super();
-		this.library = l;
 		initialize();
 	}
 	
-	public TaskListPanel(Library l, SelRunnerJob job) {
-		this(l);
+	public TaskListPanel(SelRunnerJob job) {
+		this();
 		this.setJob(job);
 	}
 
@@ -85,13 +80,9 @@ public class TaskListPanel extends JPanel {
 	 */
 	private JPanel getButtonPanel() {
 		if (buttonPanel == null) {
-			GridBagConstraints gridBagConstraints;
 			buttonPanel = new JPanel();
 			buttonPanel.setLayout(new GridBagLayout());
-			gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.insets = new Insets(2,5,2,5);
-			buttonPanel.add(getAddTaskButton(), gridBagConstraints);
-			gridBagConstraints = new GridBagConstraints();
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.insets = new Insets(2,5,2,5);
 			buttonPanel.add(getRemoveTaskButton(), gridBagConstraints);
 		}
@@ -142,31 +133,10 @@ public class TaskListPanel extends JPanel {
 			taskList.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					if (e.getClickCount() != 2) return;
-					(new TaskEditor(null, library, (SelRunnerTask) getTaskList().getSelectedValue())).run();
 				}
 			});
 		}
 		return taskList;
-	}
-
-	/**
-	 * This method initializes addTaskButton	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */
-	private JButton getAddTaskButton() {
-		if (addTaskButton == null) {
-			addTaskButton = new JButton();
-			addTaskButton.setText("New Task...");
-			addTaskButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					SelRunnerTask task = (new TaskEditor(null, library, new SelRunnerTask())).run();
-					if (task == null) return;
-					getJob().add(task);
-				}
-			});
-		}
-		return addTaskButton;
 	}
 
 	/**
@@ -187,9 +157,4 @@ public class TaskListPanel extends JPanel {
 		}
 		return removeTaskButton;
 	}
-
-	public void setLibrary(Library l) {
-		this.library = l;
-	}
-
 }

@@ -334,7 +334,6 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 
 	public void setLibrary(Library l) {
 		this.library = l;
-		this.taskList.setLibrary(l);
 		this.getTaskGenerator().setLibrary(l);
 	}
 	
@@ -365,7 +364,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 	 */
 	private TaskListPanel getTaskList() {
 		if (taskList == null) {
-			taskList = new TaskListPanel(this.getLibrary(), this.getJob());
+			taskList = new TaskListPanel(this.getJob());
 			taskList.getTaskList().addMouseListener(new MouseAdapter(){
 				@Override
 				public void mouseClicked(MouseEvent e) {
