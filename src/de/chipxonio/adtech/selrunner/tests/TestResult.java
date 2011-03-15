@@ -1,5 +1,6 @@
 package de.chipxonio.adtech.selrunner.tests;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -15,6 +16,8 @@ public class TestResult {
 	private Vector<TestResultListener> listeners = new Vector<TestResultListener>();
 	private Vector<Screenshot> screenshots = new Vector<Screenshot>();
 	private long startTime = 0, endTime = 0;
+	private Class<?> currentClass;
+	private Method currentMethod;
 	
 	public TestResult() {
 		this.startTime = System.currentTimeMillis();
@@ -43,8 +46,6 @@ public class TestResult {
 		if (e instanceof WebDriverException) try {
 			this.screenshots.add(new Screenshot((WebDriverException) e));
 		} catch (MissingScreenshotException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
 		this.fireTestResultChanged();
 	}
@@ -55,6 +56,7 @@ public class TestResult {
 	}
 	
 	public void fail() {
+		System.out.println(this.currentClass.getName() + "::" + this.currentMethod.getName());
 		this.failures++;
 		this.fireTestResultChanged();
 	}
@@ -82,5 +84,13 @@ public class TestResult {
 
 	public void stopTimer() {
 		this.endTime = System.currentTimeMillis();
+	}
+	
+	public void setTestClass(Class<?> c) {
+		this.currentClass = c;
+	}
+	
+	public void setTestMethod(Method m) {
+		this.currentMethod = m;
 	}
 }
