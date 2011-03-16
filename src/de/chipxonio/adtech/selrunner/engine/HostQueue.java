@@ -13,6 +13,7 @@ public class HostQueue extends Thread {
 	private boolean toBeStopped = false;
 	private Vector<HostQueueListener> listeners = new Vector<HostQueueListener>();
 	private Host host;
+	private boolean sleeping = false;
 	private Queue<SelRunnerTask> tasks = new AbstractQueue<SelRunnerTask>() {
 		private LinkedList<SelRunnerTask> list = new LinkedList<SelRunnerTask>();
 		
@@ -58,7 +59,7 @@ public class HostQueue extends Thread {
 	
 	public void add(SelRunnerTask task) {
 		this.tasks.add(task);
-		if (this.isAlive()) this.interrupt();
+		if (this.sleeping) this.interrupt();
 	}
 	
 	public void run() {
@@ -67,10 +68,13 @@ public class HostQueue extends Thread {
 			SelRunnerTask task = this.tasks.poll();
 			if (task == null) {
 				try {
+					this.sleeping = true;
 					Thread.sleep(60000);
 					this.terminate();
 				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
 				}
+				this.sleeping = false;
 			} else try {
 				// clear interruption state (this helps with the screenshots, they must not be interrupted);
 				interrupted();
@@ -87,7 +91,7 @@ public class HostQueue extends Thread {
 	public void terminate(){
 		if (!this.isAlive()) return;
 		this.toBeStopped = true;
-		this.interrupt();
+		if (this.sleeping) this.interrupt();
 	}
 	
 	public void addListener(HostQueueListener listener) {
