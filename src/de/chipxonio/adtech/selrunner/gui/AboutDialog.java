@@ -37,6 +37,7 @@ public class AboutDialog extends JDialog {
 	 */
 	private void initialize() {
 		this.setSize(300, 200);
+		this.setResizable(false);
 		this.setContentPane(getJContentPane());
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setTitle("About SeleniumRunner");
