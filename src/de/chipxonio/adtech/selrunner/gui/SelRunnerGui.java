@@ -2,6 +2,7 @@ package de.chipxonio.adtech.selrunner.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -104,6 +105,8 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 	private TaskListPanel taskList = null;
 	private JMenuItem fileNewMenuItem = null;
 	private TaskGenerator taskGenerator = null;
+	private JMenu helpMenu = null;
+	private JMenuItem aboutMenuItem = null;
 	/**
 	 * This method initializes 
 	 * 
@@ -199,6 +202,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 			jJMenuBar = new JMenuBar();
 			jJMenuBar.add(getFileMenu());
 			jJMenuBar.add(getEditMenu());
+			jJMenuBar.add(getHelpMenu());
 		}
 		return jJMenuBar;
 	}
@@ -417,5 +421,38 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 			
 		}
 		return taskGenerator;
+	}
+
+	/**
+	 * This method initializes helpMenu	
+	 * 	
+	 * @return javax.swing.JMenu	
+	 */
+	private JMenu getHelpMenu() {
+		if (helpMenu == null) {
+			helpMenu = new JMenu();
+			helpMenu.setText("Help");
+			helpMenu.add(getAboutMenuItem());
+		}
+		return helpMenu;
+	}
+
+	/**
+	 * This method initializes aboutMenuItem	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getAboutMenuItem() {
+		if (aboutMenuItem == null) {
+			aboutMenuItem = new JMenuItem();
+			aboutMenuItem.setText("About...");
+			final Frame parent = this;
+			aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					(new AboutDialog(parent)).setVisible(true);
+				}
+			});
+		}
+		return aboutMenuItem;
 	}
 }  //  @jve:decl-index=0:visual-constraint="78,21"
