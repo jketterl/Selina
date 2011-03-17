@@ -1,22 +1,26 @@
 package de.chipxonio.adtech.selrunner.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Frame;
-import java.awt.Dialog;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import javax.swing.JLabel;
-import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import java.awt.GridBagLayout;
 import javax.swing.JButton;
-import java.awt.GridBagConstraints;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JTextPane;
+import javax.swing.WindowConstants;
 
-public class AboutDialog extends Dialog {
+import de.chipxonio.adtech.selrunner.SelRunner;
+
+public class AboutDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private JLabel jLabel = null;
 	private JPanel buttonPanel = null;
 	private JButton jButton = null;
+	private JPanel jContentPane = null;
+	private JTextPane jTextPane = null;
 
 	/**
 	 * @param owner
@@ -32,12 +36,10 @@ public class AboutDialog extends Dialog {
 	 * @return void
 	 */
 	private void initialize() {
-		jLabel = new JLabel();
-		jLabel.setText("asdf");
 		this.setSize(300, 200);
+		this.setContentPane(getJContentPane());
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setTitle("About SeleniumRunner");
-		this.add(jLabel, BorderLayout.CENTER);
-		this.add(getButtonPanel(), BorderLayout.SOUTH);
 	}
 
 	/**
@@ -72,6 +74,43 @@ public class AboutDialog extends Dialog {
 			});
 		}
 		return jButton;
+	}
+
+	/**
+	 * This method initializes jContentPane	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJContentPane() {
+		if (jContentPane == null) {
+			jContentPane = new JPanel();
+			jContentPane.setLayout(new BorderLayout());
+			jContentPane.add(getButtonPanel(), BorderLayout.SOUTH);
+			jContentPane.add(getJTextPane(), BorderLayout.CENTER);
+		}
+		return jContentPane;
+	}
+
+	/**
+	 * This method initializes jTextPane	
+	 * 	
+	 * @return javax.swing.JTextPane	
+	 */
+	private JTextPane getJTextPane() {
+		if (jTextPane == null) {
+			jTextPane = new JTextPane();
+			jTextPane.setOpaque(false);
+			jTextPane.setFocusable(false);
+			jTextPane.setBorder(null);
+			jTextPane.setContentType("text/html");
+			jTextPane.setEditable(false);
+			jTextPane.setText("<html><head></head><body style = \"text-align: center; font-family: Arial; font-size: 12pt; \">" +
+					"<h1>Selenium Runner</h1>" +
+					"<p>Version " + SelRunner.version + " released on " + SelRunner.versionDate + "</p>" +
+					"<p>Copyright (&copy;) 2011 Jakob Ketterl<br>Chip Xonio Online GmbH</p>" +
+					"</body></html>");
+		}
+		return jTextPane;
 	}
 
 }
