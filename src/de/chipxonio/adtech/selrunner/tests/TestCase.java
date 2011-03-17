@@ -4,12 +4,33 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import de.chipxonio.adtech.selrunner.screenshots.Screenshot;
 
 public abstract class TestCase extends AbstractTest {
+	private class ElementPresentCondition implements ExpectedCondition<Boolean> {
+		private WebElement result;
+		private By by;
+		public ElementPresentCondition(By by) {
+			this.by = by;
+		}
+		@Override
+		public Boolean apply(WebDriver arg0) {
+			result = arg0.findElement(by);
+			return true;
+		}
+		public WebElement getResult() {
+			return result;
+		}
+	}
+
 	public void run() throws Exception {
 		getResult().setTestClass(this.getClass());
 		Method[] methods = this.getClass().getDeclaredMethods();
@@ -58,5 +79,12 @@ public abstract class TestCase extends AbstractTest {
 		if (!(this.getDriver() instanceof TakesScreenshot))
 			throw new InvalidDriverException();
 		this.getResult().pushScreenshot(new Screenshot(((TakesScreenshot) this.getDriver()).getScreenshotAs(OutputType.BYTES)));
+	}
+	
+	public WebElement getElement(By by) {
+		WebDriverWait w = new WebDriverWait(getDriver(), 30);
+		ElementPresentCondition c = new ElementPresentCondition(by);
+		w.until(c);
+		return c.getResult();
 	}
 }
