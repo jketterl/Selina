@@ -18,12 +18,21 @@ public abstract class TestCase extends AbstractTest {
 	private class ElementPresentCondition implements ExpectedCondition<Boolean> {
 		private WebElement result;
 		private By by;
+		private WebElement container;
 		public ElementPresentCondition(By by) {
 			this.by = by;
 		}
+		public ElementPresentCondition(By by, WebElement container) {
+			this(by);
+			this.container = container;
+		}
 		@Override
 		public Boolean apply(WebDriver arg0) {
-			result = arg0.findElement(by);
+			if (container == null) {
+				result = arg0.findElement(by);
+			} else {
+				result = container.findElement(by);
+			}
 			return true;
 		}
 		public WebElement getResult() {
@@ -84,6 +93,13 @@ public abstract class TestCase extends AbstractTest {
 	public WebElement getElement(By by) {
 		WebDriverWait w = new WebDriverWait(getDriver(), 30);
 		ElementPresentCondition c = new ElementPresentCondition(by);
+		w.until(c);
+		return c.getResult();
+	}
+	
+	public WebElement getElement(By by, WebElement container) {
+		WebDriverWait w = new WebDriverWait(getDriver(), 30);
+		ElementPresentCondition c = new ElementPresentCondition(by, container);
 		w.until(c);
 		return c.getResult();
 	}
