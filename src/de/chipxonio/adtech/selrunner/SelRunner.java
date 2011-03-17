@@ -45,4 +45,5 @@ public class SelRunner {
 
 	public final static String version = "0.1.0";
 	public final static String versionDate = "2010-03-17";
+	public final static String gitInfo = "$Id$";
 }
