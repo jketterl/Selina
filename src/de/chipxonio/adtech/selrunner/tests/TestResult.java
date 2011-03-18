@@ -85,4 +85,12 @@ public class TestResult {
 	public Vector<Exception> getExceptions() {
 		return exceptions;
 	}
+
+	public Vector<Pass> getPasses() {
+		return passes;
+	}
+
+	public Vector<Failure> getFailures() {
+		return failures;
+	}
 }
