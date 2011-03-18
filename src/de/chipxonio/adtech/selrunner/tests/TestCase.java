@@ -82,10 +82,6 @@ public abstract class TestCase extends AbstractTest {
 		this.getResult().pushFailure(new Failure(this.getClass(), currentMethod));
 	}
 	
-	public void pass(String message) {
-		this.getResult().pushPass(new Pass(this.getClass(), currentMethod, message));
-	}
-
 	public void fail(String message) {
 		this.getResult().pushFailure(new Failure(this.getClass(), currentMethod, message));
 	}
@@ -95,7 +91,7 @@ public abstract class TestCase extends AbstractTest {
 	}
 	
 	public void assertTrue(boolean b, String message) {
-		if (b) this.pass(message); else this.fail(message);
+		if (b) this.pass(); else this.fail(message);
 	}
 	
 	public void takeScreenshot() throws InvalidDriverException {
