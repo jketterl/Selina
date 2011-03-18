@@ -1,6 +1,5 @@
 package de.chipxonio.adtech.selrunner.tests;
 
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -10,14 +9,12 @@ import de.chipxonio.adtech.selrunner.screenshots.MissingScreenshotException;
 import de.chipxonio.adtech.selrunner.screenshots.Screenshot;
 
 public class TestResult {
-	private int passes = 0;
-	private int failures = 0;
+	private Vector<Pass> passes = new Vector<Pass>();;
+	private Vector<Failure> failures = new Vector<Failure>();
 	private Vector<Exception> exceptions = new Vector<Exception>();
 	private Vector<TestResultListener> listeners = new Vector<TestResultListener>();
 	private Vector<Screenshot> screenshots = new Vector<Screenshot>();
 	private long startTime = 0, endTime = 0;
-	private Class<?> currentClass;
-	private Method currentMethod;
 	
 	public TestResult() {
 		this.startTime = System.currentTimeMillis();
@@ -28,17 +25,17 @@ public class TestResult {
 		if (this.startTime > 0 && this.endTime > 0) {
 			result += "runtime: " + Math.round((this.endTime - this.startTime) / 1000) + "s; ";
 		}
-		result += "passed: " + this.passes + ", failed: " + this.failures;
+		result += "passed: " + this.passes.size() + ", failed: " + this.failures.size();
 		if (this.exceptions.size() > 0) {
 			result += ", exceptions: " + exceptions.size();
-			int screenshotCount = this.screenshots.size();
-			if (screenshotCount > 0) result += ", screenshots: " + screenshotCount;
 		}
+		int screenshotCount = this.screenshots.size();
+		if (screenshotCount > 0) result += ", screenshots: " + screenshotCount;
 		return result;
 	}
 	
 	public boolean isSuccessful() {
-		return this.failures == 0 && this.exceptions.size() == 0;
+		return this.failures.isEmpty() && this.exceptions.isEmpty();
 	}
 	
 	public void pushException(Exception e) {
@@ -50,14 +47,13 @@ public class TestResult {
 		this.fireTestResultChanged();
 	}
 	
-	public void pass() {
-		this.passes++;
+	public void pushPass(Pass p) {
+		this.passes.add(p);
 		this.fireTestResultChanged();
 	}
 	
-	public void fail() {
-		System.out.println(this.currentClass.getName() + "::" + this.currentMethod.getName());
-		this.failures++;
+	public void pushFailure(Failure f) {
+		this.failures.add(f);
 		this.fireTestResultChanged();
 	}
 	
@@ -86,14 +82,6 @@ public class TestResult {
 		this.endTime = System.currentTimeMillis();
 	}
 	
-	public void setTestClass(Class<?> c) {
-		this.currentClass = c;
-	}
-	
-	public void setTestMethod(Method m) {
-		this.currentMethod = m;
-	}
-
 	public Vector<Exception> getExceptions() {
 		return exceptions;
 	}
