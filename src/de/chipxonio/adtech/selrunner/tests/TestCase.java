@@ -10,6 +10,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.TimeoutException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import de.chipxonio.adtech.selrunner.screenshots.Screenshot;
@@ -93,14 +94,22 @@ public abstract class TestCase extends AbstractTest {
 	public WebElement getElement(By by) {
 		WebDriverWait w = new WebDriverWait(getDriver(), 30);
 		ElementPresentCondition c = new ElementPresentCondition(by);
-		w.until(c);
-		return c.getResult();
+		try {
+			w.until(c);
+			return c.getResult();
+		} catch (TimeoutException e) {
+			return null;
+		}
 	}
 	
 	public WebElement getElement(By by, WebElement container) {
 		WebDriverWait w = new WebDriverWait(getDriver(), 30);
 		ElementPresentCondition c = new ElementPresentCondition(by, container);
-		w.until(c);
-		return c.getResult();
+		try {
+			w.until(c);
+			return c.getResult();
+		} catch (TimeoutException e) {
+			return null;
+		}
 	}
 }
