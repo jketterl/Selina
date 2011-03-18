@@ -1,27 +1,31 @@
 package de.chipxonio.adtech.selrunner.gui;
 
-import javax.swing.JPanel;
-import java.awt.Frame;
 import java.awt.BorderLayout;
-import javax.swing.JDialog;
-
-import de.chipxonio.adtech.selrunner.tests.TestResult;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
+
+import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class TestResultViewer extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
 	private TestResult result;
-	private JPanel contenPanel = null;
+	private JPanel contentPanel = null;
 	private JLabel jLabel = null;
 	private JList exceptionList = null;
 	private JScrollPane jScrollPane = null;
+	private JLabel jLabel1 = null;
+	private JScrollPane jScrollPane1 = null;  //  @jve:decl-index=0:visual-constraint="220,237"
+	private JList failureList = null;  //  @jve:decl-index=0:visual-constraint="473,280"
 
 	/**
 	 * @param owner
@@ -52,36 +56,51 @@ public class TestResultViewer extends JDialog {
 		if (jContentPane == null) {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new BorderLayout());
-			jContentPane.add(getContenPanel(), BorderLayout.CENTER);
+			jContentPane.add(getContentPanel(), BorderLayout.CENTER);
 		}
 		return jContentPane;
 	}
 
 	/**
-	 * This method initializes contenPanel	
+	 * This method initializes contentPanel	
 	 * 	
 	 * @return javax.swing.JPanel	
 	 */
-	private JPanel getContenPanel() {
-		if (contenPanel == null) {
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.fill = GridBagConstraints.BOTH;
-			gridBagConstraints1.gridy = 1;
-			gridBagConstraints1.weightx = 1.0;
-			gridBagConstraints1.weighty = 1.0;
-			gridBagConstraints1.gridx = 0;
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 0;
-			gridBagConstraints.anchor = GridBagConstraints.WEST;
-			gridBagConstraints.gridy = 0;
+	private JPanel getContentPanel() {
+		if (contentPanel == null) {
+			contentPanel = new JPanel();
+			contentPanel.setLayout(new GridBagLayout());
+			GridBagConstraints gc;
+			gc = new GridBagConstraints();
+			gc.gridx = 0;
+			gc.anchor = GridBagConstraints.WEST;
+			gc.gridy = 0;
 			jLabel = new JLabel();
 			jLabel.setText("Exceptions");
-			contenPanel = new JPanel();
-			contenPanel.setLayout(new GridBagLayout());
-			contenPanel.add(jLabel, gridBagConstraints);
-			contenPanel.add(getJScrollPane(), gridBagConstraints1);
+			contentPanel.add(jLabel, gc);
+			gc = new GridBagConstraints();
+			gc.fill = GridBagConstraints.BOTH;
+			gc.gridy = 1;
+			gc.weightx = 1.0;
+			gc.weighty = 1.0;
+			gc.gridx = 0;
+			contentPanel.add(getJScrollPane(), gc);
+			gc = new GridBagConstraints();
+			gc.gridx = 0;
+			gc.anchor = GridBagConstraints.WEST;
+			gc.gridy = 2;
+			jLabel1 = new JLabel();
+			jLabel1.setText("Failures");
+			contentPanel.add(jLabel1, gc);
+			gc = new GridBagConstraints();
+			gc.fill = GridBagConstraints.BOTH;
+			gc.gridy = 3;
+			gc.weightx = 1.0;
+			gc.weighty = 1.0;
+			gc.gridx = 0;
+			contentPanel.add(getJScrollPane1(), gc);
 		}
-		return contenPanel;
+		return contentPanel;
 	}
 
 	/**
@@ -105,9 +124,33 @@ public class TestResultViewer extends JDialog {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
 			jScrollPane.setViewportView(getExceptionList());
-			jScrollPane.setViewportView(getExceptionList());
 		}
 		return jScrollPane;
+	}
+
+	/**
+	 * This method initializes jScrollPane1	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane1() {
+		if (jScrollPane1 == null) {
+			jScrollPane1 = new JScrollPane();
+			jScrollPane1.setViewportView(getFailureList());
+		}
+		return jScrollPane1;
+	}
+
+	/**
+	 * This method initializes failureList	
+	 * 	
+	 * @return javax.swing.JList	
+	 */
+	private JList getFailureList() {
+		if (failureList == null) {
+			failureList = new JList(this.result.getFailures());
+		}
+		return failureList;
 	}
 
 }
