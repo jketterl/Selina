@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -14,6 +15,7 @@ import javax.swing.ListModel;
 import javax.swing.WindowConstants;
 
 import de.chipxonio.adtech.selrunner.tests.TestResult;
+import javax.swing.JButton;
 
 public class TestResultViewer extends JDialog {
 
@@ -27,6 +29,8 @@ public class TestResultViewer extends JDialog {
 	private JLabel jLabel1 = null;
 	private JScrollPane jScrollPane1 = null;  //  @jve:decl-index=0:visual-constraint="220,237"
 	private JList failureList = null;  //  @jve:decl-index=0:visual-constraint="473,280"
+	private JPanel buttonPanel = null;
+	private JButton closeButton = null;
 
 	/**
 	 * @param owner
@@ -58,6 +62,7 @@ public class TestResultViewer extends JDialog {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new BorderLayout());
 			jContentPane.add(getContentPanel(), BorderLayout.CENTER);
+			jContentPane.add(getButtonPanel(), BorderLayout.SOUTH);
 		}
 		return jContentPane;
 	}
@@ -152,6 +157,42 @@ public class TestResultViewer extends JDialog {
 			failureList = new JList((ListModel) this.result.getFailures());
 		}
 		return failureList;
+	}
+
+	/**
+	 * This method initializes buttonPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getButtonPanel() {
+		if (buttonPanel == null) {
+			buttonPanel = new JPanel();
+			buttonPanel.setLayout(new GridBagLayout());
+			GridBagConstraints gc = new GridBagConstraints();
+			gc.insets = new Insets(2, 5, 2, 5);
+			gc.weightx = 1.0;
+			gc.anchor = GridBagConstraints.EAST;
+			buttonPanel.add(getCloseButton(), gc);
+		}
+		return buttonPanel;
+	}
+
+	/**
+	 * This method initializes closeButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getCloseButton() {
+		if (closeButton == null) {
+			closeButton = new JButton();
+			closeButton.setText("Close");
+			closeButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dispose();
+				}
+			});
+		}
+		return closeButton;
 	}
 
 }
