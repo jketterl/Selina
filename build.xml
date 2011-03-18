@@ -3,30 +3,37 @@
 	<property name="src" value="src" />
 	<property name="build" value="build" />
 	<property name="dist" value="dist" />
+	<property name="api.jarfile" value="seleniumrunner-api.jar" />
+	<property name="program.jarfile" value="seleniumrunner.jar" />
+	<property name="program.zipfile" value="seleniumrunner.zip" />
+	<property name="selenium.location" value="${eclipse.workspace}/selenium-2.0b2" />
+	<property name="selenium.libs.location" value="${selenium.location}/libs" />
+	<property name="jgoodies.looks.location" value="${eclipse.workspace}/jgoodies-looks-2.4.0" />
+	<property name="jgoodies.common.location" value="${eclipse.workspace}/jgoodies-common-1.1.1" />
 	<target name="all" depends="api,program"/>
 	<target name="api" depends="compile,api-jar" />
-	<target name="program" depends="compile,program-jar" />
+	<target name="program" depends="compile,program-jar,program-jar,program-zip" />
 	<target name="init">
 		<mkdir dir="${build}" />
 		<mkdir dir="${dist}" />
 	</target>
 	<target name="compile" depends="init">
 		<javac srcdir="${src}" destdir="${build}">
-			<classpath location="${eclipse.workspace}/selenium-2.0b2/selenium-java-2.0b2.jar" />
-			<classpath location="${eclipse.workspace}/selenium-2.0b2/libs/commons-codec-1.4.jar" />
-			<classpath location="${eclipse.workspace}/selenium-2.0b2/libs/xalan-2.7.1.jar" />
-			<classpath location="${eclipse.workspace}/selenium-2.0b2/libs/guava-r08.jar" />
+			<classpath location="${selenium.location}/selenium-java-2.0b2.jar" />
+			<classpath location="${selenium.libs.location}/commons-codec-1.4.jar" />
+			<classpath location="${selenium.libs.location}/xalan-2.7.1.jar" />
+			<classpath location="${selenium.libs.location}/guava-r08.jar" />
 		</javac>
 	</target>
-	<target name="api-jar">
-		<jar destfile="${dist}/seleniumrunner-api.jar">
+	<target name="api-jar" depends="compile" >
+		<jar destfile="${dist}/${api.jarfile}">
 			<fileset dir="${build}">
 				<include name="de/chipxonio/adtech/selrunner/tests/**" />
 			</fileset>
 		</jar>
 	</target>
-	<target name="program-jar">
-		<jar destfile="${dist}/seleniumrunner.jar">
+	<target name="program-jar" depends="compile">
+		<jar destfile="${dist}/${program.jarfile}">
 			<fileset dir="${build}">
 				<include name="**/*.class" />
 			</fileset>
@@ -36,9 +43,34 @@
 			<manifest>
 				<attribute name="Built-By" value="${user.name}"/>		
 				<attribute name="Main-Class" value="de.chipxonio.adtech.selrunner.SelRunner" />
-				<attribute name="Class-Path" value="libs/xalan-2.7.1.jar libs/commons-codec-1.4.jar selenium-java-2.0b2.jar libs/guava-r08.jar libs/httpcore-4.0.1.jar libs/httpclient-4.0.2.jar libs/commons-logging-1.1.1.jar libs/json-20080701.jar jgoodies-common-1.1.1.jar jgoodies-looks-2.4.0.jar" />
+				<attribute name="Class-Path" value="xalan-2.7.1.jar commons-codec-1.4.jar selenium-java-2.0b2.jar guava-r08.jar httpcore-4.0.1.jar httpclient-4.0.2.jar commons-logging-1.1.1.jar json-20080701.jar jgoodies-common-1.1.1.jar jgoodies-looks-2.4.0.jar" />
 			</manifest>
 		</jar>
+	</target>
+	<target name="program-zip" depends="program-jar">
+		<zip destfile="${dist}/${program.zipfile}">
+			<fileset dir="${dist}">
+				<include name="${program.jarfile}" />
+			</fileset>
+			<fileset dir="${selenium.location}">
+				<include name="selenium-java-2.0b2.jar" />
+			</fileset>
+			<fileset dir="${selenium.libs.location}">
+				<include name="xalan-2.7.1.jar" />
+				<include name="commons-codec-1.4.jar" />
+				<include name="guava-r08.jar" />
+				<include name="httpcore-4.0.1.jar" />
+				<include name="httpclient-4.0.2.jar" />
+				<include name="commons-logging-1.1.1.jar" />
+				<include name="json-20080701.jar" />
+			</fileset>
+			<fileset dir="${jgoodies.common.location}">
+				<include name="jgoodies-common-1.1.1.jar" />
+			</fileset>
+			<fileset dir="${jgoodies.looks.location}">
+				<include name="jgoodies-looks-2.4.0.jar" />
+			</fileset>
+		</zip>
 	</target>
 	<target name="clean">
 		<delete dir="${build}" />
