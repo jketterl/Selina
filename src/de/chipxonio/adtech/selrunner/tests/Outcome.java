@@ -2,7 +2,7 @@ package de.chipxonio.adtech.selrunner.tests;
 
 import java.lang.reflect.Method;
 
-public class Outcome {
+abstract public class Outcome {
 	protected Class<?> clss;
 	protected Method method;
 	
