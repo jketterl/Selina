@@ -6,16 +6,17 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 import javax.swing.WindowConstants;
+import javax.swing.border.TitledBorder;
 
 import de.chipxonio.adtech.selrunner.tests.TestResult;
-import javax.swing.JButton;
 
 public class TestResultViewer extends JDialog {
 
@@ -23,10 +24,8 @@ public class TestResultViewer extends JDialog {
 	private JPanel jContentPane = null;
 	private TestResult result;
 	private JPanel contentPanel = null;
-	private JLabel jLabel = null;
 	private JList exceptionList = null;
 	private JScrollPane jScrollPane = null;
-	private JLabel jLabel1 = null;
 	private JScrollPane jScrollPane1 = null;  //  @jve:decl-index=0:visual-constraint="220,237"
 	private JList failureList = null;  //  @jve:decl-index=0:visual-constraint="473,280"
 	private JPanel buttonPanel = null;
@@ -47,7 +46,8 @@ public class TestResultViewer extends JDialog {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(600, 200);
+		this.setSize(500, 400);
+		this.setTitle("Test Result Viewer");
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setContentPane(getJContentPane());
 	}
@@ -78,29 +78,15 @@ public class TestResultViewer extends JDialog {
 			contentPanel.setLayout(new GridBagLayout());
 			GridBagConstraints gc;
 			gc = new GridBagConstraints();
-			gc.gridx = 0;
-			gc.anchor = GridBagConstraints.WEST;
-			gc.gridy = 0;
-			jLabel = new JLabel();
-			jLabel.setText("Exceptions");
-			contentPanel.add(jLabel, gc);
-			gc = new GridBagConstraints();
 			gc.fill = GridBagConstraints.BOTH;
-			gc.gridy = 1;
+			gc.gridy = 0;
 			gc.weightx = 1.0;
 			gc.weighty = 1.0;
 			gc.gridx = 0;
 			contentPanel.add(getJScrollPane(), gc);
 			gc = new GridBagConstraints();
-			gc.gridx = 0;
-			gc.anchor = GridBagConstraints.WEST;
-			gc.gridy = 2;
-			jLabel1 = new JLabel();
-			jLabel1.setText("Failures");
-			contentPanel.add(jLabel1, gc);
-			gc = new GridBagConstraints();
 			gc.fill = GridBagConstraints.BOTH;
-			gc.gridy = 3;
+			gc.gridy = 1;
 			gc.weightx = 1.0;
 			gc.weighty = 1.0;
 			gc.gridx = 0;
@@ -129,6 +115,7 @@ public class TestResultViewer extends JDialog {
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
+			jScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Exceptions", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 			jScrollPane.setViewportView(getExceptionList());
 		}
 		return jScrollPane;
@@ -142,6 +129,7 @@ public class TestResultViewer extends JDialog {
 	private JScrollPane getJScrollPane1() {
 		if (jScrollPane1 == null) {
 			jScrollPane1 = new JScrollPane();
+			jScrollPane1.setBorder(BorderFactory.createTitledBorder(null, "Failures", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 			jScrollPane1.setViewportView(getFailureList());
 		}
 		return jScrollPane1;
