@@ -7,11 +7,12 @@ import org.openqa.selenium.WebDriverException;
 
 import de.chipxonio.adtech.selrunner.screenshots.MissingScreenshotException;
 import de.chipxonio.adtech.selrunner.screenshots.Screenshot;
+import de.chipxonio.adtech.selrunner.util.ActiveVector;
 
 public class TestResult {
-	private Vector<Pass> passes = new Vector<Pass>();;
-	private Vector<Failure> failures = new Vector<Failure>();
-	private Vector<Exception> exceptions = new Vector<Exception>();
+	private ActiveVector<Pass> passes = new ActiveVector<Pass>();;
+	private ActiveVector<Failure> failures = new ActiveVector<Failure>();
+	private ActiveVector<Exception> exceptions = new ActiveVector<Exception>();
 	private Vector<TestResultListener> listeners = new Vector<TestResultListener>();
 	private Vector<Screenshot> screenshots = new Vector<Screenshot>();
 	private long startTime = 0, endTime = 0;
@@ -82,15 +83,15 @@ public class TestResult {
 		this.endTime = System.currentTimeMillis();
 	}
 	
-	public Vector<Exception> getExceptions() {
+	public ActiveVector<Exception> getExceptions() {
 		return exceptions;
 	}
 
-	public Vector<Pass> getPasses() {
+	public ActiveVector<Pass> getPasses() {
 		return passes;
 	}
 
-	public Vector<Failure> getFailures() {
+	public ActiveVector<Failure> getFailures() {
 		return failures;
 	}
 }

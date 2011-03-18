@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ListModel;
 import javax.swing.WindowConstants;
 
 import de.chipxonio.adtech.selrunner.tests.TestResult;
@@ -110,7 +111,7 @@ public class TestResultViewer extends JDialog {
 	 */
 	private JList getExceptionList() {
 		if (exceptionList == null) {
-			exceptionList = new JList(this.result.getExceptions());
+			exceptionList = new JList((ListModel) this.result.getExceptions());
 		}
 		return exceptionList;
 	}
@@ -148,7 +149,7 @@ public class TestResultViewer extends JDialog {
 	 */
 	private JList getFailureList() {
 		if (failureList == null) {
-			failureList = new JList(this.result.getFailures());
+			failureList = new JList((ListModel) this.result.getFailures());
 		}
 		return failureList;
 	}
