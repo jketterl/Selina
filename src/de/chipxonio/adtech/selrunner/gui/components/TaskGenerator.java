@@ -11,7 +11,9 @@ import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.library.Library;
+import de.chipxonio.adtech.selrunner.packages.PackageLoaderException;
 import de.chipxonio.adtech.selrunner.packages.TestDefinition;
+import de.chipxonio.adtech.selrunner.packages.Package;
 
 import javax.swing.JScrollPane;
 import java.awt.GridBagLayout;
@@ -130,7 +132,20 @@ public class TaskGenerator extends JPanel {
 		Object[] hosts = this.getHostList().getSelectedValues();
 		for (int i = 0; i < definitions.length; i++) {
 			for (int k = 0; k < hosts.length; k++) {
-				tasks.add(new SelRunnerTask((Host) hosts[k], (TestDefinition) definitions[i].getLastPathComponent()));
+				Object o = definitions[i].getLastPathComponent();
+				if (o instanceof TestDefinition) {
+					tasks.add(new SelRunnerTask((Host) hosts[k], (TestDefinition) o));
+				} else if (o instanceof Package) {
+					try {
+						TestDefinition[] t = ((Package) o).getTests();
+						for (int l = 0; l < t.length; l++) {
+							tasks.add(new SelRunnerTask((Host) hosts[k], t[l]));
+						}
+					} catch (PackageLoaderException e) {
+						e.printStackTrace();
+					}
+					
+				}
 			}
 		}
 		return (SelRunnerTask[]) tasks.toArray(new SelRunnerTask[0]);
