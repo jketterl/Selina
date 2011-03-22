@@ -51,6 +51,7 @@
 		<zip destfile="${dist}/${program.zipfile}">
 			<fileset dir="${dist}">
 				<include name="${program.jarfile}" />
+				<include name="${api.jarfile}" />
 			</fileset>
 			<fileset dir="${selenium.location}">
 				<include name="selenium-java-2.0b2.jar" />
