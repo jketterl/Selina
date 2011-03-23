@@ -85,24 +85,47 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 	public Object getChild(Object arg0, int arg1) {
 		if (arg0 == this)
 			return this.get(arg1);
+		else if (arg0 instanceof Package)
+			try {
+				return ((Package) arg0).getTests()[arg1];
+			} catch (PackageLoaderException e) {
+				return null;
+			}
 		else
-			return ((TreeModel) arg0).getChild(arg0, arg1);
+			return null;
 	}
 
 	@Override
 	public int getChildCount(Object arg0) {
 		if (arg0 == this)
 			return this.size();
+		else if (arg0 instanceof Package)
+			try {
+				return ((Package) arg0).getTests().length;
+			} catch (PackageLoaderException e) {
+				return 0;
+			}
 		else
-			return ((TreeModel) arg0).getChildCount(arg0);
+			return 0;
 	}
 
 	@Override
 	public int getIndexOfChild(Object arg0, Object arg1) {
 		if (arg0 == this)
 			return this.indexOf(arg1);
-		else
-			return ((TreeModel) arg0).getIndexOfChild(arg0, arg1);
+		else if (arg0 instanceof Package) {
+			try {
+				TestDefinition[] tests = ((Package) arg0).getTests();
+				for (int i = 0; i < tests.length; i++) {
+					System.out.println(tests[i]);
+					if (tests[i] == arg1) return i;
+				}
+			} catch (PackageLoaderException e) {
+			}
+			System.out.println("not found: " + arg1);
+			return -1;
+		} else
+			return -1;
 	}
 
 	@Override
@@ -112,10 +135,10 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 
 	@Override
 	public boolean isLeaf(Object arg0) {
-		if (arg0 == this)
+		if (arg0 == this || arg0 instanceof Package)
 			return false;
 		else
-			return ((TreeModel) arg0).isLeaf(arg0);
+			return true;
 	}
 
 	@Override

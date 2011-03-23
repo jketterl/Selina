@@ -4,14 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Vector;
 import java.util.prefs.Preferences;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import javax.swing.event.TreeModelListener;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreePath;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -24,11 +20,11 @@ import org.xml.sax.SAXException;
 
 import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 
-public class Package extends ClassLoader implements TreeModel {
-	private Vector<TreeModelListener> listeners = new Vector<TreeModelListener>();
+public class Package extends ClassLoader {
 	private final ZipFile file;
 	private String name;
 	private Preferences preferences;
+	private TestDefinition[] tests;
 
 	public Package(String filename) throws IOException, PackageLoaderException {
 		this(new File(filename));
@@ -106,91 +102,31 @@ public class Package extends ClassLoader implements TreeModel {
 	// TODO i don't like to suppress warnings, but i don't know a way to work this out properly atm
 	@SuppressWarnings("unchecked")
 	public TestDefinition[] getTests() throws PackageLoaderException {
-		// pretty much to go wrong in this method... phew
-		try {
-			NodeList nodes = XPathAPI.selectNodeList(this.getTestIndex(), "/package/test");
-			TestDefinition[] tests = new TestDefinition[nodes.getLength()];
-			for (int i = 0; i < nodes.getLength(); i++) {
-				String testClassName = nodes.item(i).getAttributes().getNamedItem("class").getNodeValue();
-				String testName = nodes.item(i).getAttributes().getNamedItem("name").getNodeValue();
-				try {
-					Class<?> c = this.loadClass(testClassName);
-					if (!AbstractTest.class.isAssignableFrom(c))
-						throw new PackageLoaderException("'" + testClassName + "' does not inherit from AbstractTest");
-					tests[i] = new TestDefinition(testName, (Class<AbstractTest>) c);
-				} catch (ClassNotFoundException e) {
-					throw new PackageLoaderException("class '" + testClassName + "' defined in test index XML could not be found in JAR", e);
+		if (tests == null) {
+			// pretty much to go wrong in this method... phew
+			try {
+				NodeList nodes = XPathAPI.selectNodeList(this.getTestIndex(), "/package/test");
+				tests = new TestDefinition[nodes.getLength()];
+				for (int i = 0; i < nodes.getLength(); i++) {
+					String testClassName = nodes.item(i).getAttributes().getNamedItem("class").getNodeValue();
+					String testName = nodes.item(i).getAttributes().getNamedItem("name").getNodeValue();
+					try {
+						Class<?> c = this.loadClass(testClassName);
+						if (!AbstractTest.class.isAssignableFrom(c))
+							throw new PackageLoaderException("'" + testClassName + "' does not inherit from AbstractTest");
+						tests[i] = new TestDefinition(testName, (Class<AbstractTest>) c);
+					} catch (ClassNotFoundException e) {
+						throw new PackageLoaderException("class '" + testClassName + "' defined in test index XML could not be found in JAR", e);
+					}
 				}
+			} catch (TransformerException e) {
+				throw new PackageLoaderException("XPATH engine could not determine classes to be loaded", e);
 			}
-			return tests;
-		} catch (TransformerException e) {
-			throw new PackageLoaderException("XPATH engine could not determine classes to be loaded", e);
 		}
+		return tests;
 	}
 	
 	public String toString() {
 		return this.name + " (" + this.file.getName() + ")";
-	}
-
-	@Override
-	public void addTreeModelListener(TreeModelListener l) {
-		this.listeners.add(l);
-	}
-
-	@Override
-	public Object getChild(Object parent, int index) {
-		if (parent == this) {
-			try {
-				return this.getTests()[index];
-			} catch (PackageLoaderException e) {
-				e.printStackTrace();
-				return null;
-			}
-		} else {
-			return ((TreeModel) parent).getChild(parent, index);
-		}
-	}
-
-	@Override
-	public int getChildCount(Object parent) {
-		if (parent == this) {
-			try {
-				return this.getTests().length;
-			} catch (PackageLoaderException e) {
-				e.printStackTrace();
-				return 0;
-			}
-		} else {
-			return ((TreeModel) parent).getChildCount(parent);
-		}
-	}
-
-	@Override
-	public int getIndexOfChild(Object parent, Object child) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Object getRoot() {
-		return null;
-	}
-
-	@Override
-	public boolean isLeaf(Object node) {
-		if (node == this) {
-			return false;
-		} else {
-			return ((TreeModel) node).isLeaf(node);
-		}
-	}
-
-	@Override
-	public void removeTreeModelListener(TreeModelListener l) {
-		this.removeTreeModelListener(l);
-	}
-
-	@Override
-	public void valueForPathChanged(TreePath path, Object newValue) {
 	}
 }
