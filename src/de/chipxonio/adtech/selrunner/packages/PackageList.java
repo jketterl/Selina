@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
@@ -57,6 +59,13 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 				}
 				e.setPreferences(this.preferences.node(nodeName));
 			}
+			int[] indices = { indexOf(e) };
+			Object[] objects = { e };
+			fireTreeNodesInserted(new TreeModelEvent(this, new TreePath(this), indices, objects));
+			/*
+			Iterator<TreeModelListener> i = treeListeners.iterator();
+			while (i.hasNext()) i.next().treeStructureChanged(new TreeModelEvent(this, new TreePath(this)));
+			*/
 		}
 		return ret;
 	}
@@ -73,7 +82,13 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 		} catch (BackingStoreException e) {
 			e.printStackTrace();
 		}
-		return super.remove(o);
+		int[] indices = { indexOf(o) };
+		boolean ret = super.remove(o);
+		if (ret) {
+			Object[] objects = { o };
+			this.fireTreeNodesRemoved(new TreeModelEvent(this, new TreePath(this), indices, objects));
+		}
+		return ret;
 	}
 
 	@Override
@@ -148,5 +163,17 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 
 	@Override
 	public void valueForPathChanged(TreePath arg0, Object arg1) {
+	}
+	
+	private void fireTreeNodesInserted(TreeModelEvent e) {
+		Iterator<TreeModelListener> i = this.treeListeners.iterator();
+		while (i.hasNext()) i.next().treeNodesInserted(e);
+	}
+	
+	private void fireTreeNodesRemoved(TreeModelEvent e) {
+		Iterator<TreeModelListener> i = this.treeListeners.iterator();
+		while (i.hasNext()) {
+			i.next().treeNodesRemoved(e);
+		}
 	}
 }
