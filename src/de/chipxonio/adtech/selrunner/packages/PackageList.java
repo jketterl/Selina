@@ -1,10 +1,8 @@
 package de.chipxonio.adtech.selrunner.packages;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
+import java.util.UUID;
 import java.util.Vector;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -45,19 +43,7 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 		boolean ret = super.add(e);
 		if (ret) {
 			if (this.hasPreferences() && !e.hasPreferences()) {
-				String nodeName;
-				try {
-					// damn. creating an md5 hash in java is hard work...
-					byte[] md5 = MessageDigest.getInstance("MD5").digest(e.toString().getBytes("UTF-8"));
-					StringBuffer hexString = new StringBuffer();
-					for (int i = 0; i < md5.length; i++) hexString.append(Integer.toHexString(0xFF & md5[i]));
-					nodeName = hexString.toString();
-				} catch (NoSuchAlgorithmException e1) {
-					nodeName = e.toString();
-				} catch (UnsupportedEncodingException e1) {
-					nodeName = e.toString();
-				}
-				e.setPreferences(this.preferences.node(nodeName));
+				e.setPreferences(this.preferences.node(UUID.nameUUIDFromBytes(e.toString().getBytes()).toString()));
 			}
 			int[] indices = { indexOf(e) };
 			Object[] objects = { e };
