@@ -45,14 +45,9 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 			if (this.hasPreferences() && !e.hasPreferences()) {
 				e.setPreferences(this.preferences.node(UUID.nameUUIDFromBytes(e.toString().getBytes()).toString()));
 			}
-			/*
-			Iterator<TreeModelListener> i = treeListeners.iterator();
-			while (i.hasNext()) i.next().treeStructureChanged(new TreeModelEvent(this, new TreePath(this)));
-			*/
+			//fireTreeNodesInserted(new TreeModelEvent(this, new TreePath(new Object[]{this}), indices, objects));
+			this.fireTreeStructureChanged(new TreeModelEvent(this, new TreePath(this)));
 		}
-		int[] indices = { indexOf(e) };
-		Object[] objects = { e };
-		fireTreeNodesInserted(new TreeModelEvent(this, new Object[]{ this }, indices, objects));
 		return ret;
 	}
 
@@ -68,11 +63,10 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 		} catch (BackingStoreException e) {
 			e.printStackTrace();
 		}
-		int[] indices = { indexOf(o) };
 		boolean ret = super.remove(o);
 		if (ret) {
-			Object[] objects = { o };
-			this.fireTreeNodesRemoved(new TreeModelEvent(this, new TreePath(getRoot()), indices, objects));
+			//this.fireTreeNodesRemoved(new TreeModelEvent(this, new TreePath(getRoot()), indices, objects));
+			this.fireTreeStructureChanged(new TreeModelEvent(this, new TreePath(this)));
 		}
 		return ret;
 	}
@@ -84,7 +78,6 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 
 	@Override
 	public Object getChild(Object arg0, int arg1) {
-		System.out.println("getChild");
 		if (arg0 == this)
 			return this.get(arg1);
 		else if (arg0 instanceof Package)
@@ -99,7 +92,6 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 
 	@Override
 	public int getChildCount(Object arg0) {
-		System.out.println("getChildCount");
 		if (arg0 == this)
 			return this.size();
 		else if (arg0 instanceof Package)
@@ -114,19 +106,16 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 
 	@Override
 	public int getIndexOfChild(Object arg0, Object arg1) {
-		System.out.println("getIndexOfChild()");
 		if (arg0 == this)
 			return this.indexOf(arg1);
 		else if (arg0 instanceof Package) {
 			try {
 				TestDefinition[] tests = ((Package) arg0).getTests();
 				for (int i = 0; i < tests.length; i++) {
-					System.out.println(tests[i]);
 					if (tests[i] == arg1) return i;
 				}
 			} catch (PackageLoaderException e) {
 			}
-			System.out.println("not found: " + arg1);
 			return -1;
 		} else
 			return -1;
@@ -134,13 +123,11 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 
 	@Override
 	public Object getRoot() {
-		System.out.println("getRoot()");
 		return this;
 	}
 
 	@Override
 	public boolean isLeaf(Object arg0) {
-		System.out.println("isLeaf()");
 		if (arg0 == this || arg0 instanceof Package)
 			return false;
 		else
@@ -154,11 +141,10 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 
 	@Override
 	public void valueForPathChanged(TreePath arg0, Object arg1) {
-		System.out.println("valueForPathChanged");
 	}
 	
+	/*
 	private void fireTreeNodesInserted(TreeModelEvent e) {
-		System.out.println(e);
 		Iterator<TreeModelListener> i = this.treeListeners.iterator();
 		while (i.hasNext()) i.next().treeNodesInserted(e);
 	}
@@ -166,5 +152,16 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 	private void fireTreeNodesRemoved(TreeModelEvent e) {
 		Iterator<TreeModelListener> i = this.treeListeners.iterator();
 		while (i.hasNext()) i.next().treeNodesRemoved(e);
+	}
+	*/
+	
+	private void fireTreeStructureChanged(TreeModelEvent e) {
+		Iterator<TreeModelListener> i = this.treeListeners.iterator();
+		while (i.hasNext()) i.next().treeStructureChanged(e);
+	}
+
+	@Override
+	public synchronized String toString() {
+		return "Package List";
 	}
 }
