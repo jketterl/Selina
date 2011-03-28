@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -15,16 +16,13 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.TitledBorder;
 
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTaskListener;
 import de.chipxonio.adtech.selrunner.gui.TestResultViewer;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
-import javax.swing.BorderFactory;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 
 public class TaskListPanel extends JPanel {
 
@@ -34,7 +32,6 @@ public class TaskListPanel extends JPanel {
 	private SelRunnerJob job;  //  @jve:decl-index=0:
 	private JList taskList = null;
 	private JButton removeTaskButton = null;
-	private ListDataListener jobListener;  //  @jve:decl-index=0:
 
 	/**
 	 * This is the default constructor
@@ -56,33 +53,9 @@ public class TaskListPanel extends JPanel {
 		return job;
 	}
 	
-	private ListDataListener getJobListener(){
-		if (jobListener == null) {
-			jobListener = new ListDataListener() {
-				@Override
-				public void intervalRemoved(ListDataEvent e) {
-					getRemoveTaskButton();
-				}
-				
-				@Override
-				public void intervalAdded(ListDataEvent e) {
-					getRemoveTaskButton();
-				}
-				
-				@Override
-				public void contentsChanged(ListDataEvent e) {
-					getRemoveTaskButton();
-				}
-			};
-		}
-		return jobListener;
-	}
-
 	public void setJob(SelRunnerJob job) {
-		if (this.job != null) this.job.removeListDataListener(this.getJobListener());
 		this.job = job;
 		this.getTaskList().setModel(job);
-		job.addListDataListener(this.getJobListener());
 		getRemoveTaskButton();
 	}
 
@@ -135,6 +108,11 @@ public class TaskListPanel extends JPanel {
 	public JList getTaskList() {
 		if (taskList == null) {
 			taskList = new JList();
+			taskList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+				public void valueChanged(javax.swing.event.ListSelectionEvent e) {
+					getRemoveTaskButton();
+				}
+			});
 			taskList.setCellRenderer(new DefaultListCellRenderer(){
 				private static final long serialVersionUID = 1191528509556498236L;
 
@@ -214,7 +192,7 @@ public class TaskListPanel extends JPanel {
 				}
 			});
 		}
-		removeTaskButton.setEnabled(this.getJob().size() > 0);
+		removeTaskButton.setEnabled(this.getTaskList().getSelectedIndices().length > 0);
 		return removeTaskButton;
 	}
 }
