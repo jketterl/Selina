@@ -21,6 +21,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import javax.swing.filechooser.FileFilter;
 
 import de.chipxonio.adtech.selrunner.engine.SelRunnerEngine;
@@ -121,7 +123,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 	 * 
 	 */
 	private void initialize() {
-        this.setSize(new Dimension(667, 341));
+        this.setSize(new Dimension(665, 455));
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.setJMenuBar(getJJMenuBar());
         this.setTitle("Selenium Runner");
@@ -159,13 +161,31 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 				}
 			});
 		}
+		startButton.setEnabled(getJob().size() > 0);
 		return startButton;
 	}
 	
-	public void setJob(SelRunnerJob job) {
+	public void setJob(final SelRunnerJob job) {
 		this.job = job;
 		this.getTaskList().setJob(job);
 		job.addListener(this);
+		job.addListDataListener(new ListDataListener() {
+			@Override
+			public void intervalRemoved(ListDataEvent e) {
+				getStartButton();
+			}
+			
+			@Override
+			public void intervalAdded(ListDataEvent e) {
+				getStartButton();
+			}
+			
+			@Override
+			public void contentsChanged(ListDataEvent e) {
+				getStartButton();
+			}
+		});
+		getStartButton();
 	}
 	
 	public SelRunnerJob getJob() {
@@ -353,7 +373,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 	private JSplitPane getJSplitPane() {
 		if (jSplitPane == null) {
 			jSplitPane = new JSplitPane();
-			jSplitPane.setDividerLocation(150);
+			jSplitPane.setDividerLocation(190);
 			jSplitPane.setTopComponent(getTaskGenerator());
 			jSplitPane.setBottomComponent(getTaskList());
 			jSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);

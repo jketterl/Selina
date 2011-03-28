@@ -22,6 +22,9 @@ import javax.swing.tree.TreePath;
 
 import java.awt.GridBagConstraints;
 import java.util.Vector;
+import javax.swing.BorderFactory;
+import javax.swing.border.TitledBorder;
+import javax.swing.JLabel;
 
 public class TaskGenerator extends JPanel {
 
@@ -34,7 +37,8 @@ public class TaskGenerator extends JPanel {
 	private JScrollPane rightScrollPane = null;
 	private JSplitPane jSplitPane = null;
 	private JPanel buttonPanel = null;  //  @jve:decl-index=0:visual-constraint="527,292"
-	private JButton jButton = null;
+	private JButton generateButton = null;
+	private JLabel jLabel = null;
 
 	/**
 	 * This is the default constructor
@@ -52,9 +56,13 @@ public class TaskGenerator extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
+		jLabel = new JLabel();
+		jLabel.setText("Choose the test and machine combinations you would like to run, then click 'Generate Tasks':");
 		this.setLayout(new BorderLayout());
+		this.setBorder(BorderFactory.createTitledBorder(null, "Task Generator", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 		this.add(getJSplitPane(), BorderLayout.CENTER);
 		this.add(getButtonPanel(), BorderLayout.SOUTH);
+		this.add(jLabel, BorderLayout.NORTH);
 	}
 	
 	public SelRunnerJob getJob() {
@@ -84,6 +92,12 @@ public class TaskGenerator extends JPanel {
 	private PackageTree getPackageTree() {
 		if (packageTree == null) {
 			packageTree = new PackageTree();
+			packageTree
+					.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+						public void valueChanged(javax.swing.event.TreeSelectionEvent e) {
+							getGenerateButton();
+						}
+					});
 		}
 		return packageTree;
 	}
@@ -96,6 +110,11 @@ public class TaskGenerator extends JPanel {
 	private JList getHostList() {
 		if (hostList == null) {
 			hostList = new JList();
+			hostList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+				public void valueChanged(javax.swing.event.ListSelectionEvent e) {
+					getGenerateButton();
+				}
+			});
 		}
 		return hostList;
 	}
@@ -176,27 +195,28 @@ public class TaskGenerator extends JPanel {
 			buttonPanel.setLayout(new GridBagLayout());
 			GridBagConstraints gc = new GridBagConstraints();
 			gc.insets = new Insets(2, 5, 2, 5);
-			buttonPanel.add(getJButton(), gc);
+			buttonPanel.add(getGenerateButton(), gc);
 		}
 		return buttonPanel;
 	}
 
 	/**
-	 * This method initializes jButton	
+	 * This method initializes generateButton	
 	 * 	
 	 * @return javax.swing.JButton	
 	 */
-	private JButton getJButton() {
-		if (jButton == null) {
-			jButton = new JButton();
-			jButton.setText("Generate Tasks");
-			jButton.addActionListener(new java.awt.event.ActionListener() {
+	private JButton getGenerateButton() {
+		if (generateButton == null) {
+			generateButton = new JButton();
+			generateButton.setText("Generate Tasks");
+			generateButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					SelRunnerTask[] tasks = generateTasks();
 					for (int i = 0; i < tasks.length; i++) getJob().add(tasks[i]);
 				}
 			});
 		}
-		return jButton;
+		generateButton.setEnabled(getPackageTree().getSelectionCount() > 0 && getHostList().getSelectedIndices().length > 0);
+		return generateButton;
 	}
 }  //  @jve:decl-index=0:visual-constraint="12,15"

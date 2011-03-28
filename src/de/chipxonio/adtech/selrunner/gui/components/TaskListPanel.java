@@ -19,13 +19,17 @@ import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTaskListener;
 import de.chipxonio.adtech.selrunner.gui.TestResultViewer;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
+import javax.swing.BorderFactory;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 
 public class TaskListPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JScrollPane jScrollPane = null;
 	private JPanel buttonPanel = null;
-	private SelRunnerJob job;
+	private SelRunnerJob job;  //  @jve:decl-index=0:
 	private JList taskList = null;
 	private JButton removeTaskButton = null;
 
@@ -46,9 +50,29 @@ public class TaskListPanel extends JPanel {
 		return job;
 	}
 
-	public void setJob(SelRunnerJob job) {
+	public void setJob(final SelRunnerJob job) {
 		this.job = job;
 		this.getTaskList().setModel(job);
+		job.addListDataListener(new ListDataListener() {
+			private void updateButton(){
+				getRemoveTaskButton().setEnabled(job.size() > 0);
+			}
+			
+			@Override
+			public void intervalRemoved(ListDataEvent e) {
+				updateButton();
+			}
+			
+			@Override
+			public void intervalAdded(ListDataEvent e) {
+				updateButton();
+			}
+			
+			@Override
+			public void contentsChanged(ListDataEvent e) {
+				updateButton();
+			}
+		});
 	}
 
 	/**
@@ -58,6 +82,7 @@ public class TaskListPanel extends JPanel {
 	 */
 	private void initialize() {
 		this.setLayout(new BorderLayout());
+		this.setBorder(BorderFactory.createTitledBorder(null, "Task Queue", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 		this.add(getJScrollPane(), BorderLayout.CENTER);
 		this.add(getButtonPanel(), BorderLayout.SOUTH);
 	}
@@ -153,6 +178,7 @@ public class TaskListPanel extends JPanel {
 		if (removeTaskButton == null) {
 			removeTaskButton = new JButton();
 			removeTaskButton.setText("Remove Task(s)");
+			removeTaskButton.setEnabled(false);
 			removeTaskButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Object[] tasks = getTaskList().getSelectedValues();
