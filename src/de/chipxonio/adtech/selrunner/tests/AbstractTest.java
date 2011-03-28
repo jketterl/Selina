@@ -25,6 +25,6 @@ abstract public class AbstractTest {
 	public static String getName() {
 		return "Unnamed Test";
 	}
-
+	
 	abstract public void run() throws Exception;
 }

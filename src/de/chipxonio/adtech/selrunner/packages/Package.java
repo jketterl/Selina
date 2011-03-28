@@ -95,6 +95,7 @@ public class Package extends ClassLoader {
 
 	// TODO i don't like to suppress warnings, but i don't know a way to work this out properly atm
 	@SuppressWarnings("unchecked")
+	@Deprecated
 	public TestDefinition[] getTests() throws PackageLoaderException {
 		if (tests == null) {
 			// pretty much to go wrong in this method... phew
@@ -103,12 +104,11 @@ public class Package extends ClassLoader {
 				tests = new TestDefinition[nodes.getLength()];
 				for (int i = 0; i < nodes.getLength(); i++) {
 					String testClassName = nodes.item(i).getAttributes().getNamedItem("class").getNodeValue();
-					String testName = nodes.item(i).getAttributes().getNamedItem("name").getNodeValue();
 					try {
 						Class<?> c = this.loadClass(testClassName);
 						if (!AbstractTest.class.isAssignableFrom(c))
 							throw new PackageLoaderException("'" + testClassName + "' does not inherit from AbstractTest");
-						tests[i] = new TestDefinition(testName, (Class<AbstractTest>) c);
+						tests[i] = new TestDefinition((Class<AbstractTest>) c);
 					} catch (ClassNotFoundException e) {
 						throw new PackageLoaderException("class '" + testClassName + "' defined in test index XML could not be found in JAR", e);
 					}
