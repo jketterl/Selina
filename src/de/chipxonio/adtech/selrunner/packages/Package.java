@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.prefs.Preferences;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -14,6 +15,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.apache.xpath.XPathAPI;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -30,16 +32,8 @@ public class Package extends ClassLoader {
 		this(new File(filename));
 	}
 	
-	public Package(File file) throws IOException, PackageLoaderException {
+	public Package(File file) throws IOException {
 		this.file = new ZipFile(file);
-		try {
-			NodeList nodes = XPathAPI.selectNodeList(this.getTestIndex(), "/package");
-			if (nodes.getLength() != 1)
-				throw new PackageLoaderException("Multiple or no package definitions found");
-			this.name = nodes.item(0).getAttributes().getNamedItem("name").getNodeValue();
-		} catch (TransformerException e) {
-			throw new PackageLoaderException("XPath Engine could not find package definition", e);
-		}
 	}
 
 	public Package(Preferences node) throws IOException, PackageLoaderException {
@@ -126,7 +120,47 @@ public class Package extends ClassLoader {
 		return tests;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public Class<? extends AbstractTest> getRootTest() throws PackageLoaderException {
+		try {
+			NodeList nodes = XPathAPI.selectNodeList(this.getTestIndex(), "/package/@root");
+			if (nodes.getLength() != 1)
+				throw new PackageLoaderException("Multiple or no package definitions found");
+			return (Class<? extends AbstractTest>) this.loadClass(nodes.item(0).getNodeValue());
+		} catch (TransformerException e) {
+			throw new PackageLoaderException("XPath Engine could not find package definition", e);
+		} catch (DOMException e) {
+			throw new PackageLoaderException("XPath Engine could not find package definition", e);
+		} catch (ClassNotFoundException e) {
+			throw new PackageLoaderException("Package definition is faulty (class not found)", e);
+		}
+	}
+	
+	private String getName() throws PackageLoaderException {
+		// damn! so many exceptions just from one line of code.
+		if (name == null) try {
+			name = (String) getRootTest().getDeclaredMethod("getName", new Class[]{}).invoke(this, new Object[]{});
+		} catch (IllegalArgumentException e) {
+			throw new PackageLoaderException("could not call static methods on root test");
+		} catch (SecurityException e) {
+			throw new PackageLoaderException("could not call static methods on root test");
+		} catch (IllegalAccessException e) {
+			throw new PackageLoaderException("could not call static methods on root test");
+		} catch (InvocationTargetException e) {
+			throw new PackageLoaderException("could not call static methods on root test");
+		} catch (NoSuchMethodException e) {
+			throw new PackageLoaderException("could not call static methods on root test");
+		} catch (PackageLoaderException e) {
+			throw new PackageLoaderException("could not call static methods on root test");
+		}
+		return name;
+	}
+	
 	public String toString() {
-		return this.name + " (" + this.file.getName() + ")";
+		try {
+			return this.getName() + " (" + this.file.getName() + ")";
+		} catch (PackageLoaderException e) {
+			return super.toString();
+		}
 	}
 }

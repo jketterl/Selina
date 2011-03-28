@@ -15,7 +15,6 @@ import javax.swing.ListModel;
 
 import de.chipxonio.adtech.selrunner.packages.Package;
 import de.chipxonio.adtech.selrunner.packages.PackageList;
-import de.chipxonio.adtech.selrunner.packages.PackageLoaderException;
 
 public class PackageLibrary extends JPanel {
 
@@ -86,9 +85,6 @@ public class PackageLibrary extends JPanel {
 						list.add(new Package(dialog.getSelectedFile()));
 					} catch (IOException e1) {
 						// TODO display an error message
-					} catch (PackageLoaderException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
 					}
 				}
 			});

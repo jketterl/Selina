@@ -21,6 +21,10 @@ abstract public class AbstractTest {
 	public void setDriver(WebDriver driver) {
 		this.driver = driver;
 	}
+	
+	public static String getName() {
+		return "Unnamed Test";
+	}
 
 	abstract public void run() throws Exception;
 }
