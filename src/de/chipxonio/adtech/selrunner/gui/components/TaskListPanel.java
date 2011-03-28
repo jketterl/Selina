@@ -2,11 +2,13 @@ package de.chipxonio.adtech.selrunner.gui.components;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -142,7 +144,7 @@ public class TaskListPanel extends JPanel {
 						boolean cellHasFocus) {
 					JLabel l = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
 							cellHasFocus);
-					ImageIcon i = null;
+					Icon i = null;
 					SelRunnerTask task = (SelRunnerTask) value;
 					switch (task.getStatus()) {
 					case SelRunnerTaskListener.RUNNING:
@@ -155,13 +157,30 @@ public class TaskListPanel extends JPanel {
 							i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/exclamation.png"));
 						}
 						break;
+					default:
+						i = new Icon() {
+							@Override
+							public void paintIcon(Component c, Graphics g, int x, int y) {
+								// NOOP - this is an empty icon.
+							}
+							
+							@Override
+							public int getIconWidth() {
+								return 16;
+							}
+							
+							@Override
+							public int getIconHeight() {
+								return 16;
+							}
+						};
 					}
 					if (i != null) {
 						l.setIcon(i);
 						// TODO this is pretty exhausting, but it's necessary to make animated gifs animated.
 						// unfortunately it also makes the list repaint itself constantly. it doesn't consume very much
 						// cpu, so i'll leave it in. better solutions are however welcome.
-						i.setImageObserver(list);
+						if (i instanceof ImageIcon) ((ImageIcon) i).setImageObserver(list);
 					}
 					return l;
 				}
