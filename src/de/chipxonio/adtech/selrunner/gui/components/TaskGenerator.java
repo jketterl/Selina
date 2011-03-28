@@ -25,6 +25,7 @@ import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
+import javax.swing.ImageIcon;
 
 public class TaskGenerator extends JPanel {
 
@@ -209,6 +210,7 @@ public class TaskGenerator extends JPanel {
 		if (generateButton == null) {
 			generateButton = new JButton();
 			generateButton.setText("Generate Tasks");
+			generateButton.setIcon(new ImageIcon(getClass().getResource("/de/chipxonio/adtech/selrunner/resources/arrow_down.png")));
 			generateButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					SelRunnerTask[] tasks = generateTasks();

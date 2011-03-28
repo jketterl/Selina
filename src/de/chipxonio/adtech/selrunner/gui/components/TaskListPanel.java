@@ -32,6 +32,7 @@ public class TaskListPanel extends JPanel {
 	private SelRunnerJob job;  //  @jve:decl-index=0:
 	private JList taskList = null;
 	private JButton removeTaskButton = null;
+	private ListDataListener jobListener;  //  @jve:decl-index=0:
 
 	/**
 	 * This is the default constructor
@@ -47,32 +48,40 @@ public class TaskListPanel extends JPanel {
 	}
 
 	public SelRunnerJob getJob() {
+		if (this.job == null) {
+			this.job = new SelRunnerJob();
+		}
 		return job;
 	}
+	
+	private ListDataListener getJobListener(){
+		if (jobListener == null) {
+			jobListener = new ListDataListener() {
+				@Override
+				public void intervalRemoved(ListDataEvent e) {
+					getRemoveTaskButton();
+				}
+				
+				@Override
+				public void intervalAdded(ListDataEvent e) {
+					getRemoveTaskButton();
+				}
+				
+				@Override
+				public void contentsChanged(ListDataEvent e) {
+					getRemoveTaskButton();
+				}
+			};
+		}
+		return jobListener;
+	}
 
-	public void setJob(final SelRunnerJob job) {
+	public void setJob(SelRunnerJob job) {
+		if (this.job != null) this.job.removeListDataListener(this.getJobListener());
 		this.job = job;
 		this.getTaskList().setModel(job);
-		job.addListDataListener(new ListDataListener() {
-			private void updateButton(){
-				getRemoveTaskButton().setEnabled(job.size() > 0);
-			}
-			
-			@Override
-			public void intervalRemoved(ListDataEvent e) {
-				updateButton();
-			}
-			
-			@Override
-			public void intervalAdded(ListDataEvent e) {
-				updateButton();
-			}
-			
-			@Override
-			public void contentsChanged(ListDataEvent e) {
-				updateButton();
-			}
-		});
+		job.addListDataListener(this.getJobListener());
+		getRemoveTaskButton();
 	}
 
 	/**
@@ -178,7 +187,7 @@ public class TaskListPanel extends JPanel {
 		if (removeTaskButton == null) {
 			removeTaskButton = new JButton();
 			removeTaskButton.setText("Remove Task(s)");
-			removeTaskButton.setEnabled(false);
+			removeTaskButton.setIcon(new ImageIcon(getClass().getResource("/de/chipxonio/adtech/selrunner/resources/cross.png")));
 			removeTaskButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					Object[] tasks = getTaskList().getSelectedValues();
@@ -186,6 +195,7 @@ public class TaskListPanel extends JPanel {
 				}
 			});
 		}
+		removeTaskButton.setEnabled(this.getJob().size() > 0);
 		return removeTaskButton;
 	}
 }

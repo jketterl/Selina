@@ -34,6 +34,7 @@ import de.chipxonio.adtech.selrunner.gui.components.TaskListPanel;
 import de.chipxonio.adtech.selrunner.library.Library;
 import de.chipxonio.adtech.selrunner.screenshots.Screenshot;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
+import javax.swing.ImageIcon;
 
 public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 
@@ -94,6 +95,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 	private SelRunnerEngine engine;  //  @jve:decl-index=0:
 	private SelRunnerJob job;  //  @jve:decl-index=0:
 	private Library library;  //  @jve:decl-index=0:
+	private ListDataListener jobListener;  //  @jve:decl-index=0:
 	private JPanel jContentPane = null;
 	private JButton startButton = null;
 	private JMenuBar jJMenuBar = null;
@@ -155,6 +157,8 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 		if (startButton == null) {
 			startButton = new JButton();
 			startButton.setText("Start Testing");
+			startButton.setIcon(new ImageIcon(getClass().getResource("/de/chipxonio/adtech/selrunner/resources/control_play_blue.png")));
+			startButton.setPreferredSize(new Dimension(113, 35));
 			startButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					getEngine().runJob(getJob());
@@ -165,26 +169,35 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 		return startButton;
 	}
 	
+	private ListDataListener getJobListener(){
+		if (this.jobListener == null) {
+			this.jobListener = new ListDataListener() {
+				@Override
+				public void intervalRemoved(ListDataEvent e) {
+					getStartButton();
+				}
+				
+				@Override
+				public void intervalAdded(ListDataEvent e) {
+					getStartButton();
+				}
+				
+				@Override
+				public void contentsChanged(ListDataEvent e) {
+					getStartButton();
+				}
+			};
+		}
+		return this.jobListener;
+	}
+	
 	public void setJob(final SelRunnerJob job) {
+		if (this.job != null) this.job.removeListDataListener(this.getJobListener());
 		this.job = job;
 		this.getTaskList().setJob(job);
+		this.getTaskGenerator().setJob(job);
 		job.addListener(this);
-		job.addListDataListener(new ListDataListener() {
-			@Override
-			public void intervalRemoved(ListDataEvent e) {
-				getStartButton();
-			}
-			
-			@Override
-			public void intervalAdded(ListDataEvent e) {
-				getStartButton();
-			}
-			
-			@Override
-			public void contentsChanged(ListDataEvent e) {
-				getStartButton();
-			}
-		});
+		job.addListDataListener(this.getJobListener());
 		getStartButton();
 	}
 	
@@ -193,23 +206,6 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 			this.setJob(new SelRunnerJob());
 		}
 		return this.job;
-		/*
-		Iterator<Host> i = this.getLibrary().getHostList().iterator();
-		SelRunnerJob job = new SelRunnerJob();
-		while (i.hasNext()) {
-			try {
-				Host host = i.next();
-				Class<AbstractTest>[] tests = pack.getTests();
-				for (int k = 0; k < tests.length; k++) {
-					SelRunnerTask task = new SelRunnerTask(host, tests[k]);
-					job.add(task);
-				}
-			} catch (PackageLoaderException e1) {
-				e1.printStackTrace();
-			}
-		}
-		return job;
-		*/
 	}
 
 	/**
