@@ -5,6 +5,7 @@ import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 public class TestDefinition {
 	private String name;
 	private Class<? extends AbstractTest> testClass;
+	private AbstractTest instance;
 	
 	public TestDefinition (Class<? extends AbstractTest> testClass) {
 		this.testClass = testClass;
@@ -31,6 +32,9 @@ public class TestDefinition {
 	}
 
 	public AbstractTest getInstance() throws InstantiationException, IllegalAccessException {
-		return this.getTestClass().newInstance();
+		if (instance == null) {
+			instance = this.getTestClass().newInstance();
+		}
+		return instance;	
 	}
 }

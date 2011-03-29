@@ -12,6 +12,7 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import de.chipxonio.adtech.selrunner.tests.TransparentTestSuite;
 import de.chipxonio.adtech.selrunner.util.ActiveVector;
 
 public class PackageList extends ActiveVector<Package> implements TreeModel {
@@ -80,13 +81,23 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 	public Object getChild(Object arg0, int arg1) {
 		if (arg0 == this)
 			return this.get(arg1);
-		else if (arg0 instanceof Package)
+		else if (arg0 instanceof Package || arg0 instanceof TestDefinition) {
 			try {
-				return ((Package) arg0).getTests()[arg1];
+				TestDefinition test;
+				if (arg0 instanceof Package) {
+					test = ((Package) arg0).getRootTest();
+				} else {
+					test = (TestDefinition) arg0;
+				}
+				if (TransparentTestSuite.class.isAssignableFrom(test.getTestClass())) {
+					return ((TransparentTestSuite) test.getInstance()).getTests()[arg1];
+				}
 			} catch (PackageLoaderException e) {
-				return null;
+			} catch (InstantiationException e) {
+			} catch (IllegalAccessException e) {
 			}
-		else
+			return null;
+		} else
 			return null;
 	}
 
@@ -94,13 +105,23 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 	public int getChildCount(Object arg0) {
 		if (arg0 == this)
 			return this.size();
-		else if (arg0 instanceof Package)
+		else if (arg0 instanceof Package || arg0 instanceof TestDefinition) {
 			try {
-				return ((Package) arg0).getTests().length;
+				TestDefinition test;
+				if (arg0 instanceof Package) {
+					test = ((Package) arg0).getRootTest();
+				} else {
+					test = (TestDefinition) arg0;
+				}
+				if (TransparentTestSuite.class.isAssignableFrom(test.getTestClass())) {
+					return ((TransparentTestSuite) test.getInstance()).getTests().length;
+				}
 			} catch (PackageLoaderException e) {
-				return 0;
+			} catch (InstantiationException e) {
+			} catch (IllegalAccessException e) {
 			}
-		else
+			return 0;
+		} else
 			return 0;
 	}
 
@@ -108,14 +129,26 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 	public int getIndexOfChild(Object arg0, Object arg1) {
 		if (arg0 == this)
 			return this.indexOf(arg1);
-		else if (arg0 instanceof Package) {
+		else if (arg0 instanceof Package || arg0 instanceof TestDefinition) {
 			try {
-				TestDefinition[] tests = ((Package) arg0).getTests();
-				for (int i = 0; i < tests.length; i++) {
-					if (tests[i] == arg1) return i;
+				TestDefinition test;
+				if (arg0 instanceof Package) {
+					test = ((Package) arg0).getRootTest();
+				} else {
+					test = (TestDefinition) arg0;
+				}
+				if (TransparentTestSuite.class.isAssignableFrom(test.getTestClass())) {
+					System.out.println("searching " + arg1 + " in " + test);
+					TestDefinition[] tests = ((TransparentTestSuite) test.getInstance()).getTests();
+					for (int i = 0; i < tests.length; i++) {
+						if (tests[i] == arg1) return i;
+					}
 				}
 			} catch (PackageLoaderException e) {
+			} catch (InstantiationException e) {
+			} catch (IllegalAccessException e) {
 			}
+			System.out.println("not found");
 			return -1;
 		} else
 			return -1;
@@ -128,9 +161,18 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 
 	@Override
 	public boolean isLeaf(Object arg0) {
-		if (arg0 == this || arg0 instanceof Package)
+		if (arg0 == this)
 			return false;
-		else
+		else if (arg0 instanceof Package) {
+			try {
+				TestDefinition test = ((Package) arg0).getRootTest();
+				return !TransparentTestSuite.class.isAssignableFrom(test.getTestClass());
+			} catch (PackageLoaderException e) {
+			}
+			return true;
+		} else if (arg0 instanceof TestDefinition) {
+			return !TransparentTestSuite.class.isAssignableFrom(((TestDefinition) arg0).getTestClass());
+		} else
 			return true;
 	}
 

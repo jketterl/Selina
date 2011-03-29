@@ -24,7 +24,7 @@ import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 public class Package extends ClassLoader {
 	private final ZipFile file;
 	private Preferences preferences;
-	private TestDefinition[] tests;
+	private TestDefinition rootTest;
 
 	public Package(String filename) throws IOException, PackageLoaderException {
 		this(new File(filename));
@@ -93,38 +93,12 @@ public class Package extends ClassLoader {
 
 	// TODO i don't like to suppress warnings, but i don't know a way to work this out properly atm
 	@SuppressWarnings("unchecked")
-	@Deprecated
-	public TestDefinition[] getTests() throws PackageLoaderException {
-		if (tests == null) {
-			// pretty much to go wrong in this method... phew
-			try {
-				NodeList nodes = XPathAPI.selectNodeList(this.getTestIndex(), "/package/test");
-				tests = new TestDefinition[nodes.getLength()];
-				for (int i = 0; i < nodes.getLength(); i++) {
-					String testClassName = nodes.item(i).getAttributes().getNamedItem("class").getNodeValue();
-					try {
-						Class<?> c = this.loadClass(testClassName);
-						if (!AbstractTest.class.isAssignableFrom(c))
-							throw new PackageLoaderException("'" + testClassName + "' does not inherit from AbstractTest");
-						tests[i] = new TestDefinition((Class<AbstractTest>) c);
-					} catch (ClassNotFoundException e) {
-						throw new PackageLoaderException("class '" + testClassName + "' defined in test index XML could not be found in JAR", e);
-					}
-				}
-			} catch (TransformerException e) {
-				throw new PackageLoaderException("XPATH engine could not determine classes to be loaded", e);
-			}
-		}
-		return tests;
-	}
-	
-	@SuppressWarnings("unchecked")
 	public TestDefinition getRootTest() throws PackageLoaderException {
-		try {
+		if (rootTest == null) try {
 			NodeList nodes = XPathAPI.selectNodeList(this.getTestIndex(), "/package/@root");
 			if (nodes.getLength() != 1)
 				throw new PackageLoaderException("Multiple or no package definitions found");
-			return new TestDefinition((Class<? extends AbstractTest>) this.loadClass(nodes.item(0).getNodeValue()));
+			rootTest = new TestDefinition((Class<? extends AbstractTest>) this.loadClass(nodes.item(0).getNodeValue()));
 		} catch (TransformerException e) {
 			throw new PackageLoaderException("XPath Engine could not find package definition", e);
 		} catch (DOMException e) {
@@ -132,6 +106,7 @@ public class Package extends ClassLoader {
 		} catch (ClassNotFoundException e) {
 			throw new PackageLoaderException("Package definition is faulty (class not found)", e);
 		}
+		return rootTest;
 	}
 	
 	private String getName() throws PackageLoaderException {

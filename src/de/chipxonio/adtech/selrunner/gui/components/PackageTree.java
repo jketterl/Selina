@@ -24,7 +24,7 @@ public class PackageTree extends JTree {
 	 * 
 	 */
 	private void initialize() {
-        this.setRootVisible(false);
+        //this.setRootVisible(false);
 			
 	}
 

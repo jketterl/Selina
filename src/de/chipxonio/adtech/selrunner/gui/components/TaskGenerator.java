@@ -157,10 +157,8 @@ public class TaskGenerator extends JPanel {
 					tasks.add(new SelRunnerTask((Host) hosts[k], (TestDefinition) o));
 				} else if (o instanceof Package) {
 					try {
-						TestDefinition[] t = ((Package) o).getTests();
-						for (int l = 0; l < t.length; l++) {
-							tasks.add(new SelRunnerTask((Host) hosts[k], t[l]));
-						}
+						TestDefinition t = ((Package) o).getRootTest();
+						tasks.add(new SelRunnerTask((Host) hosts[k], t));
 					} catch (PackageLoaderException e) {
 						e.printStackTrace();
 					}

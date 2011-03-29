@@ -6,7 +6,7 @@ import java.util.Vector;
 public abstract class TestSuite extends AbstractTest {
 	private static final long serialVersionUID = -69790777830967570L;
 	
-	private Vector<Class<? extends AbstractTest>> tests = new Vector<Class<? extends AbstractTest>>();
+	protected Vector<Class<? extends AbstractTest>> tests = new Vector<Class<? extends AbstractTest>>();
 	
 	public void addTest(Class<? extends AbstractTest> test)
 	{
