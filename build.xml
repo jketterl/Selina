@@ -6,7 +6,7 @@
 	<property name="api.jarfile" value="seleniumrunner-api.jar" />
 	<property name="program.jarfile" value="seleniumrunner.jar" />
 	<property name="program.zipfile" value="seleniumrunner.zip" />
-	<property name="selenium.location" value="${eclipse.workspace}/selenium-2.0b2" />
+	<property name="selenium.location" value="${eclipse.workspace}/selenium-2.0b3" />
 	<property name="selenium.libs.location" value="${selenium.location}/libs" />
 	<property name="jgoodies.looks.location" value="${eclipse.workspace}/jgoodies-looks-2.4.0" />
 	<property name="jgoodies.common.location" value="${eclipse.workspace}/jgoodies-common-1.1.1" />
@@ -19,7 +19,7 @@
 	</target>
 	<target name="compile" depends="init">
 		<javac srcdir="${src}" destdir="${build}">
-			<classpath location="${selenium.location}/selenium-java-2.0b2.jar" />
+			<classpath location="${selenium.location}/selenium-java-2.0b3.jar" />
 			<classpath location="${selenium.libs.location}/commons-codec-1.4.jar" />
 			<classpath location="${selenium.libs.location}/xalan-2.7.1.jar" />
 			<classpath location="${selenium.libs.location}/guava-r08.jar" />
