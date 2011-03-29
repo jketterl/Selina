@@ -1,6 +1,11 @@
 package de.chipxonio.adtech.selrunner.gui.components;
 
+import java.awt.Component;
+
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeCellRenderer;
 
 import de.chipxonio.adtech.selrunner.packages.PackageList;
 
@@ -25,6 +30,18 @@ public class PackageTree extends JTree {
 	 */
 	private void initialize() {
         this.setRootVisible(false);
+        this.setCellRenderer(new DefaultTreeCellRenderer() {
+			private static final long serialVersionUID = 1302276464641623798L;
+
+			@Override
+			public Component getTreeCellRendererComponent(JTree tree, Object value,
+					boolean selected, boolean expanded, boolean leaf, int row,
+					boolean hasFocus) {
+				Component c = super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+				if (leaf) ((JLabel) c).setIcon(new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/cog.png")));
+				return c;
+			}
+		});
 	}
 
 	public void setList(PackageList list) {
