@@ -6,7 +6,7 @@ import java.util.Vector;
 
 import org.openqa.selenium.WebDriver;
 
-import de.chipxonio.adtech.selrunner.browsers.FirefoxBrowser;
+import de.chipxonio.adtech.selrunner.browsers.Browser;
 import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.packages.TestDefinition;
 import de.chipxonio.adtech.selrunner.tests.AbstractTest;
@@ -17,6 +17,7 @@ public class SelRunnerTask extends Thread implements Serializable, TestResultLis
 	private static final long serialVersionUID = 7731026883005748237L;
 	private Host host;
 	private TestDefinition test;
+	private Browser browser;
 	private Vector<SelRunnerTaskListener> listeners = new Vector<SelRunnerTaskListener>();
 	private WebDriver driver = null;
 	private int status = SelRunnerTaskListener.STOPPED;
@@ -30,10 +31,11 @@ public class SelRunnerTask extends Thread implements Serializable, TestResultLis
 		super();
 	};
 	
-	public SelRunnerTask(Host host, TestDefinition test) {
+	public SelRunnerTask(Host host, TestDefinition test, Browser browser) {
 		super();
 		this.host = host;
 		this.test = test;
+		this.browser = browser;
 	}
 	
 	public void addListener(SelRunnerTaskListener l) {
@@ -69,7 +71,7 @@ public class SelRunnerTask extends Thread implements Serializable, TestResultLis
 	
 	public WebDriver getDriver() {
 		if (this.driver == null) {
-			this.driver = new FirefoxBrowser().getDriver(host);
+			this.driver = this.getBrowser().getDriver(host);
 		}
 		return this.driver;
 	}
@@ -119,7 +121,7 @@ public class SelRunnerTask extends Thread implements Serializable, TestResultLis
 	public String toString() {
 		if (this.getTest() == null || this.getHost() == null) return "<uninitialized task>";
 		String ret;
-		ret = this.getTest().toString() + " on " + this.getHost().toString() + " using Firefox";
+		ret = this.getTest().toString() + " on " + this.getHost().toString() + " using " + this.getBrowser().toString();
 		if (result != null) ret += " (" + result.toString() + ")";
 		return ret;
 	}
@@ -137,5 +139,13 @@ public class SelRunnerTask extends Thread implements Serializable, TestResultLis
 	@Override
 	public void testResultChanged(TestResult result) {
 		this.fireResultChanged(result);
+	}
+
+	public Browser getBrowser() {
+		return browser;
+	}
+
+	public void setBrowser(Browser browser) {
+		this.browser = browser;
 	}
 }

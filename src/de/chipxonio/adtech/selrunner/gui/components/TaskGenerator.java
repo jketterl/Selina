@@ -1,31 +1,30 @@
 package de.chipxonio.adtech.selrunner.gui.components;
 
 import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Vector;
 
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.border.TitledBorder;
+import javax.swing.tree.TreePath;
 
+import de.chipxonio.adtech.selrunner.browsers.Browser;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerJob;
 import de.chipxonio.adtech.selrunner.engine.SelRunnerTask;
 import de.chipxonio.adtech.selrunner.hosts.Host;
 import de.chipxonio.adtech.selrunner.library.Library;
+import de.chipxonio.adtech.selrunner.packages.Package;
 import de.chipxonio.adtech.selrunner.packages.PackageLoaderException;
 import de.chipxonio.adtech.selrunner.packages.TestDefinition;
-import de.chipxonio.adtech.selrunner.packages.Package;
-
-import javax.swing.JScrollPane;
-import java.awt.GridBagLayout;
-import javax.swing.JButton;
-import javax.swing.tree.TreePath;
-
-import java.awt.GridBagConstraints;
-import java.util.Vector;
-import javax.swing.BorderFactory;
-import javax.swing.border.TitledBorder;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
 
 public class TaskGenerator extends JPanel {
 
@@ -40,6 +39,8 @@ public class TaskGenerator extends JPanel {
 	private JPanel buttonPanel = null;  //  @jve:decl-index=0:visual-constraint="527,292"
 	private JButton generateButton = null;
 	private JLabel jLabel = null;
+	private JSplitPane jSplitPane1 = null;
+	private BrowserLibrary browserLibrary = null;
 
 	/**
 	 * This is the default constructor
@@ -150,9 +151,24 @@ public class TaskGenerator extends JPanel {
 		Vector<SelRunnerTask> tasks = new Vector<SelRunnerTask>();
 		TreePath[] definitions = this.getPackageTree().getSelectionPaths();
 		Object[] hosts = this.getHostList().getSelectedValues();
+		Object[] browsers = this.getBrowserLibrary().getSelectedValues();
 		for (int i = 0; i < definitions.length; i++) {
 			for (int k = 0; k < hosts.length; k++) {
-				Object o = definitions[i].getLastPathComponent();
+				for (int l = 0; l < browsers.length; l++) {
+					Object o = definitions[i].getLastPathComponent();
+					TestDefinition test;
+					try {
+						if (o instanceof Package) {
+							test = ((Package) o).getRootTest();
+						} else {
+							test = (TestDefinition) o;
+						}
+						tasks.add(new SelRunnerTask((Host) hosts[k], test, (Browser) browsers[l]));
+					} catch (PackageLoaderException e) {
+						e.printStackTrace();
+					}
+				}
+				/*
 				if (o instanceof TestDefinition) {
 					tasks.add(new SelRunnerTask((Host) hosts[k], (TestDefinition) o));
 				} else if (o instanceof Package) {
@@ -164,6 +180,7 @@ public class TaskGenerator extends JPanel {
 					}
 					
 				}
+				*/
 			}
 		}
 		return (SelRunnerTask[]) tasks.toArray(new SelRunnerTask[0]);
@@ -177,8 +194,9 @@ public class TaskGenerator extends JPanel {
 	private JSplitPane getJSplitPane() {
 		if (jSplitPane == null) {
 			jSplitPane = new JSplitPane();
+			jSplitPane.setDividerLocation(400);
+			jSplitPane.setRightComponent(getJSplitPane1());
 			jSplitPane.setLeftComponent(getLeftScrollPane());
-			jSplitPane.setRightComponent(getRightScrollPane());
 		}
 		return jSplitPane;
 	}
@@ -218,5 +236,32 @@ public class TaskGenerator extends JPanel {
 		}
 		generateButton.setEnabled(getPackageTree().getSelectionCount() > 0 && getHostList().getSelectedIndices().length > 0);
 		return generateButton;
+	}
+
+	/**
+	 * This method initializes jSplitPane1	
+	 * 	
+	 * @return javax.swing.JSplitPane	
+	 */
+	private JSplitPane getJSplitPane1() {
+		if (jSplitPane1 == null) {
+			jSplitPane1 = new JSplitPane();
+			jSplitPane1.setDividerLocation(100);
+			jSplitPane1.setLeftComponent(getRightScrollPane());
+			jSplitPane1.setRightComponent(getBrowserLibrary());
+		}
+		return jSplitPane1;
+	}
+
+	/**
+	 * This method initializes browserLibrary	
+	 * 	
+	 * @return de.chipxonio.adtech.selrunner.gui.components.BrowserLibrary	
+	 */
+	private BrowserLibrary getBrowserLibrary() {
+		if (browserLibrary == null) {
+			browserLibrary = new BrowserLibrary();
+		}
+		return browserLibrary;
 	}
 }  //  @jve:decl-index=0:visual-constraint="12,15"
