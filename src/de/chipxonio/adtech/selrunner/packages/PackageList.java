@@ -90,7 +90,7 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 					test = (TestDefinition) arg0;
 				}
 				if (TransparentTestSuite.class.isAssignableFrom(test.getTestClass())) {
-					return ((TransparentTestSuite) test.getInstance()).getTests()[arg1];
+					return ((TransparentTestSuite) test.getSampleInstance()).getTests()[arg1];
 				}
 			} catch (PackageLoaderException e) {
 			} catch (InstantiationException e) {
@@ -114,7 +114,7 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 					test = (TestDefinition) arg0;
 				}
 				if (TransparentTestSuite.class.isAssignableFrom(test.getTestClass())) {
-					return ((TransparentTestSuite) test.getInstance()).getTests().length;
+					return ((TransparentTestSuite) test.getSampleInstance()).getTests().length;
 				}
 			} catch (PackageLoaderException e) {
 			} catch (InstantiationException e) {
@@ -139,7 +139,7 @@ public class PackageList extends ActiveVector<Package> implements TreeModel {
 				}
 				if (TransparentTestSuite.class.isAssignableFrom(test.getTestClass())) {
 					System.out.println("searching " + arg1 + " in " + test);
-					TestDefinition[] tests = ((TransparentTestSuite) test.getInstance()).getTests();
+					TestDefinition[] tests = ((TransparentTestSuite) test.getSampleInstance()).getTests();
 					for (int i = 0; i < tests.length; i++) {
 						if (tests[i] == arg1) return i;
 					}
