@@ -9,5 +9,6 @@ public class BrowserList extends ActiveVector<Browser> {
 		super();
 		this.add(new FirefoxBrowser());
 		this.add(new InternetExplorerBrowser());
+		this.add(new ChromeBrowser());
 	}
 }
