@@ -3,7 +3,7 @@ package de.chipxonio.adtech.selrunner.tests;
 import java.util.Iterator;
 import java.util.Vector;
 
-public class TestSuite extends AbstractTest {
+public abstract class TestSuite extends AbstractTest {
 	private static final long serialVersionUID = -69790777830967570L;
 	
 	private Vector<Class<? extends AbstractTest>> tests = new Vector<Class<? extends AbstractTest>>();

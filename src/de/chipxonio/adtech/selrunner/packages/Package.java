@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.prefs.Preferences;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -24,7 +23,6 @@ import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 
 public class Package extends ClassLoader {
 	private final ZipFile file;
-	private String name;
 	private Preferences preferences;
 	private TestDefinition[] tests;
 
@@ -121,12 +119,12 @@ public class Package extends ClassLoader {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Class<? extends AbstractTest> getRootTest() throws PackageLoaderException {
+	public TestDefinition getRootTest() throws PackageLoaderException {
 		try {
 			NodeList nodes = XPathAPI.selectNodeList(this.getTestIndex(), "/package/@root");
 			if (nodes.getLength() != 1)
 				throw new PackageLoaderException("Multiple or no package definitions found");
-			return (Class<? extends AbstractTest>) this.loadClass(nodes.item(0).getNodeValue());
+			return new TestDefinition((Class<? extends AbstractTest>) this.loadClass(nodes.item(0).getNodeValue()));
 		} catch (TransformerException e) {
 			throw new PackageLoaderException("XPath Engine could not find package definition", e);
 		} catch (DOMException e) {
@@ -137,23 +135,7 @@ public class Package extends ClassLoader {
 	}
 	
 	private String getName() throws PackageLoaderException {
-		// damn! so many exceptions just from one line of code.
-		if (name == null) try {
-			name = (String) getRootTest().getDeclaredMethod("getName", new Class[]{}).invoke(this, new Object[]{});
-		} catch (IllegalArgumentException e) {
-			throw new PackageLoaderException("could not call static methods on root test");
-		} catch (SecurityException e) {
-			throw new PackageLoaderException("could not call static methods on root test");
-		} catch (IllegalAccessException e) {
-			throw new PackageLoaderException("could not call static methods on root test");
-		} catch (InvocationTargetException e) {
-			throw new PackageLoaderException("could not call static methods on root test");
-		} catch (NoSuchMethodException e) {
-			throw new PackageLoaderException("could not call static methods on root test");
-		} catch (PackageLoaderException e) {
-			throw new PackageLoaderException("could not call static methods on root test");
-		}
-		return name;
+		return this.getRootTest().getName();
 	}
 	
 	public String toString() {

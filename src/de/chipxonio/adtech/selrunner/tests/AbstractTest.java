@@ -22,9 +22,7 @@ abstract public class AbstractTest {
 		this.driver = driver;
 	}
 	
-	public static String getName() {
-		return "Unnamed Test";
-	}
+	abstract public String getTestName();
 	
 	abstract public void run() throws Exception;
 }
