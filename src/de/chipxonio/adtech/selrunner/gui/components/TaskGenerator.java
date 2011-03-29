@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.TreePath;
 
 import de.chipxonio.adtech.selrunner.browsers.Browser;
@@ -234,7 +236,11 @@ public class TaskGenerator extends JPanel {
 				}
 			});
 		}
-		generateButton.setEnabled(getPackageTree().getSelectionCount() > 0 && getHostList().getSelectedIndices().length > 0);
+		generateButton.setEnabled(
+				getPackageTree().getSelectionCount() > 0 &&
+				getHostList().getSelectedIndices().length > 0 &&
+				getBrowserLibrary().getSelectedIndices().length > 0
+		);
 		return generateButton;
 	}
 
@@ -261,6 +267,12 @@ public class TaskGenerator extends JPanel {
 	private BrowserLibrary getBrowserLibrary() {
 		if (browserLibrary == null) {
 			browserLibrary = new BrowserLibrary();
+			browserLibrary.addListSelectionListener(new ListSelectionListener() {
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					getGenerateButton();
+				}
+			});
 		}
 		return browserLibrary;
 	}
