@@ -9,14 +9,18 @@ public class Host implements Serializable {
 	private String hostName;
 	private int port = 4444;
 	private Preferences preferences;
+	private HostMonitor monitor;
 	
-	public Host() {}
+	public Host() {
+		this.monitor = new HostMonitor(this);
+	}
 	
 	public Host(Preferences prefs) {
+		this();
 		this.preferences = prefs;
-		this.name = this.preferences.get("name", null);
-		this.hostName = this.preferences.get("hostName", null);
-		this.port = this.preferences.getInt("port", 4444);
+		this.setName(this.preferences.get("name", null));
+		this.setHostName(this.preferences.get("hostName", null));
+		this.setPort(this.preferences.getInt("port", 4444));
 	}
 	
 	public void setPreferences(Preferences prefs) {
@@ -41,6 +45,7 @@ public class Host implements Serializable {
 	public void setHostName(String hostName) {
 		this.hostName = hostName;
 		if (this.hasPreferences()) this.preferences.put("hostName", hostName);
+		this.monitor.setHost(this);
 	}
 
 	public int getPort() {
