@@ -23,6 +23,8 @@
 			<classpath location="${selenium.libs.location}/commons-codec-1.4.jar" />
 			<classpath location="${selenium.libs.location}/xalan-2.7.1.jar" />
 			<classpath location="${selenium.libs.location}/guava-r08.jar" />
+			<classpath location="${selenium.libs.location}/httpclient-4.0.2.jar" />
+			<classpath location="${selenium.libs.location}/httpcore-4.0.1.jar" />
 		</javac>
 	</target>
 	<target name="api-jar" depends="compile" >
@@ -43,7 +45,7 @@
 			<manifest>
 				<attribute name="Built-By" value="${user.name}"/>		
 				<attribute name="Main-Class" value="de.chipxonio.adtech.selrunner.SelRunner" />
-				<attribute name="Class-Path" value="xalan-2.7.1.jar commons-codec-1.4.jar selenium-java-2.0b2.jar guava-r08.jar httpcore-4.0.1.jar httpclient-4.0.2.jar commons-logging-1.1.1.jar json-20080701.jar jgoodies-common-1.1.1.jar jgoodies-looks-2.4.0.jar" />
+				<attribute name="Class-Path" value="xalan-2.7.1.jar commons-codec-1.4.jar selenium-java-2.0b3.jar guava-r08.jar httpcore-4.0.1.jar httpclient-4.0.2.jar commons-logging-1.1.1.jar json-20080701.jar jgoodies-common-1.1.1.jar jgoodies-looks-2.4.0.jar httpclient-4.0.2.jar httpcore-4.0.1.jar" />
 			</manifest>
 		</jar>
 	</target>
@@ -54,7 +56,7 @@
 				<include name="${api.jarfile}" />
 			</fileset>
 			<fileset dir="${selenium.location}">
-				<include name="selenium-java-2.0b2.jar" />
+				<include name="selenium-java-2.0b3.jar" />
 			</fileset>
 			<fileset dir="${selenium.libs.location}">
 				<include name="xalan-2.7.1.jar" />
@@ -64,6 +66,8 @@
 				<include name="httpclient-4.0.2.jar" />
 				<include name="commons-logging-1.1.1.jar" />
 				<include name="json-20080701.jar" />
+				<include name="httpclient-4.0.2.jar" />
+				<include name="httpcore-4.0.1.jar" />
 			</fileset>
 			<fileset dir="${jgoodies.common.location}">
 				<include name="jgoodies-common-1.1.1.jar" />
