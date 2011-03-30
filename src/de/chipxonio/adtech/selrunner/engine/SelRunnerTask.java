@@ -13,7 +13,7 @@ import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 import de.chipxonio.adtech.selrunner.tests.TestResultListener;
 
-public class SelRunnerTask extends Thread implements Serializable, TestResultListener {
+public class SelRunnerTask implements Serializable, TestResultListener {
 	private static final long serialVersionUID = 7731026883005748237L;
 	private Host host;
 	private TestDefinition test;
