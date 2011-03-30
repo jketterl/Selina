@@ -130,6 +130,11 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
         this.setJMenuBar(getJJMenuBar());
         this.setTitle("Selenium Runner");
         this.setContentPane(getJContentPane());
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+        	public void windowClosing(java.awt.event.WindowEvent e) {
+        		getEngine().shutDown();
+        	}
+        });
 			
 	}
 
@@ -260,8 +265,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 			fileExitMenuItem.setText("Exit");
 			fileExitMenuItem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					// TODO: this is not so pretty. we should return to the SelRunner at this point
-					System.exit(0);
+					dispose();
 				}
 			});
 		}

@@ -9,7 +9,7 @@ import java.util.Vector;
 
 import de.chipxonio.adtech.selrunner.hosts.Host;
 
-public class HostQueue extends Thread {
+public class HostQueue extends SelRunnerThread {
 	private boolean toBeStopped = false;
 	private Vector<HostQueueListener> listeners = new Vector<HostQueueListener>();
 	private Host host;
@@ -88,6 +88,7 @@ public class HostQueue extends Thread {
 		this.fireStatusChanged(new HostQueueEvent(this, HostQueueEvent.STOPPED | HostQueueEvent.INACTIVE));
 	}
 	
+	@Override
 	public void terminate(){
 		if (!this.isAlive()) return;
 		this.toBeStopped = true;

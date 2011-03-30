@@ -35,4 +35,8 @@ public class SelRunnerEngine implements HostQueueListener {
 		}
 		return hostQueue;
 	}
+	
+	public void shutDown() {
+		SelRunnerThread.shutDown();
+	}
 }
