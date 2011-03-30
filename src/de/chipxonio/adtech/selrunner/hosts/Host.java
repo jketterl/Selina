@@ -1,15 +1,23 @@
 package de.chipxonio.adtech.selrunner.hosts;
 
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.Vector;
 import java.util.prefs.Preferences;
 
 public class Host implements Serializable {
+	public static final int DOWN = 0;
+	public static final int UP = 1;
+	public static final int QUERYING = 2;
+	
 	private static final long serialVersionUID = 5974183186503258109L;
 	private String name;
 	private String hostName;
 	private int port = 4444;
 	private Preferences preferences;
 	private HostMonitor monitor;
+	private int status = DOWN;
+	private Vector<HostStatusListener> listeners = new Vector<HostStatusListener>();
 	
 	public Host() {
 		this.monitor = new HostMonitor(this);
@@ -69,5 +77,27 @@ public class Host implements Serializable {
 	public String toString()
 	{
 		return this.getName();
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+		this.fireStatusChanged(new HostStatusEvent(this, status));
+	}
+	
+	public void addStatusListener(HostStatusListener l) {
+		this.listeners.add(l);
+	}
+	
+	public void removeStatusListener(HostStatusListener l) {
+		this.listeners.remove(l);
+	}
+	
+	private void fireStatusChanged(HostStatusEvent newStatus) {
+		Iterator<HostStatusListener> i = this.listeners.iterator();
+		while (i.hasNext()) i.next().statusChanged(newStatus);
 	}
 }

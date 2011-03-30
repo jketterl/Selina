@@ -30,15 +30,17 @@ public class HostMonitor extends SelRunnerThread {
 		HttpClient client = new DefaultHttpClient();
 		client.getParams().setParameter("http.socket.timeout", 1000);
 		while (!shouldExit) {
+			host.setStatus(host.getStatus() | Host.QUERYING);
 			HttpGet get = new HttpGet("http://" + host.getHostName() + ":" + host.getPort() + "/wd/hub");
 			try {
 				client.execute(get).getEntity().consumeContent();
-				System.out.println(host + ": seems to be up");
+				host.setStatus(host.getStatus() | Host.UP);
 			} catch (ClientProtocolException e1) {
-				System.out.println(host + ": ClientProtocolException");
+				host.setStatus(host.getStatus() & ~Host.UP);
 			} catch (IOException e1) {
-				System.out.println(host + ": IOException");
+				host.setStatus(host.getStatus() & ~Host.UP);
 			}
+			host.setStatus(host.getStatus() & ~Host.QUERYING);
 			try {
 				this.sleeping = true;
 				Thread.sleep(60000);

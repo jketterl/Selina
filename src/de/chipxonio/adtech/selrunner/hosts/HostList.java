@@ -7,7 +7,7 @@ import java.util.prefs.Preferences;
 
 import de.chipxonio.adtech.selrunner.util.ActiveVector;
 
-public class HostList extends ActiveVector<Host>  {
+public class HostList extends ActiveVector<Host> implements HostStatusListener {
 	private static final long serialVersionUID = 5240371749382136337L;
 	private Preferences preferences;
 	
@@ -45,6 +45,7 @@ public class HostList extends ActiveVector<Host>  {
 	public synchronized boolean add(Host e) {
 		boolean ret = super.add(e);
 		if (ret) {
+			e.addStatusListener(this);
 			if (this.hasPreferences() && !e.hasPreferences()) {
 				e.setPreferences(this.preferences.node(UUID.nameUUIDFromBytes(e.toString().getBytes()).toString()));
 			}
@@ -60,6 +61,13 @@ public class HostList extends ActiveVector<Host>  {
 			} catch (BackingStoreException e) {
 				e.printStackTrace();
 			}
-		return super.remove(o);
+		boolean ret = super.remove(o);
+		if (ret) h.removeStatusListener(this);
+		return ret;
+	}
+
+	@Override
+	public void statusChanged(HostStatusEvent newStatus) {
+		System.out.println(newStatus.getSource() + ": " + newStatus.getStatus());
 	}
 }
