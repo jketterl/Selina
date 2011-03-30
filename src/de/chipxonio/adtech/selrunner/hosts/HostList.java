@@ -5,6 +5,8 @@ import java.util.UUID;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import javax.swing.event.ListDataEvent;
+
 import de.chipxonio.adtech.selrunner.util.ActiveVector;
 
 public class HostList extends ActiveVector<Host> implements HostStatusListener {
@@ -68,6 +70,8 @@ public class HostList extends ActiveVector<Host> implements HostStatusListener {
 
 	@Override
 	public void statusChanged(HostStatusEvent newStatus) {
-		System.out.println(newStatus.getSource() + ": " + newStatus.getStatus());
+		int index = this.indexOf(newStatus.getSource());
+		if (index < 0) return;
+		this.fireContentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, index, index));
 	}
 }

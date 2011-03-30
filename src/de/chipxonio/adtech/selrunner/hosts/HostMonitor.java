@@ -31,7 +31,7 @@ public class HostMonitor extends SelRunnerThread {
 		client.getParams().setParameter("http.socket.timeout", 1000);
 		while (!shouldExit) {
 			host.setStatus(host.getStatus() | Host.QUERYING);
-			HttpGet get = new HttpGet("http://" + host.getHostName() + ":" + host.getPort() + "/wd/hub");
+			HttpGet get = new HttpGet("http://" + host.getHostName() + ":" + host.getPort() + "/");
 			try {
 				client.execute(get).getEntity().consumeContent();
 				host.setStatus(host.getStatus() | Host.UP);

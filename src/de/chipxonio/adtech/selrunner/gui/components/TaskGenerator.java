@@ -1,12 +1,14 @@
 package de.chipxonio.adtech.selrunner.gui.components;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -118,6 +120,26 @@ public class TaskGenerator extends JPanel {
 				public void valueChanged(javax.swing.event.ListSelectionEvent e) {
 					getGenerateButton();
 				}
+			});
+			hostList.setCellRenderer(new DefaultListCellRenderer(){
+				private static final long serialVersionUID = -1451056106171374369L;
+
+				@Override
+				public Component getListCellRendererComponent(JList list,
+						Object value, int index, boolean isSelected,
+						boolean cellHasFocus) {
+					JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
+							cellHasFocus);
+					int status = ((Host) value).getStatus();
+					String color = "red";
+					if ((status & Host.UP) == Host.UP)
+						color = "green";
+					else if ((status & Host.QUERYING) == Host.QUERYING)
+						color = "orange";
+					label.setIcon(new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/bullet_" + color + ".png")));
+					return label;
+				}
+				
 			});
 		}
 		return hostList;

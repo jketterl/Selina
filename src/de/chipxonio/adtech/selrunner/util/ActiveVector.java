@@ -40,6 +40,11 @@ public class ActiveVector<E> extends Vector<E> implements ListModel {
 		Iterator<ListDataListener> i = listeners.iterator();
 		while (i.hasNext()) i.next().intervalRemoved(e);
 	}
+	
+	protected void fireContentsChanged(ListDataEvent e) {
+		Iterator<ListDataListener> i = listeners.iterator();
+		while (i.hasNext()) i.next().contentsChanged(e);
+	}
 
 	@Override
 	public synchronized boolean add(E e) {
