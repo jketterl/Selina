@@ -44,7 +44,7 @@ public abstract class TestCase extends AbstractTest {
 	}
 
 	public void run() throws Exception {
-		Method[] methods = this.getClass().getDeclaredMethods();
+		Method[] methods = this.getClass().getMethods();
 		for (int i = 0; i < methods.length; i++) {
 			// execute the methods of this class that begin with "test"
 			Pattern p = Pattern.compile("^test[A-Z].*");
