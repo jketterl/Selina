@@ -1,6 +1,5 @@
 package de.chipxonio.adtech.selrunner.hosts;
 
-import java.util.Iterator;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
