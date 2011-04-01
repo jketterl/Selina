@@ -1,7 +1,5 @@
 package de.chipxonio.adtech.selrunner.hosts;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.UUID;
@@ -23,17 +21,6 @@ public class Host implements Serializable {
 	transient private int status = DOWN;
 	transient private Vector<HostStatusListener> listeners = new Vector<HostStatusListener>();
 	
-	/**
-	 * restore object state after unserialization
-	 * @param in
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 */
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		in.defaultReadObject();
-		System.out.println("Host " + this.id + " restored");
-	}
-
 	public Host() {
 		this.monitor = new HostMonitor(this);
 	}
