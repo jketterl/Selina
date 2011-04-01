@@ -14,10 +14,10 @@ public class Host implements Serializable {
 	private String name;
 	private String hostName;
 	private int port = 4444;
-	private Preferences preferences;
-	private HostMonitor monitor;
-	private int status = DOWN;
-	private Vector<HostStatusListener> listeners = new Vector<HostStatusListener>();
+	transient private Preferences preferences;
+	transient private HostMonitor monitor;
+	transient private int status = DOWN;
+	transient private Vector<HostStatusListener> listeners = new Vector<HostStatusListener>();
 	
 	public Host() {
 		this.monitor = new HostMonitor(this);

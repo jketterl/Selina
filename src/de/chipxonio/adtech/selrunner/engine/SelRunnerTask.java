@@ -1,5 +1,7 @@
 package de.chipxonio.adtech.selrunner.engine;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Vector;
@@ -18,10 +20,21 @@ public class SelRunnerTask implements Serializable, TestResultListener {
 	private Host host;
 	private TestDefinition test;
 	private Browser browser;
-	private Vector<SelRunnerTaskListener> listeners = new Vector<SelRunnerTaskListener>();
-	private WebDriver driver = null;
-	private int status = SelRunnerTaskListener.STOPPED;
-	private TestResult result;
+	transient private Vector<SelRunnerTaskListener> listeners = new Vector<SelRunnerTaskListener>();
+	transient private WebDriver driver = null;
+	transient private int status = SelRunnerTaskListener.STOPPED;
+	transient private TestResult result;
+	
+	/**
+	 * restore object state after unserialization
+	 * @param in
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		this.listeners = new Vector<SelRunnerTaskListener>();
+	}
 	
 	public int getStatus() {
 		return status;
