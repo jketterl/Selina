@@ -117,7 +117,7 @@ public class SelRunnerTask implements Serializable, TestResultListener {
 		if (driver != null) {
 			try {
 				AbstractTest test = this.getTest().getInstance();
-				test.setResult(result);
+				test.setOverallResult(result);
 				test.setDriver(driver);
 				test.run();
 			} catch (Exception e) {

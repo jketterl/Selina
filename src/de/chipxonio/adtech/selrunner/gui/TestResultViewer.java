@@ -142,7 +142,7 @@ public class TestResultViewer extends JDialog {
 	 */
 	private JList getFailureList() {
 		if (failureList == null) {
-			failureList = new JList((ListModel) this.result.getFailures());
+			failureList = new JList(/*(ListModel) this.result.getFailures()*/);
 		}
 		return failureList;
 	}
