@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 
 import de.chipxonio.adtech.selrunner.browsers.Browser;
 import de.chipxonio.adtech.selrunner.hosts.Host;
+import de.chipxonio.adtech.selrunner.hosts.HostRegistry;
 import de.chipxonio.adtech.selrunner.packages.TestDefinition;
 import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
@@ -34,6 +35,9 @@ public class SelRunnerTask implements Serializable, TestResultListener {
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
 		this.listeners = new Vector<SelRunnerTaskListener>();
+		// reconnect with host object
+		Host h = HostRegistry.getSharedInstance().get(this.host.getId());
+		if (h != null) this.host = h;
 	}
 	
 	public int getStatus() {

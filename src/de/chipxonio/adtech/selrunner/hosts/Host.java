@@ -23,6 +23,7 @@ public class Host implements Serializable {
 	
 	public Host() {
 		this.monitor = new HostMonitor(this);
+		HostRegistry.getSharedInstance().put(getId(), this);
 	}
 	
 	public Host(Preferences prefs) {
@@ -31,19 +32,23 @@ public class Host implements Serializable {
 	}
 	
 	public void storeToPreferences(Preferences prefs) {
+		HostRegistry.getSharedInstance().remove(getId());
 		this.preferences = prefs;
 		this.id = prefs.name();
 		this.preferences.put("name", this.name);
 		this.preferences.put("hostName", this.hostName);
 		this.preferences.putInt("port", this.port);
+		HostRegistry.getSharedInstance().put(getId(), this);
 	}
 	
 	public void loadFromPreferences(Preferences prefs) {
+		HostRegistry.getSharedInstance().remove(getId());
 		this.setName(prefs.get("name", null));
 		this.setHostName(prefs.get("hostName", null));
 		this.setPort(prefs.getInt("port", 4444));
 		this.preferences = prefs;
 		this.id = prefs.name();
+		HostRegistry.getSharedInstance().put(getId(), this);
 	}
 	
 	public boolean hasPreferences() {
