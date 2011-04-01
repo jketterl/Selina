@@ -130,11 +130,6 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
         this.setJMenuBar(getJJMenuBar());
         this.setTitle("Selenium Runner");
         this.setContentPane(getJContentPane());
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-        	public void windowClosed(java.awt.event.WindowEvent e) {
-        		getEngine().shutDown();
-        	}
-        });
 			
 	}
 
