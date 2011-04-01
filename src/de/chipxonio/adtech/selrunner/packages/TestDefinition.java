@@ -1,8 +1,11 @@
 package de.chipxonio.adtech.selrunner.packages;
 
+import java.io.Serializable;
+
 import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 
-public class TestDefinition {
+public class TestDefinition implements Serializable {
+	private static final long serialVersionUID = -8772866525035765978L;
 	private String name;
 	private Class<? extends AbstractTest> testClass;
 	private AbstractTest sampleInstance;

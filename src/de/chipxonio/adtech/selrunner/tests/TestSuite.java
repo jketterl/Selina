@@ -19,13 +19,13 @@ public abstract class TestSuite extends AbstractTest {
 		while (i.hasNext()) {
 			try {
 				AbstractTest test = i.next().newInstance();
-				test.setResult(this.getResult());
+				test.setOverallResult(this.getOverallResult());
 				test.setDriver(this.getDriver());
 				test.run();
 			} catch (InstantiationException e1) {
 			} catch (IllegalAccessException e1) {
 			} catch (Exception e) {
-				this.getResult().pushException(e);
+				this.getOverallResult().pushException(e);
 			}
 		}
 	}

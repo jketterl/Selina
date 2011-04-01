@@ -1,7 +1,5 @@
 package de.chipxonio.adtech.selrunner.hosts;
 
-import java.util.Iterator;
-import java.util.UUID;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -15,6 +13,15 @@ public class HostList extends ActiveVector<Host> implements HostStatusListener {
 	
 	public HostList(Preferences p) {
 		super();
+		this.setPreferences(p);
+	}
+	
+	public boolean hasPreferences() {
+		return this.preferences != null;
+	}
+	
+	public void setPreferences(Preferences p) {
+		this.clear();
 		this.preferences = p;
 		try {
 			String[] names = this.preferences.childrenNames();
@@ -30,26 +37,13 @@ public class HostList extends ActiveVector<Host> implements HostStatusListener {
 			}
 		}
 	}
-	
-	public boolean hasPreferences() {
-		return this.preferences != null;
-	}
-	
-	public void setPreferences(Preferences p) {
-		this.preferences = p;
-		Iterator<Host> i = this.iterator();
-		while (i.hasNext()) {
-			Host host = i.next();
-			host.setPreferences(this.preferences.node(host.getHostName()));
-		}
-	}
 	@Override
 	public synchronized boolean add(Host e) {
 		boolean ret = super.add(e);
 		if (ret) {
 			e.addStatusListener(this);
 			if (this.hasPreferences() && !e.hasPreferences()) {
-				e.setPreferences(this.preferences.node(UUID.nameUUIDFromBytes(e.toString().getBytes()).toString()));
+				e.storeToPreferences(this.preferences.node(e.getId()));
 			}
 		}
 		return ret;

@@ -59,7 +59,7 @@ public class HostQueue extends SelRunnerThread {
 	
 	public void add(SelRunnerTask task) {
 		this.tasks.add(task);
-		if (this.sleeping) this.interrupt();
+		this.interrupt();
 	}
 	
 	public void run() {
@@ -92,7 +92,7 @@ public class HostQueue extends SelRunnerThread {
 	public void terminate(){
 		if (!this.isAlive()) return;
 		this.toBeStopped = true;
-		if (this.sleeping) this.interrupt();
+		this.interrupt();
 	}
 	
 	public void addListener(HostQueueListener listener) {
@@ -112,5 +112,11 @@ public class HostQueue extends SelRunnerThread {
 	
 	public Host getHost() {
 		return this.host;
+	}
+
+	@Override
+	public void interrupt() {
+		if (!this.sleeping) return;
+		super.interrupt();
 	}
 }

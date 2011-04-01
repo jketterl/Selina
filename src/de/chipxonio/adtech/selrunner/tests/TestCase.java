@@ -17,6 +17,7 @@ import de.chipxonio.adtech.selrunner.screenshots.Screenshot;
 
 public abstract class TestCase extends AbstractTest {
 	private Method currentMethod;
+	private TestCaseResult result;
 	
 	private class ElementPresentCondition implements ExpectedCondition<Boolean> {
 		private WebElement result;
@@ -44,6 +45,8 @@ public abstract class TestCase extends AbstractTest {
 	}
 
 	public void run() throws Exception {
+		result = new TestCaseResult(this.getClass());
+		this.getOverallResult().pushCaseResult(result);
 		Method[] methods = this.getClass().getMethods();
 		for (int i = 0; i < methods.length; i++) {
 			// execute the methods of this class that begin with "test"
@@ -55,8 +58,8 @@ public abstract class TestCase extends AbstractTest {
 				this.tearDown();
 			} catch (IllegalAccessException e) {
 				// NOOP
-				// ignored: test methods must be public
-				// TODO some kind of notification that gets passed to the user
+				// according to the documentation, Class.getMethods() only returns public methods
+				// see http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Class.html#getMethods%28%29
 			} catch (InvocationTargetException e) {
 				if (e.getCause() instanceof Exception)
 					// i know what to do with an exception
@@ -97,7 +100,7 @@ public abstract class TestCase extends AbstractTest {
 	public void takeScreenshot() throws InvalidDriverException {
 		if (!(this.getDriver() instanceof TakesScreenshot))
 			throw new InvalidDriverException();
-		this.getResult().pushScreenshot(new Screenshot(((TakesScreenshot) this.getDriver()).getScreenshotAs(OutputType.BYTES)));
+		this.getOverallResult().pushScreenshot(new Screenshot(((TakesScreenshot) this.getDriver()).getScreenshotAs(OutputType.BYTES)));
 	}
 	
 	public WebElement getElement(By by) {
@@ -120,5 +123,9 @@ public abstract class TestCase extends AbstractTest {
 		} catch (TimeoutException e) {
 			return null;
 		}
+	}
+	
+	public TestCaseResult getResult() {
+		return result;
 	}
 }

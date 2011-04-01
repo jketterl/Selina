@@ -12,6 +12,8 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import de.chipxonio.adtech.selrunner.hosts.Host;
 
 public class SafariBrowser extends Browser {
+	private static final long serialVersionUID = 1774349466391757442L;
+
 	@Override
 	public WebDriver getDriver(Host host) {
 		try {

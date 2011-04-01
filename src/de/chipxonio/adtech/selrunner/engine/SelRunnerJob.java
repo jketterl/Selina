@@ -20,8 +20,22 @@ import de.chipxonio.adtech.selrunner.tests.TestResult;
 
 public class SelRunnerJob extends Vector<SelRunnerTask> implements SelRunnerTaskListener, ListModel {
 	private static final long serialVersionUID = 6697337614166675395L;
-	private Vector<SelRunnerJobListener> listeners = new Vector<SelRunnerJobListener>();
-	private Vector<ListDataListener> listListeners = new Vector<ListDataListener>();
+	transient private Vector<SelRunnerJobListener> listeners = new Vector<SelRunnerJobListener>();
+	transient private Vector<ListDataListener> listListeners = new Vector<ListDataListener>();
+	
+	/**
+	 * restore object state after unserialization
+	 * @param in
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		this.listeners = new Vector<SelRunnerJobListener>();
+		this.listListeners = new Vector<ListDataListener>();
+		Iterator<SelRunnerTask> i = iterator();
+		while (i.hasNext()) i.next().addListener(this);
+	}
 	
 	public boolean add(SelRunnerTask task) {
 		boolean ret = super.add(task);

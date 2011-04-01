@@ -6,11 +6,11 @@ abstract public class AbstractTest {
 	private WebDriver driver;
 	private TestResult result;
 	
-	public TestResult getResult() {
+	public TestResult getOverallResult() {
 		return result;
 	}
 
-	public void setResult(TestResult result) {
+	public void setOverallResult(TestResult result) {
 		this.result = result;
 	}
 

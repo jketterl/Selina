@@ -10,11 +10,10 @@ import de.chipxonio.adtech.selrunner.screenshots.Screenshot;
 import de.chipxonio.adtech.selrunner.util.ActiveVector;
 
 public class TestResult {
-	private ActiveVector<Pass> passes = new ActiveVector<Pass>();;
-	private ActiveVector<Failure> failures = new ActiveVector<Failure>();
 	private ActiveVector<Exception> exceptions = new ActiveVector<Exception>();
 	private Vector<TestResultListener> listeners = new Vector<TestResultListener>();
 	private Vector<Screenshot> screenshots = new Vector<Screenshot>();
+	private Vector<TestCaseResult> results = new Vector<TestCaseResult>();
 	private long startTime = 0, endTime = 0;
 	
 	public TestResult() {
@@ -26,7 +25,15 @@ public class TestResult {
 		if (this.startTime > 0 && this.endTime > 0) {
 			result += "runtime: " + Math.round((this.endTime - this.startTime) / 1000) + "s; ";
 		}
-		result += "passed: " + this.passes.size() + ", failed: " + this.failures.size();
+		// count passes & failures
+		Iterator <TestCaseResult> i = this.results.iterator();
+		int passes = 0; int failures = 0;
+		while (i.hasNext()) {
+			TestCaseResult r = i.next();
+			passes += r.getPassCount();
+			failures += r.getFailCount();
+		}
+		result += "passed: " + passes + ", failed: " + failures;
 		if (this.exceptions.size() > 0) {
 			result += ", exceptions: " + exceptions.size();
 		}
@@ -36,26 +43,19 @@ public class TestResult {
 	}
 	
 	public boolean isSuccessful() {
-		return this.failures.isEmpty() && this.exceptions.isEmpty();
+		Iterator <TestCaseResult> i = this.results.iterator();
+		boolean successful = true;
+		while (i.hasNext()) successful &= i.next().isSuccessful();
+		return successful && this.exceptions.isEmpty();
 	}
 	
 	public void pushException(Exception e) {
-		e.printStackTrace();
+		// e.printStackTrace();
 		this.exceptions.add(e);
 		if (e instanceof WebDriverException) try {
 			this.screenshots.add(new Screenshot((WebDriverException) e));
 		} catch (MissingScreenshotException e1) {
 		}
-		this.fireTestResultChanged();
-	}
-	
-	public void pushPass(Pass p) {
-		this.passes.add(p);
-		this.fireTestResultChanged();
-	}
-	
-	public void pushFailure(Failure f) {
-		this.failures.add(f);
 		this.fireTestResultChanged();
 	}
 	
@@ -87,12 +87,8 @@ public class TestResult {
 	public ActiveVector<Exception> getExceptions() {
 		return exceptions;
 	}
-
-	public ActiveVector<Pass> getPasses() {
-		return passes;
-	}
-
-	public ActiveVector<Failure> getFailures() {
-		return failures;
+	
+	public void pushCaseResult(TestCaseResult r) {
+		this.results.add(r);
 	}
 }

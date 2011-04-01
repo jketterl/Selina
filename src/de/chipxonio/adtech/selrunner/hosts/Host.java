@@ -2,6 +2,7 @@ package de.chipxonio.adtech.selrunner.hosts;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.UUID;
 import java.util.Vector;
 import java.util.prefs.Preferences;
 
@@ -14,28 +15,36 @@ public class Host implements Serializable {
 	private String name;
 	private String hostName;
 	private int port = 4444;
-	private Preferences preferences;
-	private HostMonitor monitor;
-	private int status = DOWN;
-	private Vector<HostStatusListener> listeners = new Vector<HostStatusListener>();
+	private String id;
+	transient private Preferences preferences;
+	transient private HostMonitor monitor;
+	transient private int status = DOWN;
+	transient private Vector<HostStatusListener> listeners = new Vector<HostStatusListener>();
 	
 	public Host() {
 		this.monitor = new HostMonitor(this);
+		HostRegistry.getSharedInstance().put(getId(), this);
 	}
 	
 	public Host(Preferences prefs) {
 		this();
-		this.preferences = prefs;
-		this.setName(this.preferences.get("name", null));
-		this.setHostName(this.preferences.get("hostName", null));
-		this.setPort(this.preferences.getInt("port", 4444));
+		this.loadFromPreferences(prefs);
 	}
 	
-	public void setPreferences(Preferences prefs) {
+	public void storeToPreferences(Preferences prefs) {
+		setId(prefs.name());
 		this.preferences = prefs;
 		this.preferences.put("name", this.name);
 		this.preferences.put("hostName", this.hostName);
 		this.preferences.putInt("port", this.port);
+	}
+	
+	public void loadFromPreferences(Preferences prefs) {
+		this.setName(prefs.get("name", null));
+		this.setHostName(prefs.get("hostName", null));
+		this.setPort(prefs.getInt("port", 4444));
+		this.preferences = prefs;
+		setId(prefs.name());
 	}
 	
 	public boolean hasPreferences() {
@@ -53,6 +62,7 @@ public class Host implements Serializable {
 	public void setHostName(String hostName) {
 		this.hostName = hostName;
 		if (this.hasPreferences()) this.preferences.put("hostName", hostName);
+		// TODO replace this with some event-driven stuff
 		this.monitor.setHost(this);
 	}
 
@@ -99,5 +109,22 @@ public class Host implements Serializable {
 	private void fireStatusChanged(HostStatusEvent newStatus) {
 		Iterator<HostStatusListener> i = this.listeners.iterator();
 		while (i.hasNext()) i.next().statusChanged(newStatus);
+	}
+
+	public String getId() {
+		if (this.id == null) {
+			if (this.hasPreferences()) {
+				this.id = this.preferences.name();
+			} else {
+				this.id = UUID.randomUUID().toString();
+			}
+		}
+		return this.id;
+	}
+	
+	private void setId(String id) {
+		HostRegistry.getSharedInstance().remove(getId());
+		this.id = id;
+		HostRegistry.getSharedInstance().put(getId(), this);
 	}
 }

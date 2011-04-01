@@ -1,5 +1,7 @@
 package de.chipxonio.adtech.selrunner.engine;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Vector;
@@ -8,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 
 import de.chipxonio.adtech.selrunner.browsers.Browser;
 import de.chipxonio.adtech.selrunner.hosts.Host;
+import de.chipxonio.adtech.selrunner.hosts.HostRegistry;
 import de.chipxonio.adtech.selrunner.packages.TestDefinition;
 import de.chipxonio.adtech.selrunner.tests.AbstractTest;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
@@ -18,10 +21,24 @@ public class SelRunnerTask implements Serializable, TestResultListener {
 	private Host host;
 	private TestDefinition test;
 	private Browser browser;
-	private Vector<SelRunnerTaskListener> listeners = new Vector<SelRunnerTaskListener>();
-	private WebDriver driver = null;
-	private int status = SelRunnerTaskListener.STOPPED;
-	private TestResult result;
+	transient private Vector<SelRunnerTaskListener> listeners = new Vector<SelRunnerTaskListener>();
+	transient private WebDriver driver = null;
+	transient private int status = SelRunnerTaskListener.STOPPED;
+	transient private TestResult result;
+	
+	/**
+	 * restore object state after unserialization
+	 * @param in
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		this.listeners = new Vector<SelRunnerTaskListener>();
+		// reconnect with host object
+		Host h = HostRegistry.getSharedInstance().get(this.host.getId());
+		if (h != null) this.host = h;
+	}
 	
 	public int getStatus() {
 		return status;
@@ -100,7 +117,7 @@ public class SelRunnerTask implements Serializable, TestResultListener {
 		if (driver != null) {
 			try {
 				AbstractTest test = this.getTest().getInstance();
-				test.setResult(result);
+				test.setOverallResult(result);
 				test.setDriver(driver);
 				test.run();
 			} catch (Exception e) {
