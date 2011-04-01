@@ -1,5 +1,7 @@
 package de.chipxonio.adtech.selrunner.hosts;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.UUID;
@@ -21,6 +23,17 @@ public class Host implements Serializable {
 	transient private int status = DOWN;
 	transient private Vector<HostStatusListener> listeners = new Vector<HostStatusListener>();
 	
+	/**
+	 * restore object state after unserialization
+	 * @param in
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		System.out.println("Host " + this.id + " restored");
+	}
+
 	public Host() {
 		this.monitor = new HostMonitor(this);
 	}
@@ -32,6 +45,7 @@ public class Host implements Serializable {
 	
 	public void storeToPreferences(Preferences prefs) {
 		this.preferences = prefs;
+		this.id = prefs.name();
 		this.preferences.put("name", this.name);
 		this.preferences.put("hostName", this.hostName);
 		this.preferences.putInt("port", this.port);
@@ -42,6 +56,7 @@ public class Host implements Serializable {
 		this.setHostName(prefs.get("hostName", null));
 		this.setPort(prefs.getInt("port", 4444));
 		this.preferences = prefs;
+		this.id = prefs.name();
 	}
 	
 	public boolean hasPreferences() {
