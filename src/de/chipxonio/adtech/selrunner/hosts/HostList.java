@@ -69,13 +69,4 @@ public class HostList extends ActiveVector<Host> implements HostStatusListener {
 		if (index < 0) return;
 		this.fireContentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, index, index));
 	}
-
-	public Host getHostById(String id) {
-		Iterator<Host> i = iterator();
-		while (i.hasNext()) {
-			Host h = i.next();
-			if (h.getId().equals(id)) return h;
-		}
-		return null;
-	}
 }
