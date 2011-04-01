@@ -32,23 +32,19 @@ public class Host implements Serializable {
 	}
 	
 	public void storeToPreferences(Preferences prefs) {
-		HostRegistry.getSharedInstance().remove(getId());
+		setId(prefs.name());
 		this.preferences = prefs;
-		this.id = prefs.name();
 		this.preferences.put("name", this.name);
 		this.preferences.put("hostName", this.hostName);
 		this.preferences.putInt("port", this.port);
-		HostRegistry.getSharedInstance().put(getId(), this);
 	}
 	
 	public void loadFromPreferences(Preferences prefs) {
-		HostRegistry.getSharedInstance().remove(getId());
 		this.setName(prefs.get("name", null));
 		this.setHostName(prefs.get("hostName", null));
 		this.setPort(prefs.getInt("port", 4444));
 		this.preferences = prefs;
-		this.id = prefs.name();
-		HostRegistry.getSharedInstance().put(getId(), this);
+		setId(prefs.name());
 	}
 	
 	public boolean hasPreferences() {
@@ -124,5 +120,11 @@ public class Host implements Serializable {
 			}
 		}
 		return this.id;
+	}
+	
+	private void setId(String id) {
+		HostRegistry.getSharedInstance().remove(getId());
+		this.id = id;
+		HostRegistry.getSharedInstance().put(getId(), this);
 	}
 }
