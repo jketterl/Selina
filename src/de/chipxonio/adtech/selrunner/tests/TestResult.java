@@ -40,6 +40,7 @@ public class TestResult {
 	}
 	
 	public void pushException(Exception e) {
+		e.printStackTrace();
 		this.exceptions.add(e);
 		if (e instanceof WebDriverException) try {
 			this.screenshots.add(new Screenshot((WebDriverException) e));
