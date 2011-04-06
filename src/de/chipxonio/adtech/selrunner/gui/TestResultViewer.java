@@ -17,6 +17,7 @@ import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 
 import de.chipxonio.adtech.selrunner.tests.TestResult;
+import javax.swing.JTable;
 
 public class TestResultViewer extends JDialog {
 
@@ -27,9 +28,9 @@ public class TestResultViewer extends JDialog {
 	private JList exceptionList = null;
 	private JScrollPane jScrollPane = null;
 	private JScrollPane jScrollPane1 = null;  //  @jve:decl-index=0:visual-constraint="220,237"
-	private JList failureList = null;  //  @jve:decl-index=0:visual-constraint="473,280"
 	private JPanel buttonPanel = null;
 	private JButton closeButton = null;
+	private JTable resultTable = null;
 
 	/**
 	 * @param owner
@@ -130,21 +131,9 @@ public class TestResultViewer extends JDialog {
 		if (jScrollPane1 == null) {
 			jScrollPane1 = new JScrollPane();
 			jScrollPane1.setBorder(BorderFactory.createTitledBorder(null, "Failures", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
-			jScrollPane1.setViewportView(getFailureList());
+			jScrollPane1.setViewportView(getResultTable());
 		}
 		return jScrollPane1;
-	}
-
-	/**
-	 * This method initializes failureList	
-	 * 	
-	 * @return javax.swing.JList	
-	 */
-	private JList getFailureList() {
-		if (failureList == null) {
-			failureList = new JList(/*(ListModel) this.result.getFailures()*/);
-		}
-		return failureList;
 	}
 
 	/**
@@ -181,6 +170,18 @@ public class TestResultViewer extends JDialog {
 			});
 		}
 		return closeButton;
+	}
+
+	/**
+	 * This method initializes resultTable	
+	 * 	
+	 * @return javax.swing.JTable	
+	 */
+	private JTable getResultTable() {
+		if (resultTable == null) {
+			resultTable = new JTable(this.result);
+		}
+		return resultTable;
 	}
 
 }

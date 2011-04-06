@@ -16,7 +16,7 @@ public class TestCaseResult {
 	}
 	
 	public String toString() {
-		return this.cls.getName();
+		return this.cls.getSimpleName();
 	}
 
 	public ActiveVector<Pass> getPasses() {

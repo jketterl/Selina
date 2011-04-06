@@ -3,17 +3,21 @@ package de.chipxonio.adtech.selrunner.tests;
 import java.util.Iterator;
 import java.util.Vector;
 
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
+
 import org.openqa.selenium.WebDriverException;
 
 import de.chipxonio.adtech.selrunner.screenshots.MissingScreenshotException;
 import de.chipxonio.adtech.selrunner.screenshots.Screenshot;
 import de.chipxonio.adtech.selrunner.util.ActiveVector;
 
-public class TestResult implements TestCaseResultListener {
+public class TestResult implements TestCaseResultListener, TableModel {
 	private ActiveVector<Exception> exceptions = new ActiveVector<Exception>();
 	private Vector<TestResultListener> listeners = new Vector<TestResultListener>();
 	private Vector<Screenshot> screenshots = new Vector<Screenshot>();
 	private Vector<TestCaseResult> results = new Vector<TestCaseResult>();
+	private Vector<TableModelListener> tableListeners = new Vector<TableModelListener>();
 	private long startTime = 0, endTime = 0;
 	private String stringRepresentation;
 	
@@ -108,5 +112,62 @@ public class TestResult implements TestCaseResultListener {
 	public void testCaseResultUpdated(TestCaseResult src) {
 		this.updateStringRepresentation();
 		this.fireTestResultChanged();
+	}
+
+	@Override
+	public void addTableModelListener(TableModelListener arg0) {
+		this.tableListeners.add(arg0);
+	}
+
+	@Override
+	public Class<?> getColumnClass(int arg0) {
+		return String.class;
+	}
+
+	@Override
+	public int getColumnCount() {
+		return 4;
+	}
+
+	@Override
+	public String getColumnName(int arg0) {
+		return new String[]{
+			"Name of test",
+			"Time",
+			"Passes",
+			"Failures"
+		}[arg0];
+	}
+
+	@Override
+	public int getRowCount() {
+		return this.results.size();
+	}
+
+	@Override
+	public Object getValueAt(int arg0, int arg1) {
+		TestCaseResult r = this.results.get(arg0);
+		switch (arg1) {
+		case 0: return r.toString();
+		case 1: return "";
+		case 2: return r.getPassCount();
+		case 3: return r.getFailCount();
+		}
+		return null;
+	}
+
+	@Override
+	public boolean isCellEditable(int arg0, int arg1) {
+		return false;
+	}
+
+	@Override
+	public void removeTableModelListener(TableModelListener arg0) {
+		this.tableListeners.remove(arg0);
+	}
+
+	@Override
+	public void setValueAt(Object arg0, int arg1, int arg2) {
+		// NOOP since isCellEditable always returns false
 	}
 }
