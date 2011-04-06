@@ -47,7 +47,7 @@ public class TestResultViewer extends JDialog {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(500, 400);
+		this.setSize(600, 700);
 		this.setTitle("Test Result Viewer");
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setContentPane(getJContentPane());
@@ -82,16 +82,16 @@ public class TestResultViewer extends JDialog {
 			gc.fill = GridBagConstraints.BOTH;
 			gc.gridy = 0;
 			gc.weightx = 1.0;
-			gc.weighty = 1.0;
+			gc.weighty = 3.0;
 			gc.gridx = 0;
-			contentPanel.add(getJScrollPane(), gc);
+			contentPanel.add(getJScrollPane1(), gc);
 			gc = new GridBagConstraints();
 			gc.fill = GridBagConstraints.BOTH;
 			gc.gridy = 1;
 			gc.weightx = 1.0;
 			gc.weighty = 1.0;
 			gc.gridx = 0;
-			contentPanel.add(getJScrollPane1(), gc);
+			contentPanel.add(getJScrollPane(), gc);
 		}
 		return contentPanel;
 	}
@@ -130,7 +130,7 @@ public class TestResultViewer extends JDialog {
 	private JScrollPane getJScrollPane1() {
 		if (jScrollPane1 == null) {
 			jScrollPane1 = new JScrollPane();
-			jScrollPane1.setBorder(BorderFactory.createTitledBorder(null, "Failures", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+			jScrollPane1.setBorder(BorderFactory.createTitledBorder(null, "Test Results", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 			jScrollPane1.setViewportView(getResultTable());
 		}
 		return jScrollPane1;
