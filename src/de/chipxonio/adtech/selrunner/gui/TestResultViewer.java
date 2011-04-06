@@ -180,6 +180,7 @@ public class TestResultViewer extends JDialog {
 	private JTable getResultTable() {
 		if (resultTable == null) {
 			resultTable = new JTable(this.result);
+			resultTable.getColumnModel().getColumn(0).setPreferredWidth(300);
 		}
 		return resultTable;
 	}
