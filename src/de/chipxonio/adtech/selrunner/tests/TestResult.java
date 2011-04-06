@@ -9,18 +9,24 @@ import de.chipxonio.adtech.selrunner.screenshots.MissingScreenshotException;
 import de.chipxonio.adtech.selrunner.screenshots.Screenshot;
 import de.chipxonio.adtech.selrunner.util.ActiveVector;
 
-public class TestResult {
+public class TestResult implements TestCaseResultListener {
 	private ActiveVector<Exception> exceptions = new ActiveVector<Exception>();
 	private Vector<TestResultListener> listeners = new Vector<TestResultListener>();
 	private Vector<Screenshot> screenshots = new Vector<Screenshot>();
 	private Vector<TestCaseResult> results = new Vector<TestCaseResult>();
 	private long startTime = 0, endTime = 0;
+	private String stringRepresentation;
 	
 	public TestResult() {
 		this.startTime = System.currentTimeMillis();
+		this.updateStringRepresentation();
 	}
 	
 	public String toString() {
+		return stringRepresentation;
+	}
+	
+	private void updateStringRepresentation() {
 		String result = "";
 		if (this.startTime > 0 && this.endTime > 0) {
 			result += "runtime: " + Math.round((this.endTime - this.startTime) / 1000) + "s; ";
@@ -39,7 +45,7 @@ public class TestResult {
 		}
 		int screenshotCount = this.screenshots.size();
 		if (screenshotCount > 0) result += ", screenshots: " + screenshotCount;
-		return result;
+		stringRepresentation = result;
 	}
 	
 	public boolean isSuccessful() {
@@ -56,6 +62,7 @@ public class TestResult {
 			this.screenshots.add(new Screenshot((WebDriverException) e));
 		} catch (MissingScreenshotException e1) {
 		}
+		this.updateStringRepresentation();
 		this.fireTestResultChanged();
 	}
 	
@@ -78,10 +85,14 @@ public class TestResult {
 
 	public void pushScreenshot(Screenshot screenshot) {
 		this.screenshots.add(screenshot);
+		this.updateStringRepresentation();
+		this.fireTestResultChanged();
 	}
 
 	public void stopTimer() {
 		this.endTime = System.currentTimeMillis();
+		this.updateStringRepresentation();
+		this.fireTestResultChanged();
 	}
 	
 	public ActiveVector<Exception> getExceptions() {
@@ -90,5 +101,12 @@ public class TestResult {
 	
 	public void pushCaseResult(TestCaseResult r) {
 		this.results.add(r);
+		r.addListener(this);
+	}
+
+	@Override
+	public void testCaseResultUpdated(TestCaseResult src) {
+		this.updateStringRepresentation();
+		this.fireTestResultChanged();
 	}
 }
