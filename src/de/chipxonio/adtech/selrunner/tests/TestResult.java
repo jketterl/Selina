@@ -3,6 +3,7 @@ package de.chipxonio.adtech.selrunner.tests;
 import java.util.Iterator;
 import java.util.Vector;
 
+import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
@@ -105,6 +106,8 @@ public class TestResult implements TestCaseResultListener, TableModel {
 	
 	public void pushCaseResult(TestCaseResult r) {
 		this.results.add(r);
+		int index = this.results.size() - 1;
+		this.fireTableChanged(new TableModelEvent(this, index, index, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT));
 		r.addListener(this);
 	}
 
@@ -112,6 +115,7 @@ public class TestResult implements TestCaseResultListener, TableModel {
 	public void testCaseResultUpdated(TestCaseResult src) {
 		this.updateStringRepresentation();
 		this.fireTestResultChanged();
+		this.fireTableChanged(new TableModelEvent(this, this.results.indexOf(src)));
 	}
 
 	@Override
@@ -169,5 +173,10 @@ public class TestResult implements TestCaseResultListener, TableModel {
 	@Override
 	public void setValueAt(Object arg0, int arg1, int arg2) {
 		// NOOP since isCellEditable always returns false
+	}
+	
+	private void fireTableChanged(TableModelEvent e) {
+		Iterator<TableModelListener> i = tableListeners.iterator();
+		while (i.hasNext()) i.next().tableChanged(e);
 	}
 }

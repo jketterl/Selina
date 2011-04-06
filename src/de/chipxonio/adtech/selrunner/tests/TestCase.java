@@ -45,7 +45,7 @@ public abstract class TestCase extends AbstractTest {
 	}
 
 	public void run() throws Exception {
-		result = new TestCaseResult(this.getClass());
+		result = new TestCaseResult(this.getTestName());
 		this.getOverallResult().pushCaseResult(result);
 		Method[] methods = this.getClass().getMethods();
 		for (int i = 0; i < methods.length; i++) {

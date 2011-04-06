@@ -6,17 +6,17 @@ import java.util.Vector;
 import de.chipxonio.adtech.selrunner.util.ActiveVector;
 
 public class TestCaseResult {
-	private Class<? extends TestCase> cls;
+	private String name;
 	private ActiveVector<Pass> passes = new ActiveVector<Pass>();;
 	private ActiveVector<Failure> failures = new ActiveVector<Failure>();
 	private Vector<TestCaseResultListener> listeners = new Vector<TestCaseResultListener>();
 	
-	public TestCaseResult(Class<? extends TestCase> cls) {
-		this.cls = cls;
+	public TestCaseResult(String name) {
+		this.name = name;
 	}
 	
 	public String toString() {
-		return this.cls.getSimpleName();
+		return this.name;
 	}
 
 	public ActiveVector<Pass> getPasses() {
