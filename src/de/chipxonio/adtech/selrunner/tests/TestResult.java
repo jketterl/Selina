@@ -125,7 +125,7 @@ public class TestResult implements TestCaseResultListener, TableModel {
 
 	@Override
 	public Class<?> getColumnClass(int arg0) {
-		return String.class;
+		return TestCaseResult.class;
 	}
 
 	@Override
@@ -150,14 +150,7 @@ public class TestResult implements TestCaseResultListener, TableModel {
 
 	@Override
 	public Object getValueAt(int arg0, int arg1) {
-		TestCaseResult r = this.results.get(arg0);
-		switch (arg1) {
-		case 0: return r.toString();
-		case 1: return "";
-		case 2: return r.getPassCount();
-		case 3: return r.getFailCount();
-		}
-		return null;
+		return this.results.get(arg0);
 	}
 
 	@Override

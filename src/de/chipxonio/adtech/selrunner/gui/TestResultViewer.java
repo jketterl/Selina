@@ -1,6 +1,8 @@
 package de.chipxonio.adtech.selrunner.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,13 +11,16 @@ import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 
+import de.chipxonio.adtech.selrunner.tests.TestCaseResult;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
 import javax.swing.JTable;
 
@@ -181,6 +186,40 @@ public class TestResultViewer extends JDialog {
 		if (resultTable == null) {
 			resultTable = new JTable(this.result);
 			resultTable.getColumnModel().getColumn(0).setPreferredWidth(300);
+			resultTable.setDefaultRenderer(TestCaseResult.class, new DefaultTableCellRenderer(){
+				private static final long serialVersionUID = 8619907859395215841L;
+
+				@Override
+				public Component getTableCellRendererComponent(JTable table,
+						Object value, boolean isSelected, boolean hasFocus,
+						int row, int column) {
+					JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+							row, column);
+					TestCaseResult r = (TestCaseResult) value;
+					switch (column) {
+					case 0:
+						l.setText(r.toString());
+						break;
+					case 1: 
+						l.setText("");
+						break;
+					case 2: 
+						l.setText(Integer.toString(r.getPassCount()));
+						break;
+					case 3: 
+						l.setText(Integer.toString(r.getFailCount()));
+						break;
+					}
+					if (!isSelected) {
+						if (r.isSuccessful()) {
+							l.setBackground(new Color(200, 255, 200));
+						} else {
+							l.setBackground(new Color(255, 200, 200));
+						}
+					}
+					return l;
+				}
+			});
 		}
 		return resultTable;
 	}
