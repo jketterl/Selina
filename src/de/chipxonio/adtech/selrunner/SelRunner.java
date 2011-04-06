@@ -18,7 +18,7 @@ public class SelRunner {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		SelRunnerEngine engine = new SelRunnerEngine();
+		final SelRunnerEngine engine = new SelRunnerEngine();
 		Library l = new LocalLibrary(Preferences.userRoot().node("SelRunner").node("library"));
 		PackageLoader.getSharedInstance().setPackageList(l.getPackageList());
 		if (args.length == 0) {
@@ -34,6 +34,11 @@ public class SelRunner {
 				e.printStackTrace();
 			}
 			SelRunnerGui gui = new SelRunnerGui();
+			gui.addWindowListener(new java.awt.event.WindowAdapter() {
+	        	public void windowClosed(java.awt.event.WindowEvent e) {
+	        		engine.shutDown();
+	        	}
+	        });
 			gui.setEngine(engine);
 			gui.setLibrary(l);
 			gui.setVisible(true);

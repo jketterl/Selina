@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.Iterator;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -34,7 +35,6 @@ import de.chipxonio.adtech.selrunner.gui.components.TaskListPanel;
 import de.chipxonio.adtech.selrunner.library.Library;
 import de.chipxonio.adtech.selrunner.screenshots.Screenshot;
 import de.chipxonio.adtech.selrunner.tests.TestResult;
-import javax.swing.ImageIcon;
 
 public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 
@@ -130,11 +130,6 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
         this.setJMenuBar(getJJMenuBar());
         this.setTitle("Selenium Runner");
         this.setContentPane(getJContentPane());
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-        	public void windowClosing(java.awt.event.WindowEvent e) {
-        		getEngine().shutDown();
-        	}
-        });
 			
 	}
 
