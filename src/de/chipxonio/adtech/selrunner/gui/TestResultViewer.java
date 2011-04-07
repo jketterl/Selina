@@ -25,6 +25,9 @@ import de.chipxonio.adtech.selrunner.tests.TestResult;
 import javax.swing.JTable;
 
 public class TestResultViewer extends JDialog {
+	
+	private static final Color successColor = new Color(200, 255, 200);
+	private static final Color failureColor = new Color(255, 200, 200);
 
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
@@ -212,9 +215,9 @@ public class TestResultViewer extends JDialog {
 					}
 					if (!isSelected) {
 						if (r.isSuccessful()) {
-							l.setBackground(new Color(200, 255, 200));
+							l.setBackground(successColor);
 						} else {
-							l.setBackground(new Color(255, 200, 200));
+							l.setBackground(failureColor);
 						}
 					}
 					return l;
