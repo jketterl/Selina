@@ -8,12 +8,12 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import de.chipxonio.adtech.selina.engine.SelRunnerEngine;
 import de.chipxonio.adtech.selina.engine.SelRunnerJob;
-import de.chipxonio.adtech.selina.gui.SelRunnerGui;
+import de.chipxonio.adtech.selina.gui.SelinaGui;
 import de.chipxonio.adtech.selina.library.Library;
 import de.chipxonio.adtech.selina.library.LocalLibrary;
 import de.chipxonio.adtech.selina.packages.PackageLoader;
 
-public class SelRunner {
+public class Selina {
 	/**
 	 * @param args
 	 */
@@ -33,7 +33,7 @@ public class SelRunner {
 			} catch (UnsupportedLookAndFeelException e) {
 				e.printStackTrace();
 			}
-			SelRunnerGui gui = new SelRunnerGui();
+			SelinaGui gui = new SelinaGui();
 			gui.addWindowListener(new java.awt.event.WindowAdapter() {
 	        	public void windowClosed(java.awt.event.WindowEvent e) {
 	        		engine.shutDown();

@@ -36,7 +36,7 @@ import de.chipxonio.adtech.selina.library.Library;
 import de.chipxonio.adtech.selina.screenshots.Screenshot;
 import de.chipxonio.adtech.selina.tests.TestResult;
 
-public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
+public class SelinaGui extends JFrame implements SelRunnerJobListener {
 
 	private class TaskContextMenu extends JPopupMenu {
 		private static final long serialVersionUID = -2012460762563752709L;
@@ -115,7 +115,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 	 * This method initializes 
 	 * 
 	 */
-	public SelRunnerGui() {
+	public SelinaGui() {
 		super();
 		initialize();
 	}
