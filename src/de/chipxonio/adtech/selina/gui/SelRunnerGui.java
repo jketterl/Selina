@@ -128,7 +128,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
         this.setSize(new Dimension(665, 455));
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.setJMenuBar(getJJMenuBar());
-        this.setTitle("Selenium Runner");
+        this.setTitle("Selina");
         this.setContentPane(getJContentPane());
 			
 	}
