@@ -75,13 +75,13 @@ public class SelinaGui extends JFrame implements SelinaListener {
 	private class JobFilter extends FileFilter {
 		@Override
 		public String getDescription() {
-			return "Selnium Runner jobs (*.srjob)";
+			return "Selina jobs (*.seljob)";
 		}
 		
 		@Override
 		public boolean accept(File f) {
 			if (f.isDirectory()) return true;
-			return (getExtension(f).equals("srjob"));
+			return (getExtension(f).equals("seljob"));
 		}
 		
 		private String getExtension(File f) {
@@ -321,7 +321,7 @@ public class SelinaGui extends JFrame implements SelinaListener {
 					if (dialog.showSaveDialog(null) != JFileChooser.APPROVE_OPTION) return;
 					File f = dialog.getSelectedFile();
 					if (f.getName().indexOf('.') <= 0) {
-						f = new File(f.getAbsoluteFile() + ".srjob");
+						f = new File(f.getAbsoluteFile() + ".seljob");
 					}
 					getJob().saveToFile(f);
 				}
