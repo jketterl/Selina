@@ -1,6 +1,7 @@
 package de.chipxonio.adtech.selina;
 
 import java.io.File;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import javax.swing.UIManager;
@@ -14,12 +15,38 @@ import de.chipxonio.adtech.selina.library.LocalLibrary;
 import de.chipxonio.adtech.selina.packages.PackageLoader;
 
 public class Selina {
+	public static final void copyNode(Preferences source, Preferences target) {
+		try {
+			String[] keys = source.keys();
+			for (int i = 0; i < keys.length; i++) {
+				target.put(keys[i], source.get(keys[i], null));
+			}
+			String[] children = source.childrenNames();
+			for (int i = 0; i < children.length; i++) {
+				copyNode(source.node(children[i]), target.node(children[i]));
+			}
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		final SelinaEngine engine = new SelinaEngine();
-		Library l = new LocalLibrary(Preferences.userRoot().node("SelRunner").node("library"));
+		Preferences root = Preferences.userRoot();
+		try {
+			if (root.nodeExists("SelRunner")) {
+				if (!root.nodeExists("Selina")) {
+					copyNode(root.node("SelRunner"), root.node("Selina"));
+				}
+				root.node("SelRunner").removeNode();
+			}
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
+		}
+		Library l = new LocalLibrary(root.node("Selina").node("library"));
 		PackageLoader.getSharedInstance().setPackageList(l.getPackageList());
 		if (args.length == 0) {
 			try {
@@ -48,6 +75,6 @@ public class Selina {
 		}
 	}
 
-	public final static String version = "0.1.0";
-	public final static String versionDate = "2010-03-17";
+	public final static String version = "0.2.0";
+	public final static String versionDate = "2010-04-21";
 }
