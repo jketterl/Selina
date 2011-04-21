@@ -9,22 +9,22 @@ import java.util.Vector;
 
 import de.chipxonio.adtech.selina.hosts.Host;
 
-public class HostQueue extends SelRunnerThread {
+public class HostQueue extends SelinaThread {
 	private boolean toBeStopped = false;
 	private Vector<HostQueueListener> listeners = new Vector<HostQueueListener>();
 	private Host host;
 	private boolean sleeping = false;
-	private Queue<SelRunnerTask> tasks = new AbstractQueue<SelRunnerTask>() {
-		private LinkedList<SelRunnerTask> list = new LinkedList<SelRunnerTask>();
+	private Queue<SelinaTask> tasks = new AbstractQueue<SelinaTask>() {
+		private LinkedList<SelinaTask> list = new LinkedList<SelinaTask>();
 		
 		@Override
-		public boolean offer(SelRunnerTask arg0) {
+		public boolean offer(SelinaTask arg0) {
 			if (arg0 == null) return false;
 			return this.list.add(arg0);
 		}
 
 		@Override
-		public SelRunnerTask peek() {
+		public SelinaTask peek() {
 			try {
 				return this.list.getFirst();
 			} catch (NoSuchElementException e) {
@@ -33,7 +33,7 @@ public class HostQueue extends SelRunnerThread {
 		}
 
 		@Override
-		public SelRunnerTask poll() {
+		public SelinaTask poll() {
 			try {
 				return this.list.removeFirst();
 			} catch (NoSuchElementException e) {
@@ -42,7 +42,7 @@ public class HostQueue extends SelRunnerThread {
 		}
 
 		@Override
-		public Iterator<SelRunnerTask> iterator() {
+		public Iterator<SelinaTask> iterator() {
 			return this.list.iterator();
 		}
 
@@ -57,7 +57,7 @@ public class HostQueue extends SelRunnerThread {
 		this.start();
 	}
 	
-	public void add(SelRunnerTask task) {
+	public void add(SelinaTask task) {
 		this.tasks.add(task);
 		this.interrupt();
 	}
@@ -65,7 +65,7 @@ public class HostQueue extends SelRunnerThread {
 	public void run() {
 		this.fireStatusChanged(new HostQueueEvent(this, HostQueueEvent.RUNNING | HostQueueEvent.INACTIVE));
 		while(!this.toBeStopped) {
-			SelRunnerTask task = this.tasks.poll();
+			SelinaTask task = this.tasks.poll();
 			if (task == null) {
 				try {
 					this.sleeping = true;

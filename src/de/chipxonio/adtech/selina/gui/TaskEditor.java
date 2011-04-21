@@ -11,7 +11,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import de.chipxonio.adtech.selina.engine.SelRunnerTask;
+import de.chipxonio.adtech.selina.engine.SelinaTask;
 import de.chipxonio.adtech.selina.gui.components.PackageTree;
 import de.chipxonio.adtech.selina.hosts.Host;
 import de.chipxonio.adtech.selina.library.Library;
@@ -29,7 +29,7 @@ public class TaskEditor extends JDialog {
 	private JPanel buttonPanel = null;
 	private JButton okButton = null;
 	private JButton cancelButton = null;
-	private SelRunnerTask task;  //  @jve:decl-index=0:
+	private SelinaTask task;  //  @jve:decl-index=0:
 	private boolean confirmed = false;
 	private JPanel jContentPane = null;
 	private JPanel contentPanel = null;
@@ -42,24 +42,24 @@ public class TaskEditor extends JDialog {
 	/**
 	 * @param owner
 	 */
-	public TaskEditor(Frame owner, Library l, SelRunnerTask task) {
+	public TaskEditor(Frame owner, Library l, SelinaTask task) {
 		super(owner);
 		this.library = l;
 		this.task = task;
 		initialize();
 	}
 	
-	public SelRunnerTask run() {
+	public SelinaTask run() {
 		this.setVisible(true);
 		if (!this.confirmed) return null;
 		return task;
 	}
 
-	public SelRunnerTask getTask() {
+	public SelinaTask getTask() {
 		return task;
 	}
 
-	public void setTask(SelRunnerTask task) {
+	public void setTask(SelinaTask task) {
 		this.task = task;
 	}
 

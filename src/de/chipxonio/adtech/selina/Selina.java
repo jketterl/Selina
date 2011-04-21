@@ -6,8 +6,8 @@ import java.util.prefs.Preferences;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import de.chipxonio.adtech.selina.engine.SelRunnerEngine;
-import de.chipxonio.adtech.selina.engine.SelRunnerJob;
+import de.chipxonio.adtech.selina.engine.SelinaEngine;
+import de.chipxonio.adtech.selina.engine.SelinaJob;
 import de.chipxonio.adtech.selina.gui.SelinaGui;
 import de.chipxonio.adtech.selina.library.Library;
 import de.chipxonio.adtech.selina.library.LocalLibrary;
@@ -18,7 +18,7 @@ public class Selina {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		final SelRunnerEngine engine = new SelRunnerEngine();
+		final SelinaEngine engine = new SelinaEngine();
 		Library l = new LocalLibrary(Preferences.userRoot().node("SelRunner").node("library"));
 		PackageLoader.getSharedInstance().setPackageList(l.getPackageList());
 		if (args.length == 0) {
@@ -43,7 +43,7 @@ public class Selina {
 			gui.setLibrary(l);
 			gui.setVisible(true);
 		} else {
-			SelRunnerJob job = SelRunnerJob.loadFromFile(new File(args[0]));
+			SelinaJob job = SelinaJob.loadFromFile(new File(args[0]));
 			engine.runJob(job);
 		}
 	}

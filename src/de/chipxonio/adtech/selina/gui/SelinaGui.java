@@ -26,24 +26,24 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.filechooser.FileFilter;
 
-import de.chipxonio.adtech.selina.engine.SelRunnerEngine;
-import de.chipxonio.adtech.selina.engine.SelRunnerJob;
-import de.chipxonio.adtech.selina.engine.SelRunnerJobListener;
-import de.chipxonio.adtech.selina.engine.SelRunnerTask;
+import de.chipxonio.adtech.selina.engine.SelinaEngine;
+import de.chipxonio.adtech.selina.engine.SelinaJob;
+import de.chipxonio.adtech.selina.engine.SelinaListener;
+import de.chipxonio.adtech.selina.engine.SelinaTask;
 import de.chipxonio.adtech.selina.gui.components.TaskGenerator;
 import de.chipxonio.adtech.selina.gui.components.TaskListPanel;
 import de.chipxonio.adtech.selina.library.Library;
 import de.chipxonio.adtech.selina.screenshots.Screenshot;
 import de.chipxonio.adtech.selina.tests.TestResult;
 
-public class SelinaGui extends JFrame implements SelRunnerJobListener {
+public class SelinaGui extends JFrame implements SelinaListener {
 
 	private class TaskContextMenu extends JPopupMenu {
 		private static final long serialVersionUID = -2012460762563752709L;
 		private JMenu showScreenshotMenu;
-		private SelRunnerTask task;
+		private SelinaTask task;
 
-		public TaskContextMenu(SelRunnerTask task) {
+		public TaskContextMenu(SelinaTask task) {
 			super();
 			this.task = task;
 			this.add(getShowScreenshotMenu());
@@ -92,8 +92,8 @@ public class SelinaGui extends JFrame implements SelRunnerJobListener {
 	}
 
 	private static final long serialVersionUID = -4222699284599413079L;
-	private SelRunnerEngine engine;  //  @jve:decl-index=0:
-	private SelRunnerJob job;  //  @jve:decl-index=0:
+	private SelinaEngine engine;  //  @jve:decl-index=0:
+	private SelinaJob job;  //  @jve:decl-index=0:
 	private Library library;  //  @jve:decl-index=0:
 	private ListDataListener jobListener;  //  @jve:decl-index=0:
 	private JPanel jContentPane = null;
@@ -191,7 +191,7 @@ public class SelinaGui extends JFrame implements SelRunnerJobListener {
 		return this.jobListener;
 	}
 	
-	public void setJob(final SelRunnerJob job) {
+	public void setJob(final SelinaJob job) {
 		if (this.job != null) this.job.removeListDataListener(this.getJobListener());
 		this.job = job;
 		this.getTaskList().setJob(job);
@@ -201,9 +201,9 @@ public class SelinaGui extends JFrame implements SelRunnerJobListener {
 		getStartButton();
 	}
 	
-	public SelRunnerJob getJob() {
+	public SelinaJob getJob() {
 		if (this.job == null) {
-			this.setJob(new SelRunnerJob());
+			this.setJob(new SelinaJob());
 		}
 		return this.job;
 	}
@@ -241,11 +241,11 @@ public class SelinaGui extends JFrame implements SelRunnerJobListener {
 		return fileMenu;
 	}
 
-	public SelRunnerEngine getEngine() {
+	public SelinaEngine getEngine() {
 		return engine;
 	}
 
-	public void setEngine(SelRunnerEngine engine) {
+	public void setEngine(SelinaEngine engine) {
 		this.engine = engine;
 	}
 
@@ -344,7 +344,7 @@ public class SelinaGui extends JFrame implements SelRunnerJobListener {
 					JFileChooser dialog = new JFileChooser();
 					dialog.setFileFilter(new JobFilter());
 					if (dialog.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) return;
-					setJob(SelRunnerJob.loadFromFile(dialog.getSelectedFile()));
+					setJob(SelinaJob.loadFromFile(dialog.getSelectedFile()));
 				}
 			});
 		}
@@ -398,7 +398,7 @@ public class SelinaGui extends JFrame implements SelRunnerJobListener {
 					int index = taskList.getTaskList().locationToIndex(e.getPoint());
 					if (index < 0) return;
 					taskList.getTaskList().setSelectedIndex(index);
-					SelRunnerTask task = (SelRunnerTask)taskList.getTaskList().getModel().getElementAt(index);
+					SelinaTask task = (SelinaTask)taskList.getTaskList().getModel().getElementAt(index);
 					if (task == null) return;
 					(new TaskContextMenu(task)).show(taskList, e.getX(), e.getY());
 				}
@@ -418,7 +418,7 @@ public class SelinaGui extends JFrame implements SelRunnerJobListener {
 			fileNewMenuItem.setText("New Job");
 			fileNewMenuItem.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					setJob(new SelRunnerJob());
+					setJob(new SelinaJob());
 				}
 			});
 		}

@@ -22,8 +22,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.TreePath;
 
 import de.chipxonio.adtech.selina.browsers.Browser;
-import de.chipxonio.adtech.selina.engine.SelRunnerJob;
-import de.chipxonio.adtech.selina.engine.SelRunnerTask;
+import de.chipxonio.adtech.selina.engine.SelinaJob;
+import de.chipxonio.adtech.selina.engine.SelinaTask;
 import de.chipxonio.adtech.selina.hosts.Host;
 import de.chipxonio.adtech.selina.library.Library;
 import de.chipxonio.adtech.selina.packages.Package;
@@ -33,7 +33,7 @@ import de.chipxonio.adtech.selina.packages.TestDefinition;
 public class TaskGenerator extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private SelRunnerJob job;  //  @jve:decl-index=0:
+	private SelinaJob job;  //  @jve:decl-index=0:
 	private Library library;
 	private PackageTree packageTree = null;
 	private JList hostList = null;
@@ -49,7 +49,7 @@ public class TaskGenerator extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public TaskGenerator(SelRunnerJob job, Library l) {
+	public TaskGenerator(SelinaJob job, Library l) {
 		super();
 		this.setJob(job);
 		this.setLibrary(l);
@@ -71,11 +71,11 @@ public class TaskGenerator extends JPanel {
 		this.add(jLabel, BorderLayout.NORTH);
 	}
 	
-	public SelRunnerJob getJob() {
+	public SelinaJob getJob() {
 		return job;
 	}
 
-	public void setJob(SelRunnerJob job) {
+	public void setJob(SelinaJob job) {
 		this.job = job;
 	}
 
@@ -171,8 +171,8 @@ public class TaskGenerator extends JPanel {
 		return rightScrollPane;
 	}
 	
-	public SelRunnerTask[] generateTasks() {
-		Vector<SelRunnerTask> tasks = new Vector<SelRunnerTask>();
+	public SelinaTask[] generateTasks() {
+		Vector<SelinaTask> tasks = new Vector<SelinaTask>();
 		TreePath[] definitions = this.getPackageTree().getSelectionPaths();
 		Object[] hosts = this.getHostList().getSelectedValues();
 		Object[] browsers = this.getBrowserLibrary().getSelectedValues();
@@ -187,7 +187,7 @@ public class TaskGenerator extends JPanel {
 						} else {
 							test = (TestDefinition) o;
 						}
-						tasks.add(new SelRunnerTask((Host) hosts[k], test, (Browser) browsers[l]));
+						tasks.add(new SelinaTask((Host) hosts[k], test, (Browser) browsers[l]));
 					} catch (PackageLoaderException e) {
 						e.printStackTrace();
 					}
@@ -207,7 +207,7 @@ public class TaskGenerator extends JPanel {
 				*/
 			}
 		}
-		return (SelRunnerTask[]) tasks.toArray(new SelRunnerTask[0]);
+		return (SelinaTask[]) tasks.toArray(new SelinaTask[0]);
 	}
 
 	/**
@@ -253,7 +253,7 @@ public class TaskGenerator extends JPanel {
 			generateButton.setIcon(new ImageIcon(getClass().getResource("/de/chipxonio/adtech/selina/resources/arrow_down.png")));
 			generateButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					SelRunnerTask[] tasks = generateTasks();
+					SelinaTask[] tasks = generateTasks();
 					for (int i = 0; i < tasks.length; i++) getJob().add(tasks[i]);
 				}
 			});

@@ -5,16 +5,16 @@ import java.util.Iterator;
 
 import de.chipxonio.adtech.selina.hosts.Host;
 
-public class SelRunnerEngine implements HostQueueListener {
+public class SelinaEngine implements HostQueueListener {
 	private Hashtable<Host,HostQueue> queues = new Hashtable<Host,HostQueue>();
 
-	public void runJob(SelRunnerJob job) {
-		Iterator<SelRunnerTask> i = job.iterator();
+	public void runJob(SelinaJob job) {
+		Iterator<SelinaTask> i = job.iterator();
 		while (i.hasNext()) try {
-			SelRunnerTask t = i.next();
+			SelinaTask t = i.next();
 			t.reset();
 			this.getQueue(t.getHost()).add(t);
-		} catch (SelRunnerTaskException e) {
+		} catch (SelinaTaskException e) {
 			e.printStackTrace();
 		}
 	}
@@ -37,6 +37,6 @@ public class SelRunnerEngine implements HostQueueListener {
 	}
 	
 	public void shutDown() {
-		SelRunnerThread.shutDown();
+		SelinaThread.shutDown();
 	}
 }

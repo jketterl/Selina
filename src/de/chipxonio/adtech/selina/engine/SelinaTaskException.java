@@ -1,7 +1,7 @@
 package de.chipxonio.adtech.selina.engine;
 
-public class SelRunnerTaskException extends Exception {
-	public SelRunnerTaskException(String string) {
+public class SelinaTaskException extends Exception {
+	public SelinaTaskException(String string) {
 		super(string);
 	}
 

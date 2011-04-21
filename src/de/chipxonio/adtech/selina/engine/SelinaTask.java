@@ -16,14 +16,14 @@ import de.chipxonio.adtech.selina.tests.AbstractTest;
 import de.chipxonio.adtech.selina.tests.TestResult;
 import de.chipxonio.adtech.selina.tests.TestResultListener;
 
-public class SelRunnerTask implements Serializable, TestResultListener {
+public class SelinaTask implements Serializable, TestResultListener {
 	private static final long serialVersionUID = 7731026883005748237L;
 	private Host host;
 	private TestDefinition test;
 	private Browser browser;
-	transient private Vector<SelRunnerTaskListener> listeners = new Vector<SelRunnerTaskListener>();
+	transient private Vector<SelinaTaskListener> listeners = new Vector<SelinaTaskListener>();
 	transient private WebDriver driver = null;
-	transient private int status = SelRunnerTaskListener.STOPPED;
+	transient private int status = SelinaTaskListener.STOPPED;
 	transient private TestResult result;
 	
 	/**
@@ -34,7 +34,7 @@ public class SelRunnerTask implements Serializable, TestResultListener {
 	 */
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
-		this.listeners = new Vector<SelRunnerTaskListener>();
+		this.listeners = new Vector<SelinaTaskListener>();
 		// reconnect with host object
 		Host h = HostRegistry.getSharedInstance().get(this.host.getId());
 		if (h != null) this.host = h;
@@ -44,32 +44,32 @@ public class SelRunnerTask implements Serializable, TestResultListener {
 		return status;
 	}
 
-	public SelRunnerTask() {
+	public SelinaTask() {
 		super();
 	};
 	
-	public SelRunnerTask(Host host, TestDefinition test, Browser browser) {
+	public SelinaTask(Host host, TestDefinition test, Browser browser) {
 		super();
 		this.host = host;
 		this.test = test;
 		this.browser = browser;
 	}
 	
-	public void addListener(SelRunnerTaskListener l) {
+	public void addListener(SelinaTaskListener l) {
 		this.listeners.add(l);
 	}
 	
 	private void fireTestingComplete(TestResult result) {
-		Iterator<SelRunnerTaskListener> i = this.listeners.iterator();
+		Iterator<SelinaTaskListener> i = this.listeners.iterator();
 		while (i.hasNext()) i.next().testingComplete(result);
 	}
 	
 	private void fireResultChanged(TestResult result) {
-		Iterator<SelRunnerTaskListener> i = this.listeners.iterator();
+		Iterator<SelinaTaskListener> i = this.listeners.iterator();
 		while (i.hasNext()) i.next().resultChanged(this, result);
 	}
 	
-	public void removeListener(SelRunnerTaskListener l) {
+	public void removeListener(SelinaTaskListener l) {
 		this.listeners.remove(l);
 	}
 	
@@ -93,19 +93,19 @@ public class SelRunnerTask implements Serializable, TestResultListener {
 		return this.driver;
 	}
 	
-	public void reset() throws SelRunnerTaskException {
-		if (this.getStatus() == SelRunnerTaskListener.RUNNING)
-			throw new SelRunnerTaskException("Cannot reset a running task");
+	public void reset() throws SelinaTaskException {
+		if (this.getStatus() == SelinaTaskListener.RUNNING)
+			throw new SelinaTaskException("Cannot reset a running task");
 		if (this.result != null) {
 			this.result.removeListener(this);
 			this.result = null;
 		}
-		this.setStatus(SelRunnerTaskListener.STOPPED);
+		this.setStatus(SelinaTaskListener.STOPPED);
 	}
 
 	public void run()
 	{
-		this.setStatus(SelRunnerTaskListener.RUNNING);
+		this.setStatus(SelinaTaskListener.RUNNING);
 		result = new TestResult();
 		result.addListener(this);
 		WebDriver driver = null;
@@ -132,7 +132,7 @@ public class SelRunnerTask implements Serializable, TestResultListener {
 			}
 		}
 		result.stopTimer();
-		this.setStatus(SelRunnerTaskListener.COMPLETE);
+		this.setStatus(SelinaTaskListener.COMPLETE);
 	}
 	
 	public String toString() {
@@ -145,7 +145,7 @@ public class SelRunnerTask implements Serializable, TestResultListener {
 	
 	private void setStatus(int status) {
 		this.status = status;
-		Iterator<SelRunnerTaskListener> i = this.listeners.iterator();
+		Iterator<SelinaTaskListener> i = this.listeners.iterator();
 		while (i.hasNext()) i.next().statusUpdated(this, status);
 	}
 

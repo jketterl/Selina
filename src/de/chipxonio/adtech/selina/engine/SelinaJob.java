@@ -18,9 +18,9 @@ import javax.swing.event.ListDataListener;
 import de.chipxonio.adtech.selina.packages.PackageLoader;
 import de.chipxonio.adtech.selina.tests.TestResult;
 
-public class SelRunnerJob extends Vector<SelRunnerTask> implements SelRunnerTaskListener, ListModel {
+public class SelinaJob extends Vector<SelinaTask> implements SelinaTaskListener, ListModel {
 	private static final long serialVersionUID = 6697337614166675395L;
-	transient private Vector<SelRunnerJobListener> listeners = new Vector<SelRunnerJobListener>();
+	transient private Vector<SelinaListener> listeners = new Vector<SelinaListener>();
 	transient private Vector<ListDataListener> listListeners = new Vector<ListDataListener>();
 	
 	/**
@@ -31,13 +31,13 @@ public class SelRunnerJob extends Vector<SelRunnerTask> implements SelRunnerTask
 	 */
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
-		this.listeners = new Vector<SelRunnerJobListener>();
+		this.listeners = new Vector<SelinaListener>();
 		this.listListeners = new Vector<ListDataListener>();
-		Iterator<SelRunnerTask> i = iterator();
+		Iterator<SelinaTask> i = iterator();
 		while (i.hasNext()) i.next().addListener(this);
 	}
 	
-	public boolean add(SelRunnerTask task) {
+	public boolean add(SelinaTask task) {
 		boolean ret = super.add(task);
 		if (ret) {
 			task.addListener(this);
@@ -52,22 +52,22 @@ public class SelRunnerJob extends Vector<SelRunnerTask> implements SelRunnerTask
 		int index = this.indexOf(o);
 		boolean ret = super.remove(o);
 		if (ret) {
-			((SelRunnerTask) o).removeListener(this);
+			((SelinaTask) o).removeListener(this);
 			this.fireIntervalRemoved(new ListDataEvent(this, ListDataEvent.INTERVAL_REMOVED, index, index));
 		}
 		return ret;
 	}
 
-	public void addListener(SelRunnerJobListener l) {
+	public void addListener(SelinaListener l) {
 		this.listeners.add(l);
 	}
 	
 	private void fireTestingComplete(TestResult result) {
-		Iterator<SelRunnerJobListener> i = this.listeners.iterator();
+		Iterator<SelinaListener> i = this.listeners.iterator();
 		while (i.hasNext()) i.next().testingComplete(result);
 	}
 	
-	public void removeListener(SelRunnerJobListener l) {
+	public void removeListener(SelinaListener l) {
 		this.listeners.remove(l);
 	}
 
@@ -96,7 +96,7 @@ public class SelRunnerJob extends Vector<SelRunnerTask> implements SelRunnerTask
 		}
 	}
 	
-	public static SelRunnerJob loadFromFile(File file) {
+	public static SelinaJob loadFromFile(File file) {
 		ObjectInputStream ois;
 		try {
 			ois = new ObjectInputStream(new FileInputStream(file)) {
@@ -112,7 +112,7 @@ public class SelRunnerJob extends Vector<SelRunnerTask> implements SelRunnerTask
 					}
 				}
 			};
-			SelRunnerJob job = (SelRunnerJob) ois.readObject();
+			SelinaJob job = (SelinaJob) ois.readObject();
 			ois.close();
 			return job;
 		} catch (FileNotFoundException e) {
@@ -164,14 +164,14 @@ public class SelRunnerJob extends Vector<SelRunnerTask> implements SelRunnerTask
 	}
 
 	@Override
-	public void statusUpdated(SelRunnerTask source, int status) {
+	public void statusUpdated(SelinaTask source, int status) {
 		int index = this.indexOf(source);
 		if (index < 0) return;
 		this.fireContentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, index, index));
 	}
 
 	@Override
-	public void resultChanged(SelRunnerTask source, TestResult result) {
+	public void resultChanged(SelinaTask source, TestResult result) {
 		int index = this.indexOf(source);
 		if (index < 0) return;
 		this.fireContentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, index, index));

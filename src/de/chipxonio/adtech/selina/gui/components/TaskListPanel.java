@@ -18,9 +18,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 
-import de.chipxonio.adtech.selina.engine.SelRunnerJob;
-import de.chipxonio.adtech.selina.engine.SelRunnerTask;
-import de.chipxonio.adtech.selina.engine.SelRunnerTaskListener;
+import de.chipxonio.adtech.selina.engine.SelinaJob;
+import de.chipxonio.adtech.selina.engine.SelinaTask;
+import de.chipxonio.adtech.selina.engine.SelinaTaskListener;
 import de.chipxonio.adtech.selina.gui.TestResultViewer;
 import de.chipxonio.adtech.selina.tests.TestResult;
 
@@ -29,7 +29,7 @@ public class TaskListPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JScrollPane jScrollPane = null;
 	private JPanel buttonPanel = null;
-	private SelRunnerJob job;  //  @jve:decl-index=0:
+	private SelinaJob job;  //  @jve:decl-index=0:
 	private JList taskList = null;
 	private JButton removeTaskButton = null;
 
@@ -41,19 +41,19 @@ public class TaskListPanel extends JPanel {
 		initialize();
 	}
 	
-	public TaskListPanel(SelRunnerJob job) {
+	public TaskListPanel(SelinaJob job) {
 		this();
 		this.setJob(job);
 	}
 
-	public SelRunnerJob getJob() {
+	public SelinaJob getJob() {
 		if (this.job == null) {
-			this.job = new SelRunnerJob();
+			this.job = new SelinaJob();
 		}
 		return job;
 	}
 	
-	public void setJob(SelRunnerJob job) {
+	public void setJob(SelinaJob job) {
 		this.job = job;
 		this.getTaskList().setModel(job);
 		getRemoveTaskButton();
@@ -123,12 +123,12 @@ public class TaskListPanel extends JPanel {
 					JLabel l = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
 							cellHasFocus);
 					Icon i = null;
-					SelRunnerTask task = (SelRunnerTask) value;
+					SelinaTask task = (SelinaTask) value;
 					switch (task.getStatus()) {
-					case SelRunnerTaskListener.RUNNING:
+					case SelinaTaskListener.RUNNING:
 						i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selina/resources/loader.gif"));
 						break;
-					case SelRunnerTaskListener.COMPLETE:
+					case SelinaTaskListener.COMPLETE:
 						if (task.getResult().isSuccessful()) {
 							i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selina/resources/accept.png"));
 						} else {
@@ -166,7 +166,7 @@ public class TaskListPanel extends JPanel {
 			taskList.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					if (e.getClickCount() != 2) return;
-					TestResult result = ((SelRunnerTask) taskList.getSelectedValue()).getResult();
+					TestResult result = ((SelinaTask) taskList.getSelectedValue()).getResult();
 					(new TestResultViewer(null, result)).setVisible(true);
 					
 				}

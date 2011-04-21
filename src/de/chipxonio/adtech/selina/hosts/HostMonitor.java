@@ -7,9 +7,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import de.chipxonio.adtech.selina.engine.SelRunnerThread;
+import de.chipxonio.adtech.selina.engine.SelinaThread;
 
-public class HostMonitor extends SelRunnerThread {
+public class HostMonitor extends SelinaThread {
 	private Host host;
 	private boolean shouldExit = false;
 	private boolean sleeping = false;

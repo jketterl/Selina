@@ -4,19 +4,19 @@ import java.util.Iterator;
 
 import de.chipxonio.adtech.selina.util.ActiveVector;
 
-abstract public class SelRunnerThread extends Thread {
-	protected static ActiveVector<SelRunnerThread> runningThreads = new ActiveVector<SelRunnerThread>();
+abstract public class SelinaThread extends Thread {
+	protected static ActiveVector<SelinaThread> runningThreads = new ActiveVector<SelinaThread>();
 	
-	public static void registerThread(SelRunnerThread thread) {
+	public static void registerThread(SelinaThread thread) {
 		runningThreads.add(thread);
 	}
 	
-	public static void unregisterThread(SelRunnerThread thread) {
+	public static void unregisterThread(SelinaThread thread) {
 		runningThreads.remove(thread);
 	}
 	
 	public static void shutDown() {
-		Iterator<SelRunnerThread> i = runningThreads.iterator();
+		Iterator<SelinaThread> i = runningThreads.iterator();
 		while (i.hasNext()) i.next().terminate();
 	}
 
