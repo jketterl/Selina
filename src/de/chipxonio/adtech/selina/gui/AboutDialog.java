@@ -40,7 +40,7 @@ public class AboutDialog extends JDialog {
 		this.setResizable(false);
 		this.setContentPane(getJContentPane());
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		this.setTitle("About SeleniumRunner");
+		this.setTitle("About Selina");
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class AboutDialog extends JDialog {
 			jTextPane.setContentType("text/html");
 			jTextPane.setEditable(false);
 			jTextPane.setText("<html><head></head><body style = \"text-align: center; font-family: Arial; font-size: 12pt; \">" +
-					"<h1>Selenium Runner</h1>" +
+					"<h1>Selina</h1>" +
 					"<p>Version " + SelRunner.version + " released on " + SelRunner.versionDate + "</p>" +
 					"<p>Copyright (&copy;) 2011 Jakob Ketterl<br>Chip Xonio Online GmbH</p>" +
 					"</body></html>");
