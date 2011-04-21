@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.WindowConstants;
 
-import de.chipxonio.adtech.selina.SelRunner;
+import de.chipxonio.adtech.selina.Selina;
 
 public class AboutDialog extends JDialog {
 
@@ -107,7 +107,7 @@ public class AboutDialog extends JDialog {
 			jTextPane.setEditable(false);
 			jTextPane.setText("<html><head></head><body style = \"text-align: center; font-family: Arial; font-size: 12pt; \">" +
 					"<h1>Selina</h1>" +
-					"<p>Version " + SelRunner.version + " released on " + SelRunner.versionDate + "</p>" +
+					"<p>Version " + Selina.version + " released on " + Selina.versionDate + "</p>" +
 					"<p>Copyright (&copy;) 2011 Jakob Ketterl<br>Chip Xonio Online GmbH</p>" +
 					"</body></html>");
 		}
