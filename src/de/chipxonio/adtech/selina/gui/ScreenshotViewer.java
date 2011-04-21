@@ -39,7 +39,7 @@ public class ScreenshotViewer extends JDialog {
 	/**
 	 * This method initializes imageViewer	
 	 * 	
-	 * @return de.chipxonio.adtech.selrunner.gui.components.ImageViewer	
+	 * @return de.chipxonio.adtech.selina.gui.components.ImageViewer	
 	 */
 	private ImagePanel getImageViewer() {
 		if (imageViewer == null) {

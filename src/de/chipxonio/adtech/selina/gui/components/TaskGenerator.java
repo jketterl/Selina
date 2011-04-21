@@ -93,7 +93,7 @@ public class TaskGenerator extends JPanel {
 	/**
 	 * This method initializes packageTree	
 	 * 	
-	 * @return de.chipxonio.adtech.selrunner.gui.components.PackageTree	
+	 * @return de.chipxonio.adtech.selina.gui.components.PackageTree	
 	 */
 	private PackageTree getPackageTree() {
 		if (packageTree == null) {
@@ -136,7 +136,7 @@ public class TaskGenerator extends JPanel {
 						color = "green";
 					else if ((status & Host.QUERYING) == Host.QUERYING)
 						color = "orange";
-					label.setIcon(new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/bullet_" + color + ".png")));
+					label.setIcon(new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selina/resources/bullet_" + color + ".png")));
 					return label;
 				}
 				
@@ -284,7 +284,7 @@ public class TaskGenerator extends JPanel {
 	/**
 	 * This method initializes browserLibrary	
 	 * 	
-	 * @return de.chipxonio.adtech.selrunner.gui.components.BrowserLibrary	
+	 * @return de.chipxonio.adtech.selina.gui.components.BrowserLibrary	
 	 */
 	private BrowserLibrary getBrowserLibrary() {
 		if (browserLibrary == null) {

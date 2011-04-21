@@ -108,7 +108,7 @@ public class PreferencesGui extends JDialog {
 	/**
 	 * This method initializes packageLibrary	
 	 * 	
-	 * @return de.chipxonio.adtech.selrunner.gui.components.PackageLibrary	
+	 * @return de.chipxonio.adtech.selina.gui.components.PackageLibrary	
 	 */
 	private PackageLibrary getPackageLibrary() {
 		if (packageLibrary == null) {

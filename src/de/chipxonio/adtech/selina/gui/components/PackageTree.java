@@ -38,7 +38,7 @@ public class PackageTree extends JTree {
 					boolean selected, boolean expanded, boolean leaf, int row,
 					boolean hasFocus) {
 				Component c = super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
-				if (leaf) ((JLabel) c).setIcon(new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/cog.png")));
+				if (leaf) ((JLabel) c).setIcon(new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selina/resources/cog.png")));
 				return c;
 			}
 		});

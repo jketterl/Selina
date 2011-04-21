@@ -204,7 +204,7 @@ public class TaskEditor extends JDialog {
 	/**
 	 * This method initializes packageTree	
 	 * 	
-	 * @return de.chipxonio.adtech.selrunner.gui.components.PackageTree	
+	 * @return de.chipxonio.adtech.selina.gui.components.PackageTree	
 	 */
 	private PackageTree getPackageTree() {
 		if (packageTree == null) {

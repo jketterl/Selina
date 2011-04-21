@@ -126,13 +126,13 @@ public class TaskListPanel extends JPanel {
 					SelRunnerTask task = (SelRunnerTask) value;
 					switch (task.getStatus()) {
 					case SelRunnerTaskListener.RUNNING:
-						i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/loader.gif"));
+						i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selina/resources/loader.gif"));
 						break;
 					case SelRunnerTaskListener.COMPLETE:
 						if (task.getResult().isSuccessful()) {
-							i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/accept.png"));
+							i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selina/resources/accept.png"));
 						} else {
-							i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selrunner/resources/exclamation.png"));
+							i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selina/resources/exclamation.png"));
 						}
 						break;
 					default:

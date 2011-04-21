@@ -428,7 +428,7 @@ public class SelRunnerGui extends JFrame implements SelRunnerJobListener {
 	/**
 	 * This method initializes taskGenerator	
 	 * 	
-	 * @return de.chipxonio.adtech.selrunner.gui.components.TaskGenerator	
+	 * @return de.chipxonio.adtech.selina.gui.components.TaskGenerator	
 	 */
 	private TaskGenerator getTaskGenerator() {
 		if (taskGenerator == null) {
