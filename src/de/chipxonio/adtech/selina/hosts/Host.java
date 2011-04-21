@@ -72,7 +72,7 @@ public class Host implements Serializable {
 
 	public void setPort(int port) {
 		this.port = port;
-		if (this.hasPreferences()) this.preferences.putInt("post", port);
+		if (this.hasPreferences()) this.preferences.putInt("port", port);
 	}
 
 	public String getName() {
