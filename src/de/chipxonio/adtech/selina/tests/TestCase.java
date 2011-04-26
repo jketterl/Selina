@@ -90,7 +90,7 @@ public abstract class TestCase extends AbstractTest {
 	}
 	
 	public void assertTrue(boolean b) {
-		if (b) this.pass(); else this.fail();
+		this.assertTrue(b, "Failed asserting that '" + b + "' is true.");
 	}
 	
 	public void assertTrue(boolean b, String message) {
