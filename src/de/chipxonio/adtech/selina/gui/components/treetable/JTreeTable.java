@@ -83,6 +83,8 @@ public class JTreeTable extends JTable {
 		});
 		// Make the tree and table row heights the same.
 		tree.setRowHeight(getRowHeight());
+		
+		tree.setRootVisible(false);
 
 		// Install the tree editor renderer and editor.
 		setDefaultRenderer(TreeTableModel.class, tree);
