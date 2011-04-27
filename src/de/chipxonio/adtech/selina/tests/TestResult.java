@@ -3,22 +3,23 @@ package de.chipxonio.adtech.selina.tests;
 import java.util.Iterator;
 import java.util.Vector;
 
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.TableModel;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.TreePath;
 
 import org.openqa.selenium.WebDriverException;
 
+import de.chipxonio.adtech.selina.gui.components.treetable.TreeTableModel;
 import de.chipxonio.adtech.selina.screenshots.MissingScreenshotException;
 import de.chipxonio.adtech.selina.screenshots.Screenshot;
 import de.chipxonio.adtech.selina.util.ActiveVector;
 
-public class TestResult implements TestCaseResultListener, TableModel {
+public class TestResult implements TestCaseResultListener, TreeTableModel {
 	private ActiveVector<Exception> exceptions = new ActiveVector<Exception>();
 	private Vector<TestResultListener> listeners = new Vector<TestResultListener>();
 	private Vector<Screenshot> screenshots = new Vector<Screenshot>();
 	private Vector<TestCaseResult> results = new Vector<TestCaseResult>();
-	private Vector<TableModelListener> tableListeners = new Vector<TableModelListener>();
+	private Vector<TreeModelListener> treeListeners = new Vector<TreeModelListener>();
 	private long startTime = 0, endTime = 0;
 	private String stringRepresentation;
 	
@@ -105,9 +106,11 @@ public class TestResult implements TestCaseResultListener, TableModel {
 	}
 	
 	public void pushCaseResult(TestCaseResult r) {
-		this.results.add(r);
-		int index = this.results.size() - 1;
-		this.fireTableChanged(new TableModelEvent(this, index, index, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT));
+		int index = this.results.size();
+		this.results.add(index, r);
+		//this.fireTableChanged(new TableModelEvent(this, index, index, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT));
+		this.fireTreeNodesInserted(new TreeModelEvent(this, new Object[] { this }, new int[] { index }, new Object[] { r }));
+		this.fireTreeStructureChanged(new TreeModelEvent(this, new Object[] { this }));
 		r.addListener(this);
 	}
 
@@ -115,16 +118,30 @@ public class TestResult implements TestCaseResultListener, TableModel {
 	public void testCaseResultUpdated(TestCaseResult src) {
 		this.updateStringRepresentation();
 		this.fireTestResultChanged();
-		this.fireTableChanged(new TableModelEvent(this, this.results.indexOf(src)));
+		this.fireTreeStructureChanged(new TreeModelEvent(this, new Object[] { this }));
+		int index = this.results.indexOf(src);
+		this.fireTreeNodesChanged(new TreeModelEvent(this, new Object[] { this }, new int[] { index }, new Object[] { src }));
+		//this.fireTableChanged(new TableModelEvent(this, ));
 	}
-
-	@Override
-	public void addTableModelListener(TableModelListener arg0) {
-		this.tableListeners.add(arg0);
+	
+	private void fireTreeNodesChanged(TreeModelEvent e) {
+		Iterator <TreeModelListener> i = this.treeListeners.iterator();
+		while (i.hasNext()) i.next().treeNodesChanged(e);
+	}
+	
+	private void fireTreeNodesInserted(TreeModelEvent e) {
+		Iterator <TreeModelListener> i = this.treeListeners.iterator();
+		while (i.hasNext()) i.next().treeNodesInserted(e);
+	}
+	
+	private void fireTreeStructureChanged(TreeModelEvent e) {
+		Iterator <TreeModelListener> i = this.treeListeners.iterator();
+		while (i.hasNext()) i.next().treeStructureChanged(e);
 	}
 
 	@Override
 	public Class<?> getColumnClass(int arg0) {
+		if (arg0 == 0) return TreeTableModel.class;
 		return TestCaseResult.class;
 	}
 
@@ -144,32 +161,67 @@ public class TestResult implements TestCaseResultListener, TableModel {
 	}
 
 	@Override
-	public int getRowCount() {
+	public void addTreeModelListener(TreeModelListener arg0) {
+		this.treeListeners.add(arg0);
+	}
+
+	@Override
+	public Object getChild(Object arg0, int arg1) {
+		if (arg0 != this) return null;
+		return this.results.get(arg1);
+	}
+
+	@Override
+	public int getChildCount(Object arg0) {
+		if (arg0 != this) return 0;
 		return this.results.size();
 	}
 
 	@Override
-	public Object getValueAt(int arg0, int arg1) {
-		return this.results.get(arg0);
+	public int getIndexOfChild(Object arg0, Object arg1) {
+		if (arg0 != this) return -1;
+		return this.results.indexOf(arg1);
 	}
 
 	@Override
-	public boolean isCellEditable(int arg0, int arg1) {
+	public Object getRoot() {
+		return this;
+	}
+
+	@Override
+	public boolean isLeaf(Object arg0) {
+		if (arg0 == this) return false;
+		return true;
+	}
+
+	@Override
+	public void removeTreeModelListener(TreeModelListener arg0) {
+		this.treeListeners.remove(arg0);
+	}
+
+	@Override
+	public void valueForPathChanged(TreePath arg0, Object arg1) {
+	}
+
+	@Override
+	public Object getValueAt(Object node, int column) {
+		if (node == this) return "";
+		TestCaseResult result = (TestCaseResult) node;
+		switch (column) {
+		case 0: return result.toString();
+		case 1: return "";
+		case 2: return result.getPassCount();
+		case 3: return result.getFailCount();
+		}
+		return "";
+	}
+
+	@Override
+	public boolean isCellEditable(Object node, int column) {
 		return false;
 	}
 
 	@Override
-	public void removeTableModelListener(TableModelListener arg0) {
-		this.tableListeners.remove(arg0);
-	}
-
-	@Override
-	public void setValueAt(Object arg0, int arg1, int arg2) {
-		// NOOP since isCellEditable always returns false
-	}
-	
-	private void fireTableChanged(TableModelEvent e) {
-		Iterator<TableModelListener> i = tableListeners.iterator();
-		while (i.hasNext()) i.next().tableChanged(e);
+	public void setValueAt(Object aValue, Object node, int column) {
 	}
 }

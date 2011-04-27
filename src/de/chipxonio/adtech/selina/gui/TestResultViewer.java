@@ -2,7 +2,6 @@ package de.chipxonio.adtech.selina.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,19 +10,16 @@ import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.ListModel;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 
-import de.chipxonio.adtech.selina.tests.TestCaseResult;
+import de.chipxonio.adtech.selina.gui.components.treetable.JTreeTable;
 import de.chipxonio.adtech.selina.tests.TestResult;
-
-import javax.swing.JTable;
 
 public class TestResultViewer extends JDialog {
 	
@@ -39,7 +35,7 @@ public class TestResultViewer extends JDialog {
 	private JScrollPane jScrollPane1 = null;  //  @jve:decl-index=0:visual-constraint="220,237"
 	private JPanel buttonPanel = null;
 	private JButton closeButton = null;
-	private JTable resultTable = null;
+	private JTreeTable resultTable = null;
 
 	/**
 	 * @param owner
@@ -188,8 +184,9 @@ public class TestResultViewer extends JDialog {
 	 */
 	private JTable getResultTable() {
 		if (resultTable == null) {
-			resultTable = new JTable(this.result);
+			resultTable = new JTreeTable(this.result);
 			resultTable.getColumnModel().getColumn(0).setPreferredWidth(300);
+			/*
 			resultTable.setDefaultRenderer(TestCaseResult.class, new DefaultTableCellRenderer(){
 				private static final long serialVersionUID = 8619907859395215841L;
 
@@ -224,6 +221,7 @@ public class TestResultViewer extends JDialog {
 					return l;
 				}
 			});
+			*/
 		}
 		return resultTable;
 	}
