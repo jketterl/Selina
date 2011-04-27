@@ -205,13 +205,7 @@ public class TestResult implements TestCaseResultListener, TreeTableModel {
 	public Object getValueAt(Object node, int column) {
 		if (node == this) return "";
 		TestCaseResult result = (TestCaseResult) node;
-		switch (column) {
-		case 0: return result.toString();
-		case 1: return "";
-		case 2: return result.getPassCount();
-		case 3: return result.getFailCount();
-		}
-		return "";
+		return result;
 	}
 
 	@Override
