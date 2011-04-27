@@ -36,7 +36,12 @@ public class TreeModelListenerAdapter implements TreeModelListener {
 
 	@Override
 	public void treeNodesRemoved(TreeModelEvent e) {
-		adapter.fireTableDataChanged();
+		TreePath p = e.getTreePath();
+		int[] indices = e.getChildIndices();
+		int index = tree.getRowForPath(p);
+		if (index >= 0 && tree.isExpanded(index)) for (int i = 0; i < indices.length; i++) {
+			adapter.fireTableRowsDeleted(index + indices[i], index + indices[i]);
+		}
 	}
 
 	@Override
