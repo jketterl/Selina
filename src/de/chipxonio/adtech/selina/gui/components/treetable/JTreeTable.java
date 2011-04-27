@@ -39,15 +39,21 @@ package de.chipxonio.adtech.selina.gui.components.treetable;
  * maintenance of any nuclear facility.
  */
 
-import javax.swing.*;
-import javax.swing.tree.*;
-import javax.swing.table.*;
-
-import java.awt.Dimension;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 
+import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.JTree;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeSelectionModel;
+import javax.swing.tree.TreeModel;
+
+import de.chipxonio.adtech.selina.gui.components.TaskListPanel;
+import de.chipxonio.adtech.selina.tests.TestCaseResult;
 
 /**
  * This example shows how to create a simple JTreeTable component, by using a
@@ -63,7 +69,7 @@ import javax.swing.JTable;
 public class JTreeTable extends JTable {
 	private static final long serialVersionUID = 6634274235930481438L;
 	protected TreeTableCellRenderer tree;
-
+	
 	public JTreeTable(TreeTableModel treeTableModel) {
 		super();
 
@@ -85,6 +91,26 @@ public class JTreeTable extends JTable {
 		tree.setRowHeight(getRowHeight());
 		
 		tree.setRootVisible(false);
+		
+		tree.setCellRenderer(new DefaultTreeCellRenderer(){
+			private static final long serialVersionUID = -7348703070519883070L;
+
+			@Override
+			public Component getTreeCellRendererComponent(JTree tree, Object value,
+					boolean selected, boolean expanded, boolean leaf, int row,
+					boolean hasFocus) {
+				JLabel l = (JLabel) super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+				if (value instanceof TestCaseResult) {
+					TestCaseResult r = (TestCaseResult) value;
+					if (r.isSuccessful()) {
+						l.setIcon(TaskListPanel.SUCCESS_ICON);
+					} else {
+						l.setIcon(TaskListPanel.FAILURE_ICON);
+					}
+				}
+				return l;
+			}
+		});
 
 		// Install the tree editor renderer and editor.
 		setDefaultRenderer(TreeTableModel.class, tree);
