@@ -108,9 +108,7 @@ public class TestResult implements TestCaseResultListener, TreeTableModel {
 	public void pushCaseResult(TestCaseResult r) {
 		int index = this.results.size();
 		this.results.add(index, r);
-		//this.fireTableChanged(new TableModelEvent(this, index, index, TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT));
 		this.fireTreeNodesInserted(new TreeModelEvent(this, new Object[] { this }, new int[] { index }, new Object[] { r }));
-		this.fireTreeStructureChanged(new TreeModelEvent(this, new Object[] { this }));
 		r.addListener(this);
 	}
 
@@ -118,10 +116,8 @@ public class TestResult implements TestCaseResultListener, TreeTableModel {
 	public void testCaseResultUpdated(TestCaseResult src) {
 		this.updateStringRepresentation();
 		this.fireTestResultChanged();
-		this.fireTreeStructureChanged(new TreeModelEvent(this, new Object[] { this }));
 		int index = this.results.indexOf(src);
 		this.fireTreeNodesChanged(new TreeModelEvent(this, new Object[] { this }, new int[] { index }, new Object[] { src }));
-		//this.fireTableChanged(new TableModelEvent(this, ));
 	}
 	
 	private void fireTreeNodesChanged(TreeModelEvent e) {
@@ -134,10 +130,12 @@ public class TestResult implements TestCaseResultListener, TreeTableModel {
 		while (i.hasNext()) i.next().treeNodesInserted(e);
 	}
 	
+	/*
 	private void fireTreeStructureChanged(TreeModelEvent e) {
 		Iterator <TreeModelListener> i = this.treeListeners.iterator();
 		while (i.hasNext()) i.next().treeStructureChanged(e);
 	}
+	*/
 
 	@Override
 	public Class<?> getColumnClass(int arg0) {
