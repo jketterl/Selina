@@ -27,20 +27,20 @@ public class TreeModelListenerAdapter implements TreeModelListener {
 	@Override
 	public void treeNodesInserted(TreeModelEvent e) {
 		TreePath p = e.getTreePath();
-		int[] indices = e.getChildIndices();
-		int index = tree.getRowForPath(p);
-		if (index >= 0 && tree.isExpanded(index)) for (int i = 0; i < indices.length; i++) {
-			adapter.fireTableRowsInserted(index + indices[i], index + indices[i]);
+		Object[] children = e.getChildren();
+		for (int i = 0; i < children.length; i++) {
+			int index = tree.getRowForPath(p.pathByAddingChild(children[i]));
+			if (index >= 0) adapter.fireTableRowsInserted(index, index);
 		}
 	}
 
 	@Override
 	public void treeNodesRemoved(TreeModelEvent e) {
 		TreePath p = e.getTreePath();
-		int[] indices = e.getChildIndices();
-		int index = tree.getRowForPath(p);
-		if (index >= 0 && tree.isExpanded(index)) for (int i = 0; i < indices.length; i++) {
-			adapter.fireTableRowsDeleted(index + indices[i], index + indices[i]);
+		Object[] children = e.getChildren();
+		for (int i = 0; i < children.length; i++) {
+			int index = tree.getRowForPath(p.pathByAddingChild(children[i]));
+			if (index >= 0) adapter.fireTableRowsDeleted(index, index);
 		}
 	}
 
