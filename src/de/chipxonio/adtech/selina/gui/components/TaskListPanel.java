@@ -33,6 +33,10 @@ public class TaskListPanel extends JPanel {
 	private JList taskList = null;
 	private JButton removeTaskButton = null;
 
+	public static final ImageIcon SUCCESS_ICON = new ImageIcon(ClassLoader.getSystemResource("de/chipxonio/adtech/selina/resources/accept.png"));
+	public static final ImageIcon FAILURE_ICON = new ImageIcon(ClassLoader.getSystemResource("de/chipxonio/adtech/selina/resources/exclamation.png"));
+	public static final ImageIcon WAITING_ICON = new ImageIcon(ClassLoader.getSystemResource("de/chipxonio/adtech/selina/resources/loader.gif"));
+
 	/**
 	 * This is the default constructor
 	 */
@@ -126,13 +130,13 @@ public class TaskListPanel extends JPanel {
 					SelinaTask task = (SelinaTask) value;
 					switch (task.getStatus()) {
 					case SelinaTaskListener.RUNNING:
-						i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selina/resources/loader.gif"));
+						i = WAITING_ICON;
 						break;
 					case SelinaTaskListener.COMPLETE:
 						if (task.getResult().isSuccessful()) {
-							i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selina/resources/accept.png"));
+							i = SUCCESS_ICON;
 						} else {
-							i = new ImageIcon(getClass().getClassLoader().getResource("de/chipxonio/adtech/selina/resources/exclamation.png"));
+							i = FAILURE_ICON;
 						}
 						break;
 					default:
