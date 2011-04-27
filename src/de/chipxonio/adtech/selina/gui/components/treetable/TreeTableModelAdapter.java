@@ -39,13 +39,11 @@ package de.chipxonio.adtech.selina.gui.components.treetable;
  * maintenance of any nuclear facility.
  */
 
-import javax.swing.table.AbstractTableModel;
 import javax.swing.JTree;
-import javax.swing.tree.TreePath;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.tree.TreePath;
 
 /**
  * This is a wrapper class takes a TreeTableModel and implements the table model
@@ -79,27 +77,7 @@ public class TreeTableModelAdapter extends AbstractTableModel {
 			}
 		});
 		
-		treeTableModel.addTreeModelListener(new TreeModelListener() {
-			@Override
-			public void treeStructureChanged(TreeModelEvent e) {
-				fireTableDataChanged();
-			}
-			
-			@Override
-			public void treeNodesRemoved(TreeModelEvent e) {
-				fireTableDataChanged();
-			}
-			
-			@Override
-			public void treeNodesInserted(TreeModelEvent e) {
-				fireTableDataChanged();
-			}
-			
-			@Override
-			public void treeNodesChanged(TreeModelEvent e) {
-				fireTableDataChanged();
-			}
-		});
+		treeTableModel.addTreeModelListener(new TreeModelListenerAdapter(tree, this));
 	}
 
 	// Wrappers, implementing TableModel interface.
