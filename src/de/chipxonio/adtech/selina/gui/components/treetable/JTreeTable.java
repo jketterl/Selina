@@ -91,6 +91,7 @@ public class JTreeTable extends JTable {
 		tree.setRowHeight(getRowHeight());
 		
 		tree.setRootVisible(false);
+		tree.setShowsRootHandles(true);
 		
 		tree.setCellRenderer(new DefaultTreeCellRenderer(){
 			private static final long serialVersionUID = -7348703070519883070L;
