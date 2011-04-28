@@ -165,20 +165,32 @@ public class TestResult implements TestCaseResultListener, TreeTableModel {
 
 	@Override
 	public Object getChild(Object arg0, int arg1) {
-		if (arg0 != this) return null;
-		return this.results.get(arg1);
+		if (arg0 == this) return this.results.get(arg1);
+		if (arg0 instanceof TestCaseResult) {
+			TestCaseResult r = (TestCaseResult) arg0;
+			return r.getFailures().get(arg1);
+		}
+		return null;
 	}
 
 	@Override
 	public int getChildCount(Object arg0) {
-		if (arg0 != this) return 0;
-		return this.results.size();
+		if (arg0 == this) return this.results.size();
+		if (arg0 instanceof TestCaseResult) {
+			TestCaseResult r = (TestCaseResult) arg0;
+			return r.getFailCount();
+		}
+		return 0;
 	}
 
 	@Override
 	public int getIndexOfChild(Object arg0, Object arg1) {
-		if (arg0 != this) return -1;
-		return this.results.indexOf(arg1);
+		if (arg0 == this) this.results.indexOf(arg1);
+		if (arg0 instanceof TestCaseResult) {
+			TestCaseResult r = (TestCaseResult) arg0;
+			return r.getFailures().indexOf(arg1);
+		}
+		return -1;
 	}
 
 	@Override
@@ -189,6 +201,7 @@ public class TestResult implements TestCaseResultListener, TreeTableModel {
 	@Override
 	public boolean isLeaf(Object arg0) {
 		if (arg0 == this) return false;
+		if (arg0 instanceof TestCaseResult) return ((TestCaseResult) arg0).getFailCount() == 0;
 		return true;
 	}
 
@@ -203,13 +216,12 @@ public class TestResult implements TestCaseResultListener, TreeTableModel {
 
 	@Override
 	public Object getValueAt(Object node, int column) {
-		if (node == this) return "";
-		TestCaseResult result = (TestCaseResult) node;
-		return result;
+		return node;
 	}
 
 	@Override
 	public boolean isCellEditable(Object node, int column) {
+		if (getColumnClass(column) == TreeTableModel.class) return true;
 		return false;
 	}
 

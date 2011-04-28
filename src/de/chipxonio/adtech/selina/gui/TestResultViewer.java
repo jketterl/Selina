@@ -22,6 +22,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import de.chipxonio.adtech.selina.gui.components.treetable.JTreeTable;
+import de.chipxonio.adtech.selina.tests.Outcome;
+import de.chipxonio.adtech.selina.tests.Pass;
 import de.chipxonio.adtech.selina.tests.TestCaseResult;
 import de.chipxonio.adtech.selina.tests.TestResult;
 
@@ -186,7 +188,7 @@ public class TestResultViewer extends JDialog {
 	 * 	
 	 * @return javax.swing.JTable	
 	 */
-	private JTable getResultTable() {
+	private JTreeTable getResultTable() {
 		if (resultTable == null) {
 			resultTable = new JTreeTable(this.result);
 			resultTable.getColumnModel().getColumn(0).setPreferredWidth(300);
@@ -199,28 +201,38 @@ public class TestResultViewer extends JDialog {
 						int row, int column) {
 					JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
 							row, column);
-					if (!(value instanceof TestCaseResult)) return l;
-					TestCaseResult r = (TestCaseResult) value;
-					switch (column) {
-					case 0:
-						l.setText(r.toString());
-						break;
-					case 1: 
-						l.setText("");
-						break;
-					case 2: 
-						l.setText(Integer.toString(r.getPassCount()));
-						break;
-					case 3: 
-						l.setText(Integer.toString(r.getFailCount()));
-						break;
-					}
-					if (!isSelected) {
-						if (r.isSuccessful()) {
-							l.setBackground(successColor);
-						} else {
-							l.setBackground(failureColor);
+					if (value instanceof TestCaseResult) {
+						TestCaseResult r = (TestCaseResult) value;
+						switch (column) {
+						case 0:
+							l.setText(r.toString());
+							break;
+						case 1: 
+							l.setText("");
+							break;
+						case 2: 
+							l.setText(Integer.toString(r.getPassCount()));
+							break;
+						case 3: 
+							l.setText(Integer.toString(r.getFailCount()));
+							break;
 						}
+						if (!isSelected) {
+							if (r.isSuccessful()) {
+								l.setBackground(successColor);
+							} else {
+								l.setBackground(failureColor);
+							}
+						}
+					} else if (value instanceof Outcome) {
+						if (!isSelected) {
+							if (value instanceof Pass) {
+								l.setBackground(successColor);
+							} else {
+								l.setBackground(failureColor);
+							}
+						}
+						l.setText("");
 					}
 					return l;
 				}
