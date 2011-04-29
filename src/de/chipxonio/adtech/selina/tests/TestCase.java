@@ -67,7 +67,7 @@ public abstract class TestCase extends AbstractTest {
 				if (e.getCause() instanceof Exception)
 					// i know what to do with an exception
 					//throw (Exception) e.getCause();
-					result.pushFailure(new ExceptionFailure(this.getClass(), currentMethod, e));
+					result.pushFailure(new ExceptionFailure(this.getClass(), currentMethod, (Exception) e.getCause()));
 				else
 					// but i don't know what to do with the rest
 					e.printStackTrace();
