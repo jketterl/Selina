@@ -16,7 +16,7 @@ public class Failure extends Outcome {
 	}
 
 	public Failure(Class<? extends TestCase> c, Method m, String message) {
-		this(c, m);
+		super(c, m);
 		this.message = message;
 	}
 	
