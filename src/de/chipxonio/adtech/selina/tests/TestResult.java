@@ -7,15 +7,11 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreePath;
 
-import org.openqa.selenium.WebDriverException;
-
 import de.chipxonio.adtech.selina.gui.components.treetable.TreeTableModel;
-import de.chipxonio.adtech.selina.screenshots.MissingScreenshotException;
 import de.chipxonio.adtech.selina.screenshots.Screenshot;
-import de.chipxonio.adtech.selina.util.ActiveVector;
 
 public class TestResult implements TestCaseResultListener, TreeTableModel {
-	private ActiveVector<Exception> exceptions = new ActiveVector<Exception>();
+	//private ActiveVector<Exception> exceptions = new ActiveVector<Exception>();
 	private Vector<TestResultListener> listeners = new Vector<TestResultListener>();
 	private Vector<Screenshot> screenshots = new Vector<Screenshot>();
 	private Vector<TestCaseResult> results = new Vector<TestCaseResult>();
@@ -46,9 +42,11 @@ public class TestResult implements TestCaseResultListener, TreeTableModel {
 			failures += r.getFailCount();
 		}
 		result += "passed: " + passes + ", failed: " + failures;
+		/*
 		if (this.exceptions.size() > 0) {
 			result += ", exceptions: " + exceptions.size();
 		}
+		*/
 		int screenshotCount = this.screenshots.size();
 		if (screenshotCount > 0) result += ", screenshots: " + screenshotCount;
 		stringRepresentation = result;
@@ -58,9 +56,10 @@ public class TestResult implements TestCaseResultListener, TreeTableModel {
 		Iterator <TestCaseResult> i = this.results.iterator();
 		boolean successful = true;
 		while (i.hasNext()) successful &= i.next().isSuccessful();
-		return successful && this.exceptions.isEmpty();
+		return successful /*&& this.exceptions.isEmpty()*/;
 	}
 	
+	/*
 	public void pushException(Exception e) {
 		// e.printStackTrace();
 		this.exceptions.add(e);
@@ -71,6 +70,7 @@ public class TestResult implements TestCaseResultListener, TreeTableModel {
 		this.updateStringRepresentation();
 		this.fireTestResultChanged();
 	}
+	*/
 	
 	public Vector<Screenshot> getScreenshots() {
 		return screenshots;
@@ -101,9 +101,11 @@ public class TestResult implements TestCaseResultListener, TreeTableModel {
 		this.fireTestResultChanged();
 	}
 	
+	/*
 	public ActiveVector<Exception> getExceptions() {
 		return exceptions;
 	}
+	*/
 	
 	public void pushCaseResult(TestCaseResult r) {
 		int index = this.results.size();

@@ -12,11 +12,9 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListModel;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -36,8 +34,6 @@ public class TestResultViewer extends JDialog {
 	private JPanel jContentPane = null;
 	private TestResult result;
 	private JPanel contentPanel = null;
-	private JList exceptionList = null;
-	private JScrollPane jScrollPane = null;
 	private JScrollPane jScrollPane1 = null;  //  @jve:decl-index=0:visual-constraint="220,237"
 	private JPanel buttonPanel = null;
 	private JButton closeButton = null;
@@ -96,41 +92,13 @@ public class TestResultViewer extends JDialog {
 			gc.weighty = 3.0;
 			gc.gridx = 0;
 			contentPanel.add(getJScrollPane1(), gc);
-			gc = new GridBagConstraints();
 			gc.fill = GridBagConstraints.BOTH;
 			gc.gridy = 1;
 			gc.weightx = 1.0;
 			gc.weighty = 1.0;
 			gc.gridx = 0;
-			contentPanel.add(getJScrollPane(), gc);
 		}
 		return contentPanel;
-	}
-
-	/**
-	 * This method initializes exceptionList	
-	 * 	
-	 * @return javax.swing.JList	
-	 */
-	private JList getExceptionList() {
-		if (exceptionList == null) {
-			exceptionList = new JList((ListModel) this.result.getExceptions());
-		}
-		return exceptionList;
-	}
-
-	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
-	 */
-	private JScrollPane getJScrollPane() {
-		if (jScrollPane == null) {
-			jScrollPane = new JScrollPane();
-			jScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Exceptions", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
-			jScrollPane.setViewportView(getExceptionList());
-		}
-		return jScrollPane;
 	}
 
 	/**

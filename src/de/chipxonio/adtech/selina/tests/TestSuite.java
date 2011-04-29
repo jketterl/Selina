@@ -24,8 +24,6 @@ public abstract class TestSuite extends AbstractTest {
 				test.run();
 			} catch (InstantiationException e1) {
 			} catch (IllegalAccessException e1) {
-			} catch (Exception e) {
-				this.getOverallResult().pushException(e);
 			}
 		}
 	}
