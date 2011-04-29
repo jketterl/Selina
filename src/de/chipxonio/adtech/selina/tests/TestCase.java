@@ -85,6 +85,10 @@ public abstract class TestCase extends AbstractTest {
 		this.getResult().pushPass(new Pass(this.getClass(), currentMethod));
 	}
 	
+	/**
+	 * @deprecated failing without a message is discouraged.
+	 * @see fail(String message) instead.
+	 */
 	public void fail() {
 		this.getResult().pushFailure(new Failure(this.getClass(), currentMethod));
 	}
@@ -93,6 +97,10 @@ public abstract class TestCase extends AbstractTest {
 		this.getResult().pushFailure(new Failure(this.getClass(), currentMethod, message));
 	}
 	
+	/**
+	 * @deprecated failing without a message is discouraged.
+	 * @see fail(String message) instead.
+	 */
 	public void assertTrue(boolean b) {
 		this.assertTrue(b, "Failed asserting that '" + b + "' is true.");
 	}
