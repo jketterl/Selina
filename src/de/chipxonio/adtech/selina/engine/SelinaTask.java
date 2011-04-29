@@ -120,8 +120,10 @@ public class SelinaTask implements Serializable, TestResultListener {
 				test.setOverallResult(result);
 				test.setDriver(driver);
 				test.run();
-			} catch (Exception e) {
-				result.pushException(e);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
 			}
 			this.fireTestingComplete(result);
 			try {

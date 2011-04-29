@@ -24,5 +24,5 @@ abstract public class AbstractTest {
 	
 	abstract public String getTestName();
 	
-	abstract public void run() throws Exception;
+	abstract public void run();
 }

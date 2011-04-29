@@ -1,6 +1,8 @@
-package de.chipxonio.adtech.selina.tests;
+package de.chipxonio.adtech.selina.tests.outcomes;
 
 import java.lang.reflect.Method;
+
+import de.chipxonio.adtech.selina.tests.TestCase;
 
 abstract public class Outcome {
 	protected Class<?> clss;

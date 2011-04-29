@@ -14,6 +14,9 @@ import org.openqa.selenium.support.ui.TimeoutException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import de.chipxonio.adtech.selina.screenshots.Screenshot;
+import de.chipxonio.adtech.selina.tests.outcomes.ExceptionFailure;
+import de.chipxonio.adtech.selina.tests.outcomes.Failure;
+import de.chipxonio.adtech.selina.tests.outcomes.Pass;
 
 public abstract class TestCase extends AbstractTest {
 	private Method currentMethod;
@@ -44,7 +47,7 @@ public abstract class TestCase extends AbstractTest {
 		}
 	}
 
-	public void run() throws Exception {
+	public void run() {
 		result = new TestCaseResult(this.getTestName());
 		this.getOverallResult().pushCaseResult(result);
 		Method[] methods = this.getClass().getMethods();
@@ -63,7 +66,8 @@ public abstract class TestCase extends AbstractTest {
 			} catch (InvocationTargetException e) {
 				if (e.getCause() instanceof Exception)
 					// i know what to do with an exception
-					throw (Exception) e.getCause();
+					//throw (Exception) e.getCause();
+					result.pushFailure(new ExceptionFailure(this.getClass(), currentMethod, e));
 				else
 					// but i don't know what to do with the rest
 					e.printStackTrace();
