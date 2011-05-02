@@ -17,13 +17,17 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import de.chipxonio.adtech.selina.gui.components.treetable.JTreeTable;
 import de.chipxonio.adtech.selina.results.TestCaseResult;
 import de.chipxonio.adtech.selina.results.TestResult;
+import de.chipxonio.adtech.selina.results.outcomes.Failure;
 import de.chipxonio.adtech.selina.results.outcomes.Outcome;
 import de.chipxonio.adtech.selina.results.outcomes.Pass;
+import javax.swing.JList;
 
 public class TestResultViewer extends JDialog {
 	
@@ -38,6 +42,8 @@ public class TestResultViewer extends JDialog {
 	private JPanel buttonPanel = null;
 	private JButton closeButton = null;
 	private JTreeTable resultTable = null;
+	private JScrollPane jScrollPane = null;
+	private JList stackTraceList = null;
 
 	/**
 	 * @param owner
@@ -89,9 +95,16 @@ public class TestResultViewer extends JDialog {
 			gc.fill = GridBagConstraints.BOTH;
 			gc.gridy = 0;
 			gc.weightx = 1.0;
-			gc.weighty = 3.0;
+			gc.weighty = 1.0;
 			gc.gridx = 0;
 			contentPanel.add(getJScrollPane1(), gc);
+			gc = new GridBagConstraints();
+			gc.fill = GridBagConstraints.BOTH;
+			gc.gridy = 1;
+			gc.weightx = 1.0;
+			gc.weighty = 1.0;
+			gc.gridx = 0;
+			contentPanel.add(getJScrollPane(), gc);
 			gc.fill = GridBagConstraints.BOTH;
 			gc.gridy = 1;
 			gc.weightx = 1.0;
@@ -205,8 +218,44 @@ public class TestResultViewer extends JDialog {
 					return l;
 				}
 			});
+			resultTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					if (e.getValueIsAdjusting()) return;
+					Object row = resultTable.getValueAt(e.getFirstIndex(), 1);
+					if (!(row instanceof Failure)) return;
+					Failure f = (Failure) row;
+					stackTraceList.setListData(f.getStackTrace());
+				}
+			});
 		}
 		return resultTable;
+	}
+
+	/**
+	 * This method initializes jScrollPane	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane() {
+		if (jScrollPane == null) {
+			jScrollPane = new JScrollPane();
+			jScrollPane.setViewportView(getStackTraceList());
+			jScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Stack Trace", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+		}
+		return jScrollPane;
+	}
+
+	/**
+	 * This method initializes stackTraceList	
+	 * 	
+	 * @return javax.swing.JList	
+	 */
+	private JList getStackTraceList() {
+		if (stackTraceList == null) {
+			stackTraceList = new JList();
+		}
+		return stackTraceList;
 	}
 
 }
