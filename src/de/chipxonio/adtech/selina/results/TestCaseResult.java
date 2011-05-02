@@ -1,10 +1,10 @@
-package de.chipxonio.adtech.selina.tests;
+package de.chipxonio.adtech.selina.results;
 
 import java.util.Iterator;
 import java.util.Vector;
 
-import de.chipxonio.adtech.selina.tests.outcomes.Failure;
-import de.chipxonio.adtech.selina.tests.outcomes.Pass;
+import de.chipxonio.adtech.selina.results.outcomes.Failure;
+import de.chipxonio.adtech.selina.results.outcomes.Pass;
 import de.chipxonio.adtech.selina.util.ActiveVector;
 
 public class TestCaseResult {

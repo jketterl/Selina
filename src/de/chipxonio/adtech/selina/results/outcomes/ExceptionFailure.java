@@ -1,4 +1,4 @@
-package de.chipxonio.adtech.selina.tests.outcomes;
+package de.chipxonio.adtech.selina.results.outcomes;
 
 import java.lang.reflect.Method;
 

@@ -13,10 +13,11 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.TimeoutException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import de.chipxonio.adtech.selina.results.TestCaseResult;
+import de.chipxonio.adtech.selina.results.outcomes.ExceptionFailure;
+import de.chipxonio.adtech.selina.results.outcomes.Failure;
+import de.chipxonio.adtech.selina.results.outcomes.Pass;
 import de.chipxonio.adtech.selina.screenshots.Screenshot;
-import de.chipxonio.adtech.selina.tests.outcomes.ExceptionFailure;
-import de.chipxonio.adtech.selina.tests.outcomes.Failure;
-import de.chipxonio.adtech.selina.tests.outcomes.Pass;
 
 public abstract class TestCase extends AbstractTest {
 	private Method currentMethod;

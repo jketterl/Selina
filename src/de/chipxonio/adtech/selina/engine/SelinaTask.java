@@ -12,9 +12,9 @@ import de.chipxonio.adtech.selina.browsers.Browser;
 import de.chipxonio.adtech.selina.hosts.Host;
 import de.chipxonio.adtech.selina.hosts.HostRegistry;
 import de.chipxonio.adtech.selina.packages.TestDefinition;
+import de.chipxonio.adtech.selina.results.TestResult;
+import de.chipxonio.adtech.selina.results.TestResultListener;
 import de.chipxonio.adtech.selina.tests.AbstractTest;
-import de.chipxonio.adtech.selina.tests.TestResult;
-import de.chipxonio.adtech.selina.tests.TestResultListener;
 
 public class SelinaTask implements Serializable, TestResultListener {
 	private static final long serialVersionUID = 7731026883005748237L;

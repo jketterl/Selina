@@ -2,6 +2,8 @@ package de.chipxonio.adtech.selina.tests;
 
 import org.openqa.selenium.WebDriver;
 
+import de.chipxonio.adtech.selina.results.TestResult;
+
 abstract public class AbstractTest {
 	private WebDriver driver;
 	private TestResult result;

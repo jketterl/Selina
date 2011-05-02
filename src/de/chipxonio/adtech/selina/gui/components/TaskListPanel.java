@@ -22,7 +22,7 @@ import de.chipxonio.adtech.selina.engine.SelinaJob;
 import de.chipxonio.adtech.selina.engine.SelinaTask;
 import de.chipxonio.adtech.selina.engine.SelinaTaskListener;
 import de.chipxonio.adtech.selina.gui.TestResultViewer;
-import de.chipxonio.adtech.selina.tests.TestResult;
+import de.chipxonio.adtech.selina.results.TestResult;
 
 public class TaskListPanel extends JPanel {
 

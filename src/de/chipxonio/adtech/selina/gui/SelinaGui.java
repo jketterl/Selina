@@ -33,8 +33,8 @@ import de.chipxonio.adtech.selina.engine.SelinaTask;
 import de.chipxonio.adtech.selina.gui.components.TaskGenerator;
 import de.chipxonio.adtech.selina.gui.components.TaskListPanel;
 import de.chipxonio.adtech.selina.library.Library;
+import de.chipxonio.adtech.selina.results.TestResult;
 import de.chipxonio.adtech.selina.screenshots.Screenshot;
-import de.chipxonio.adtech.selina.tests.TestResult;
 
 public class SelinaGui extends JFrame implements SelinaListener {
 

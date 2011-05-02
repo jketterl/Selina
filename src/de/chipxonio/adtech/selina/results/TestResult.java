@@ -1,4 +1,4 @@
-package de.chipxonio.adtech.selina.tests;
+package de.chipxonio.adtech.selina.results;
 
 import java.util.Iterator;
 import java.util.Vector;

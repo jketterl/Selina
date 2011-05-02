@@ -20,10 +20,10 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import de.chipxonio.adtech.selina.gui.components.treetable.JTreeTable;
-import de.chipxonio.adtech.selina.tests.TestCaseResult;
-import de.chipxonio.adtech.selina.tests.TestResult;
-import de.chipxonio.adtech.selina.tests.outcomes.Outcome;
-import de.chipxonio.adtech.selina.tests.outcomes.Pass;
+import de.chipxonio.adtech.selina.results.TestCaseResult;
+import de.chipxonio.adtech.selina.results.TestResult;
+import de.chipxonio.adtech.selina.results.outcomes.Outcome;
+import de.chipxonio.adtech.selina.results.outcomes.Pass;
 
 public class TestResultViewer extends JDialog {
 	

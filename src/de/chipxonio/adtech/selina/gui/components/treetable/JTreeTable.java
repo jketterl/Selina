@@ -53,7 +53,7 @@ import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreeModel;
 
 import de.chipxonio.adtech.selina.gui.components.TaskListPanel;
-import de.chipxonio.adtech.selina.tests.TestCaseResult;
+import de.chipxonio.adtech.selina.results.TestCaseResult;
 
 /**
  * This example shows how to create a simple JTreeTable component, by using a

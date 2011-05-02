@@ -16,7 +16,7 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 import de.chipxonio.adtech.selina.packages.PackageLoader;
-import de.chipxonio.adtech.selina.tests.TestResult;
+import de.chipxonio.adtech.selina.results.TestResult;
 
 public class SelinaJob extends Vector<SelinaTask> implements SelinaTaskListener, ListModel {
 	private static final long serialVersionUID = 6697337614166675395L;
