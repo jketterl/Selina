@@ -14,13 +14,22 @@ public class Failure extends Outcome {
 	 */
 	public Failure(Class<? extends TestCase> c, Method m) {
 		super(c, m);
-		this.stackTrace = Thread.currentThread().getStackTrace();
+		this.stackTrace = this.gatherStackInformation();
 	}
 
 	public Failure(Class<? extends TestCase> c, Method m, String message) {
 		super(c, m);
 		this.message = message;
-		this.stackTrace = Thread.currentThread().getStackTrace();
+		this.stackTrace = this.gatherStackInformation();
+	}
+	
+	protected StackTraceElement[] gatherStackInformation() {
+		StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+		StackTraceElement[] result = new StackTraceElement[stack.length - 4];
+		for (int i = 0; i < stack.length - 4; i++) {
+			result[i] = stack[i + 4];
+		}
+		return result;
 	}
 	
 	public String toString() {
