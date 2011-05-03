@@ -105,11 +105,6 @@ public class TestResultViewer extends JDialog {
 			gc.weighty = 1.0;
 			gc.gridx = 0;
 			contentPanel.add(getJScrollPane(), gc);
-			gc.fill = GridBagConstraints.BOTH;
-			gc.gridy = 1;
-			gc.weightx = 1.0;
-			gc.weighty = 1.0;
-			gc.gridx = 0;
 		}
 		return contentPanel;
 	}
