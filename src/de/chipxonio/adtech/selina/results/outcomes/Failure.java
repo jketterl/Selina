@@ -40,4 +40,8 @@ public class Failure extends Outcome {
 	public StackTraceElement[] getStackTrace() {
 		return this.stackTrace;
 	}
+	
+	public String getMessage() {
+		return this.message;
+	}
 }

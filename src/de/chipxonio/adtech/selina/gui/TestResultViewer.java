@@ -21,17 +21,17 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import de.chipxonio.adtech.selina.gui.components.FailureDetailPanel;
 import de.chipxonio.adtech.selina.gui.components.treetable.JTreeTable;
 import de.chipxonio.adtech.selina.results.TestCaseResult;
 import de.chipxonio.adtech.selina.results.TestResult;
 import de.chipxonio.adtech.selina.results.outcomes.Failure;
 import de.chipxonio.adtech.selina.results.outcomes.Outcome;
 import de.chipxonio.adtech.selina.results.outcomes.Pass;
-import javax.swing.JList;
 
 public class TestResultViewer extends JDialog {
 	
-	private static final Color successColor = new Color(200, 255, 200);
+	private static final Color successColor = new Color(200, 255, 200);  //  @jve:decl-index=0:
 	private static final Color failureColor = new Color(255, 200, 200);
 
 	private static final long serialVersionUID = 1L;
@@ -42,9 +42,7 @@ public class TestResultViewer extends JDialog {
 	private JPanel buttonPanel = null;
 	private JButton closeButton = null;
 	private JTreeTable resultTable = null;
-	private JScrollPane jScrollPane = null;
-	private JList stackTraceList = null;
-
+	private FailureDetailPanel failureDetailPanel = null;
 	/**
 	 * @param owner
 	 */
@@ -91,20 +89,18 @@ public class TestResultViewer extends JDialog {
 			contentPanel = new JPanel();
 			contentPanel.setLayout(new GridBagLayout());
 			GridBagConstraints gc;
+			
 			gc = new GridBagConstraints();
 			gc.fill = GridBagConstraints.BOTH;
-			gc.gridy = 0;
-			gc.weightx = 1.0;
-			gc.weighty = 1.0;
-			gc.gridx = 0;
+			gc.gridx = 0; gc.gridy = 0;
+			gc.weightx = 1.0; gc.weighty = 1.0;
 			contentPanel.add(getJScrollPane1(), gc);
+			
 			gc = new GridBagConstraints();
 			gc.fill = GridBagConstraints.BOTH;
-			gc.gridy = 1;
-			gc.weightx = 1.0;
-			gc.weighty = 1.0;
-			gc.gridx = 0;
-			contentPanel.add(getJScrollPane(), gc);
+			gc.gridx = 0; gc.gridy = 1;
+			gc.weightx = 1.0; gc.weighty = 1.0;
+			contentPanel.add(getFailureDetailPanel(), gc);
 		}
 		return contentPanel;
 	}
@@ -220,7 +216,7 @@ public class TestResultViewer extends JDialog {
 					Object row = resultTable.getValueAt(e.getFirstIndex(), 1);
 					if (!(row instanceof Failure)) return;
 					Failure f = (Failure) row;
-					stackTraceList.setListData(f.getStackTrace());
+					getFailureDetailPanel().setFailure(f);
 				}
 			});
 		}
@@ -228,29 +224,15 @@ public class TestResultViewer extends JDialog {
 	}
 
 	/**
-	 * This method initializes jScrollPane	
+	 * This method initializes failureDetailPanel	
 	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * @return de.chipxonio.adtech.selina.gui.components.FailureDetailPanel	
 	 */
-	private JScrollPane getJScrollPane() {
-		if (jScrollPane == null) {
-			jScrollPane = new JScrollPane();
-			jScrollPane.setViewportView(getStackTraceList());
-			jScrollPane.setBorder(BorderFactory.createTitledBorder(null, "Stack Trace", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+	private FailureDetailPanel getFailureDetailPanel() {
+		if (failureDetailPanel == null) {
+			failureDetailPanel = new FailureDetailPanel();
 		}
-		return jScrollPane;
-	}
-
-	/**
-	 * This method initializes stackTraceList	
-	 * 	
-	 * @return javax.swing.JList	
-	 */
-	private JList getStackTraceList() {
-		if (stackTraceList == null) {
-			stackTraceList = new JList();
-		}
-		return stackTraceList;
+		return failureDetailPanel;
 	}
 
 }
