@@ -1,6 +1,7 @@
 package de.chipxonio.adtech.selina.results.outcomes;
 
 import java.lang.reflect.Method;
+import java.net.URL;
 
 import de.chipxonio.adtech.selina.tests.TestCase;
 
@@ -12,13 +13,13 @@ public class Failure extends Outcome {
 	 * @deprecated failing without a message is discouraged.
 	 * @see Failure(Class<?extends TestCase> c, Method m, String message) instead.
 	 */
-	public Failure(Class<? extends TestCase> c, Method m) {
-		super(c, m);
+	public Failure(Class<? extends TestCase> c, Method m, URL url) {
+		super(c, m, url);
 		this.stackTrace = this.gatherStackInformation();
 	}
 
-	public Failure(Class<? extends TestCase> c, Method m, String message) {
-		super(c, m);
+	public Failure(Class<? extends TestCase> c, Method m, URL url, String message) {
+		super(c, m, url);
 		this.message = message;
 		this.stackTrace = this.gatherStackInformation();
 	}

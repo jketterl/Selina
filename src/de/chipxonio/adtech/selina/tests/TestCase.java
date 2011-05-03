@@ -2,6 +2,8 @@ package de.chipxonio.adtech.selina.tests;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.regex.Pattern;
 
 import org.openqa.selenium.By;
@@ -65,11 +67,15 @@ public abstract class TestCase extends AbstractTest {
 				// according to the documentation, Class.getMethods() only returns public methods
 				// see http://download.oracle.com/javase/1.5.0/docs/api/java/lang/Class.html#getMethods%28%29
 			} catch (InvocationTargetException e) {
-				if (e.getCause() instanceof Exception)
+				if (e.getCause() instanceof Exception) {
 					// i know what to do with an exception
-					//throw (Exception) e.getCause();
-					result.pushFailure(new ExceptionFailure(this.getClass(), currentMethod, (Exception) e.getCause()));
-				else
+					URL url = null;
+					try {
+						url = new URL(getDriver().getCurrentUrl());
+					} catch (MalformedURLException e1) {
+					}
+					result.pushFailure(new ExceptionFailure(this.getClass(), currentMethod, url, (Exception) e.getCause()));
+				} else
 					// but i don't know what to do with the rest
 					e.printStackTrace();
 			}
@@ -83,7 +89,12 @@ public abstract class TestCase extends AbstractTest {
 	}
 
 	public void pass() {
-		this.getResult().pushPass(new Pass(this.getClass(), currentMethod));
+		URL url = null;
+		try {
+			url = new URL(getDriver().getCurrentUrl());
+		} catch (MalformedURLException e1) {
+		}
+		this.getResult().pushPass(new Pass(this.getClass(), currentMethod, url));
 	}
 	
 	/**
@@ -91,11 +102,21 @@ public abstract class TestCase extends AbstractTest {
 	 * @see fail(String message) instead.
 	 */
 	public void fail() {
-		this.getResult().pushFailure(new Failure(this.getClass(), currentMethod));
+		URL url = null;
+		try {
+			url = new URL(getDriver().getCurrentUrl());
+		} catch (MalformedURLException e1) {
+		}
+		this.getResult().pushFailure(new Failure(this.getClass(), currentMethod, url));
 	}
 	
 	public void fail(String message) {
-		this.getResult().pushFailure(new Failure(this.getClass(), currentMethod, message));
+		URL url = null;
+		try {
+			url = new URL(getDriver().getCurrentUrl());
+		} catch (MalformedURLException e1) {
+		}
+		this.getResult().pushFailure(new Failure(this.getClass(), currentMethod, url, message));
 	}
 	
 	/**
