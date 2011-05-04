@@ -28,6 +28,7 @@ import de.chipxonio.adtech.selina.results.TestResult;
 import de.chipxonio.adtech.selina.results.outcomes.Failure;
 import de.chipxonio.adtech.selina.results.outcomes.Outcome;
 import de.chipxonio.adtech.selina.results.outcomes.Pass;
+import javax.swing.JSplitPane;
 
 public class TestResultViewer extends JDialog {
 	
@@ -37,12 +38,12 @@ public class TestResultViewer extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
 	private TestResult result;
-	private JPanel contentPanel = null;
 	private JScrollPane jScrollPane1 = null;  //  @jve:decl-index=0:visual-constraint="220,237"
 	private JPanel buttonPanel = null;
 	private JButton closeButton = null;
 	private JTreeTable resultTable = null;
 	private FailureDetailPanel failureDetailPanel = null;
+	private JSplitPane contentPanel = null;
 	/**
 	 * @param owner
 	 */
@@ -77,32 +78,6 @@ public class TestResultViewer extends JDialog {
 			jContentPane.add(getButtonPanel(), BorderLayout.SOUTH);
 		}
 		return jContentPane;
-	}
-
-	/**
-	 * This method initializes contentPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getContentPanel() {
-		if (contentPanel == null) {
-			contentPanel = new JPanel();
-			contentPanel.setLayout(new GridBagLayout());
-			GridBagConstraints gc;
-			
-			gc = new GridBagConstraints();
-			gc.fill = GridBagConstraints.BOTH;
-			gc.gridx = 0; gc.gridy = 0;
-			gc.weightx = 1.0; gc.weighty = 1.0;
-			contentPanel.add(getJScrollPane1(), gc);
-			
-			gc = new GridBagConstraints();
-			gc.fill = GridBagConstraints.BOTH;
-			gc.gridx = 0; gc.gridy = 1;
-			gc.weightx = 1.0; gc.weighty = 1.0;
-			contentPanel.add(getFailureDetailPanel(), gc);
-		}
-		return contentPanel;
 	}
 
 	/**
@@ -233,6 +208,22 @@ public class TestResultViewer extends JDialog {
 			failureDetailPanel = new FailureDetailPanel();
 		}
 		return failureDetailPanel;
+	}
+
+	/**
+	 * This method initializes contentPanel	
+	 * 	
+	 * @return javax.swing.JSplitPane	
+	 */
+	private JSplitPane getContentPanel() {
+		if (contentPanel == null) {
+			contentPanel = new JSplitPane();
+			contentPanel.setOrientation(JSplitPane.VERTICAL_SPLIT);
+			contentPanel.setDividerLocation(400);
+			contentPanel.setLeftComponent(getJScrollPane1());
+			contentPanel.setRightComponent(getFailureDetailPanel());
+		}
+		return contentPanel;
 	}
 
 }
