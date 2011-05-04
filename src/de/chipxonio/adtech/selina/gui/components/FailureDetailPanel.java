@@ -18,12 +18,10 @@ import de.chipxonio.adtech.selina.results.outcomes.Failure;
 public class FailureDetailPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JLabel jLabel = null;
 	private JTextField urlTextField = null;
-	private JLabel jLabel1 = null;
 	private JTextField messageTextField = null;
 	private JScrollPane jScrollPane = null;
-	private Failure failure;
+	private Failure failure;  //  @jve:decl-index=0:
 	private JList stackTraceList = null;
 
 	/**
@@ -48,21 +46,24 @@ public class FailureDetailPanel extends JPanel {
 		
 		// add labels
 		gc.insets = new Insets(2, 5, 2, 5);
+		gc.anchor = GridBagConstraints.WEST;
 		
-		jLabel = new JLabel();
-		jLabel.setText("Browser URL:");
+		JLabel label;
+		label = new JLabel("Browser URL:");
 		gc.gridx = 0; gc.gridy = 0;
-		gc.anchor = GridBagConstraints.WEST;
-		this.add(jLabel, gc);
+		this.add(label, gc);
 
-		jLabel1 = new JLabel();
-		jLabel1.setText("Message:");
+		label = new JLabel("Message:");
 		gc.gridx = 0; gc.gridy = 1;
-		gc.anchor = GridBagConstraints.WEST;
-		this.add(jLabel1, gc);
+		this.add(label, gc);
+		
+		label = new JLabel("Stack Trace:");
+		gc.gridx = 0; gc.gridy = 2;
+		gc.gridwidth = 2;
+		this.add(label, gc);
 		
 		// add text fields
-		gc.weightx = 1;
+		gc.weightx = 1; gc.gridwidth = 1;
 		
 		gc.gridx = 1; gc.gridy = 0;
 		gc.fill = GridBagConstraints.HORIZONTAL;
@@ -75,7 +76,7 @@ public class FailureDetailPanel extends JPanel {
 		// add list box
 		gc.weighty = 1;
 
-		gc.gridx = 0; gc.gridy = 2;
+		gc.gridx = 0; gc.gridy = 3;
 		gc.gridwidth = GridBagConstraints.REMAINDER;
 		gc.fill = GridBagConstraints.BOTH;
 		this.add(getJScrollPane(), gc);
