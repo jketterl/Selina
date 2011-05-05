@@ -189,9 +189,12 @@ public class TestResultViewer extends JDialog {
 				public void valueChanged(ListSelectionEvent e) {
 					if (e.getValueIsAdjusting()) return;
 					Object row = resultTable.getValueAt(e.getFirstIndex(), 1);
-					if (!(row instanceof Failure)) return;
-					Failure f = (Failure) row;
-					getFailureDetailPanel().setFailure(f);
+					if (!(row instanceof Failure)) {
+						getFailureDetailPanel().setFailure(null);
+					} else {
+						Failure f = (Failure) row;
+						getFailureDetailPanel().setFailure(f);
+					}
 				}
 			});
 		}

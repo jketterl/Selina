@@ -23,6 +23,8 @@ public class FailureDetailPanel extends JPanel {
 	private JScrollPane jScrollPane = null;
 	private Failure failure;  //  @jve:decl-index=0:
 	private JList stackTraceList = null;
+	private JTextField classNameTextField = null;
+	private JTextField methodNameTextField = null;
 
 	/**
 	 * This is the default constructor
@@ -69,14 +71,19 @@ public class FailureDetailPanel extends JPanel {
 		gc.weightx = 1;
 		gc.gridwidth = 1;
 		gc.gridx = 1;
+		gc.fill = GridBagConstraints.HORIZONTAL;
 		
 		gc.gridy = 0;
-		gc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(getUrlTextField(), gc);
 
 		gc.gridy = 1;
-		gc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(getMessageTextField(), gc);
+		
+		gc.gridy = 2;
+		this.add(getClassNameTextField(), gc);
+		
+		gc.gridy = 3;
+		this.add(getMethodNameTextField(), gc);
 		
 		// add list box
 		gc.weighty = 1;
@@ -127,10 +134,20 @@ public class FailureDetailPanel extends JPanel {
 
 	public void setFailure(Failure f) {
 		this.failure = f;
-		URL url = this.failure.getUrl();
-		getUrlTextField().setText(url != null ? url.toString() : "");
-		getMessageTextField().setText(this.failure.getMessage());
-		getStackTraceList().setListData(this.failure.getStackTrace());
+		if (this.failure == null) {
+			getUrlTextField().setText("");
+			getMessageTextField().setText("");
+			getStackTraceList().setListData(new Object[0]);
+			getClassNameTextField().setText("");
+			getMethodNameTextField().setText("");
+		} else {
+			URL url = this.failure.getUrl();
+			getUrlTextField().setText(url != null ? url.toString() : "");
+			getMessageTextField().setText(this.failure.getMessage());
+			getStackTraceList().setListData(this.failure.getStackTrace());
+			getClassNameTextField().setText(this.failure.getClassName());
+			getMethodNameTextField().setText(this.failure.getMethodName());
+		}
 	}
 
 	/**
@@ -143,6 +160,32 @@ public class FailureDetailPanel extends JPanel {
 			stackTraceList = new JList();
 		}
 		return stackTraceList;
+	}
+
+	/**
+	 * This method initializes classNameTextField	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getClassNameTextField() {
+		if (classNameTextField == null) {
+			classNameTextField = new JTextField();
+			classNameTextField.setEditable(false);
+		}
+		return classNameTextField;
+	}
+
+	/**
+	 * This method initializes methodNameTextField	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getMethodNameTextField() {
+		if (methodNameTextField == null) {
+			methodNameTextField = new JTextField();
+			methodNameTextField.setEditable(false);
+		}
+		return methodNameTextField;
 	}
 }
 

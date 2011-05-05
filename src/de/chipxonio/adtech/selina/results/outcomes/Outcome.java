@@ -23,4 +23,12 @@ abstract public class Outcome {
 	public URL getUrl() {
 		return url;
 	}
+	
+	public String getClassName() {
+		return this.clss.getName();
+	}
+	
+	public String getMethodName() {
+		return this.method.getName();
+	}
 }
