@@ -47,36 +47,40 @@ public class FailureDetailPanel extends JPanel {
 		// add labels
 		gc.insets = new Insets(2, 5, 2, 5);
 		gc.anchor = GridBagConstraints.WEST;
+		gc.gridx = 0;
 		
-		JLabel label;
-		label = new JLabel("Browser URL:");
-		gc.gridx = 0; gc.gridy = 0;
-		this.add(label, gc);
+		gc.gridy = 0;
+		this.add(new JLabel("Browser URL:"), gc);
 
-		label = new JLabel("Message:");
-		gc.gridx = 0; gc.gridy = 1;
-		this.add(label, gc);
+		gc.gridy = 1;
+		this.add(new JLabel("Message:"), gc);
 		
-		label = new JLabel("Stack Trace:");
-		gc.gridx = 0; gc.gridy = 2;
+		gc.gridy = 2;
+		this.add(new JLabel("Class Name:"), gc);
+		
+		gc.gridy = 3;
+		this.add(new JLabel("Method Name:"), gc);
+		
+		gc.gridy = 4;
 		gc.gridwidth = 2;
-		this.add(label, gc);
+		this.add(new JLabel("Stack Trace:"), gc);
 		
 		// add text fields
-		gc.weightx = 1; gc.gridwidth = 1;
+		gc.weightx = 1;
+		gc.gridwidth = 1;
+		gc.gridx = 1;
 		
-		gc.gridx = 1; gc.gridy = 0;
+		gc.gridy = 0;
 		gc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(getUrlTextField(), gc);
 
-		gc.gridx = 1; gc.gridy = 1;
+		gc.gridy = 1;
 		gc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(getMessageTextField(), gc);
 		
 		// add list box
 		gc.weighty = 1;
-
-		gc.gridx = 0; gc.gridy = 3;
+		gc.gridx = 0; gc.gridy = 5;
 		gc.gridwidth = GridBagConstraints.REMAINDER;
 		gc.fill = GridBagConstraints.BOTH;
 		this.add(getJScrollPane(), gc);
