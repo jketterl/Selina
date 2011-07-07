@@ -75,9 +75,14 @@ public abstract class TestCase extends AbstractTest {
 					} catch (MalformedURLException e1) {
 					}
 					result.pushFailure(new ExceptionFailure(this.getClass(), currentMethod, url, (Exception) e.getCause()));
-				} else
+				} else {
 					// but i don't know what to do with the rest
+					System.out.println("don't know how to handle this:");
 					e.printStackTrace();
+				}
+			} catch (Exception e) {
+				System.out.println("unknown exception:");
+				e.printStackTrace();
 			}
 		}
 	}
@@ -161,5 +166,9 @@ public abstract class TestCase extends AbstractTest {
 	
 	public TestCaseResult getResult() {
 		return result;
+	}
+
+	protected void resetDriver() {
+		this.task.resetDriver(this);
 	}
 }

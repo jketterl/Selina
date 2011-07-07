@@ -118,6 +118,7 @@ public class SelinaTask implements Serializable, TestResultListener {
 			try {
 				AbstractTest test = this.getTest().getInstance();
 				test.setOverallResult(result);
+				test.setTask(this);
 				test.setDriver(driver);
 				test.run();
 			} catch (IllegalAccessException e) {
@@ -166,5 +167,14 @@ public class SelinaTask implements Serializable, TestResultListener {
 
 	public void setBrowser(Browser browser) {
 		this.browser = browser;
+	}
+
+	public void resetDriver(AbstractTest test) {
+		try {
+			this.driver.quit();
+		} catch (Exception e) {
+		}
+		this.driver = null;
+		test.setDriver(this.getDriver());
 	}
 }
