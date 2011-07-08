@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 
 import de.chipxonio.adtech.selina.browsers.Browser;
 import de.chipxonio.adtech.selina.hosts.Host;
@@ -87,8 +88,16 @@ public class SelinaTask implements Serializable, TestResultListener {
 	}
 	
 	public WebDriver getDriver() {
-		if (this.driver == null) {
+		while (this.driver == null) try {
+			System.out.println("connecting to " + host);
 			this.driver = this.getBrowser().getDriver(host);
+			System.out.println("established connection to " + host);
+		} catch (WebDriverException e) {
+			System.out.println("waiting 60 seconds for " + host);
+			try {
+				Thread.sleep(60);
+			} catch (InterruptedException e1) {
+			}
 		}
 		return this.driver;
 	}
