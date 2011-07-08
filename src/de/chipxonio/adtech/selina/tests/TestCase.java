@@ -72,7 +72,7 @@ public abstract class TestCase extends AbstractTest {
 					URL url = null;
 					try {
 						url = new URL(getDriver().getCurrentUrl());
-					} catch (MalformedURLException e1) {
+					} catch (Exception e1) {
 					}
 					result.pushFailure(new ExceptionFailure(this.getClass(), currentMethod, url, (Exception) e.getCause()));
 				} else {
@@ -119,7 +119,7 @@ public abstract class TestCase extends AbstractTest {
 		URL url = null;
 		try {
 			url = new URL(getDriver().getCurrentUrl());
-		} catch (MalformedURLException e1) {
+		} catch (Exception e1) {
 		}
 		this.getResult().pushFailure(new Failure(this.getClass(), currentMethod, url, message));
 	}
