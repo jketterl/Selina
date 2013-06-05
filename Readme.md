@@ -1,11 +1,12 @@
 
+```
                 .__   .__                 
   ______  ____  |  |  |__|  ____  _____   
  /  ___/_/ __ \ |  |  |  | /    \ \__  \  
  \___ \ \  ___/ |  |__|  ||   |  \ / __ \_
 /____  > \___  >|____/|__||___|  /(____  /
      \/      \/                \/      \/ 
-
+```
 
 Selina is an experimental implementation of a multithreading testing
 framework that runs prepared tests against a set of selenium-enabled
